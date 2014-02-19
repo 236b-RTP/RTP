@@ -1,4 +1,29 @@
 Rtp::Application.routes.draw do
+
+  resources :user_sessions, only: [ :new, :create, :destroy ]
+
+  resources :events do
+    collection do
+      post 'search'
+    end
+  end
+
+  resources :tasks do
+    collection do
+      post 'search'
+    end
+  end
+
+  resources :calendars, only: [ :index ] do
+    member do
+      get 'preferences'
+      put 'preferences' => 'calendars#update_preferences'
+      post 'add_task'
+    end
+  end
+
+  resources :users, except: [ :index ]
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
