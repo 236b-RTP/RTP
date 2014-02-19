@@ -13,7 +13,7 @@
   <![endif]-->
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body class="<%= controller_name %> <%= "#{controller_name}-#{action_name}" %>">
 
 <div class="navbar navbar-inverse navbar-static-top" role="navigation">
   <div class="container">
@@ -24,7 +24,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Project name</a>
+      <a class="navbar-brand" href="#">RTP</a>
     </div>
     <div class="navbar-collapse collapse">
       <form class="navbar-form navbar-right" role="form">
