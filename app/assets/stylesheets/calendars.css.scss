@@ -1,3 +1,30 @@
 // Place all the styles related to the calendars controller here.
 // They will automatically be included in application.css.scss.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.tasks .btn-block {
+  margin-bottom: 1em;
+}
+
+.tasks .tasks-search {
+  padding: 1em;
+}
+
+.tasks .tasks-search .adv-search {
+  color: #fff;
+}
+
+.tasks-tabs .active a {
+  background-color: #5cb85c !important;
+  color: #fff !important;
+  border-color: #5cb85c !important;
+}
+
+.tasks .tasks-view {
+  background-color: #5cb85c;
+}
+
+.tasks .tasks-list {
+  overflow-y: auto;
+  width: 100%;
+}

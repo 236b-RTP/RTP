@@ -1,2 +1,41 @@
-<h1>Calendars#index</h1>
-<p>Find me in app/views/calendars/index.html.erb</p>
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="left-sidebar col-xs-2">
+
+    </div>
+
+    <div class="calendar col-xs-7">
+      <div id="calendar">
+        <!-- calendar -->
+      </div>
+    </div>
+
+    <div class="tasks col-xs-3">
+      <button class="btn btn-success btn-block">New task</button>
+
+      <ul class="tasks-tabs nav nav-tabs nav-justified">
+        <li class="active"><a class="bg-success" href="#">To Do</a></li>
+        <li><a href="#">Doing</a></li>
+        <li><a href="#">Done</a></li>
+      </ul>
+
+      <div class="tasks-view tab-content">
+
+        <div class="tasks-search">
+          <form>
+            <div class="input-group">
+              <span class="input-group-btn"><button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button></span>
+              <input type="text" class="form-control" />
+            </div>
+            <a class="adv-search small pull-right" href="#">Advanced</a>
+          </form>
+        </div>
+
+        <div class="tasks-list">
+          <!-- dynamically added tasks go here -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
