@@ -1,0 +1,6 @@
+<% flash_messages_display_keys.each do |key| %>
+  <% next unless flash[key].present? %>
+  <div class="alert alert-<%= flash_class_for_key(key) %>">
+    <%= flash[key] %>
+  </div>
+<% end %>

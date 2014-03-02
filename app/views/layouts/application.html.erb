@@ -24,18 +24,27 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">RTP</a>
+      <%= link_to 'RTP', root_path, class: 'navbar-brand' %>
     </div>
     <div class="navbar-collapse collapse">
-      <form class="navbar-form navbar-right" role="form">
-        <div class="form-group">
-          <input type="text" placeholder="Email" class="form-control">
-        </div>
-        <div class="form-group">
-          <input type="password" placeholder="Password" class="form-control">
-        </div>
-        <button type="submit" class="btn btn-success">Sign in</button>
-      </form>
+      <% if current_user.present? %>
+        <%= form_for(current_user_session, method: :delete, html: { class: 'navbar-form navbar-right', role: 'form' }) do |f| %>
+          <%= f.submit('Sign out', class: 'btn btn-default') %>
+        <% end %>
+        <p class="navbar-text navbar-right">
+          Welcome, <%= current_user.full_name %>
+        </p>
+      <% else %>
+        <%= form_tag(user_sessions_path, class: 'navbar-form navbar-right', role: 'form') do %>
+          <div class="form-group">
+            <%= email_field_tag :email, nil, class: 'form-control', placeholder: 'Email' %>
+          </div>
+          <div class="form-group">
+            <%= password_field_tag :password, nil, class: 'form-control', placeholder: 'Password' %>
+          </div>
+          <%= submit_tag 'Sign in', class: 'btn btn-success' %>
+        <% end %>
+      <% end %>
     </div><!--/.navbar-collapse -->
   </div>
 </div>
