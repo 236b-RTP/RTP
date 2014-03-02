@@ -21,3 +21,12 @@ jQuery ($) ->
   $("#calendar").fullCalendar({
     defaultView: "agendaWeek"
   })
+
+  # show new task dialog
+  newTaskDialog = $("#newTaskDialog").modal({
+    backdrop: "static",
+    keyboard: false,
+    show: false
+  })
+  $("#newTaskButton").on "click", ->
+    newTaskDialog.modal("show")

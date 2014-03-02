@@ -12,7 +12,7 @@
     </div>
 
     <div class="tasks col-xs-3">
-      <button class="btn btn-success btn-block">New task</button>
+      <button class="btn btn-success btn-block" type="button" id="newTaskButton">New task</button>
 
       <ul class="tasks-tabs nav nav-tabs nav-justified">
         <li class="active"><a class="bg-success" href="#">To Do</a></li>
@@ -39,3 +39,5 @@
     </div>
   </div>
 </div>
+
+<%= render partial: "new_task_dialog" %>
