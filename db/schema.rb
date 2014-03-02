@@ -11,10 +11,42 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140302010017) do
+ActiveRecord::Schema.define(version: 20140302205405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "events", force: true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "task_events", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "item_id"
+    t.string   "item_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "task_events", ["user_id"], name: "index_task_events_on_user_id", using: :btree
+
+  create_table "tasks", force: true do |t|
+    t.string   "title"
+    t.text     "description"
+    t.string   "tag"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.datetime "due_date"
+    t.integer  "priority"
+    t.integer  "difficulty"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "user_sessions", force: true do |t|
     t.integer  "user_id"

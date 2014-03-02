@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  tag: MyString
+  start_time: 2014-03-02 15:51:24
+  end_time: 2014-03-02 15:51:24
+  due_date: 2014-03-02 15:51:24
+  priority: 1
+  difficulty: 1
+
+two:
+  title: MyString
+  description: MyText
+  tag: MyString
+  start_time: 2014-03-02 15:51:24
+  end_time: 2014-03-02 15:51:24
+  due_date: 2014-03-02 15:51:24
+  priority: 1
+  difficulty: 1
