@@ -10,10 +10,12 @@ class UserSessionsController < ApplicationController
 
       cookies.permanent.signed[:authentication_key] = user_session.key
 
-      # TODO: if user has calender, log in and redirect to calendar page
-      # else redirect to preferences/tutorial
-
+      # TODO if user has calender, log in and redirect to calendar page
       redirect_to calendars_path
+
+      # TODO else redirect to preferences/tutorial
+
+
     else
       flash.now[:error] = "<strong>Error:</strong> Invalid Credentials.".html_safe
       render :new

@@ -39,5 +39,4 @@ describe 'Static pages' do
       expect(page).to have_title("Settings | #{base_title}")
     end
   end
-
 end
