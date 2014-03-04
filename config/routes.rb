@@ -1,5 +1,8 @@
 Rtp::Application.routes.draw do
 
+  get "static_pages/help"
+  get "static_pages/settings"
+
   resources :user_sessions, only: [ :new, :create, :destroy ]
 
   resources :events do
