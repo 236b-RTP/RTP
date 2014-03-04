@@ -49,3 +49,6 @@ gem 'capistrano-rails', '~> 1.1'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+gem 'rspec-rails', '~> 2.14.1', group: [:development, :test]
+gem 'guard', group: [:development, :test]
+gem 'guard-rspec', group: [:development, :test]
