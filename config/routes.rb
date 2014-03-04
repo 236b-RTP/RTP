@@ -2,6 +2,7 @@ Rtp::Application.routes.draw do
 
   get "static_pages/help"
   get "static_pages/settings"
+  get "static_pages/welcome"
 
   resources :user_sessions, only: [ :new, :create, :destroy ]
 
@@ -27,7 +28,7 @@ Rtp::Application.routes.draw do
 
   resources :users, except: [ :index ]
 
-  root 'welcome#index'
+  root 'static_pages#welcome'
 
   match '/signup',  to: 'users#new',            via: 'get'
 

@@ -16,4 +16,11 @@ describe StaticPagesController do
     end
   end
 
+  describe "GET 'welcome'" do
+    it "returns http welcome" do
+      get 'welcome'
+      response.should be_success
+    end
+  end
+
 end
