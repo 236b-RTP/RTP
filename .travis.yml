@@ -1,9 +1,7 @@
 language: ruby
 rvm:
   - 2.1.0
-services:
-  - postgres
 before_script:
   - psql -c 'CREATE ROLE rtp NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN;' -U postgres
   - psql -c 'CREATE DATABASE rtp_test WITH OWNER rtp;' -U postgres
-script: "RAILS_ENV=test bundle exec rake db:migrate; bundle exec rspec spec"
+script: "RAILS_ENV=test bundle exec rake db:schema:load; bundle exec rspec spec"
