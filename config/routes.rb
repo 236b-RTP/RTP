@@ -1,9 +1,6 @@
 Rtp::Application.routes.draw do
 
-  get "static_pages/help"
-  get "static_pages/settings"
-  get "static_pages/welcome"
-
+  # resources
   resources :user_sessions, only: [ :new, :create, :destroy ]
 
   resources :events do
@@ -28,9 +25,12 @@ Rtp::Application.routes.draw do
 
   resources :users, except: [ :index ]
 
+  # root and matches
   root 'static_pages#welcome'
+  get '/signup',   to: 'users#new'
+  get '/help',     to: 'static_pages#help'
+  get '/settings', to: 'static_pages#settings'
 
-  match '/signup',  to: 'users#new',            via: 'get'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
