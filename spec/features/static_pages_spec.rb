@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe 'Static pages' do
 
+  let(:base_title) { "Real-Time Productivity" }
+
   describe 'Welcome page' do
 
     it 'should have the content "Productivity made easy"' do
@@ -11,7 +13,7 @@ describe 'Static pages' do
 
     it "should have the title 'Welcome'" do
       visit '/static_pages/welcome'
-      expect(page).to have_title("Welcome")
+      expect(page).to have_title("Welcome | #{base_title}")
     end
   end
 
@@ -24,7 +26,7 @@ describe 'Static pages' do
 
     it "should have the title 'Help'" do
       visit '/static_pages/help'
-      expect(page).to have_title("Help")
+      expect(page).to have_title("Help | #{base_title}")
     end
   end
 
@@ -37,7 +39,7 @@ describe 'Static pages' do
 
     it "should have the title 'Settings'" do
       visit '/static_pages/settings'
-      expect(page).to have_title("Settings")
+      expect(page).to have_title("Settings | #{base_title}")
     end
   end
 end

@@ -49,7 +49,12 @@ gem 'capistrano-rails', '~> 1.1'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-gem 'rspec-rails', '~> 2.14.1', group: [:development, :test]
-gem 'guard', group: [:development, :test]
-gem 'guard-rspec', group: [:development, :test]
-gem 'capybara', group: [:development, :test]
+group :development, :test do
+  gem 'rspec-rails', '~> 2.14.1'
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'capybara'
+  gem 'spork-rails', '4.0.0'
+  gem 'guard-spork', '1.5.0'
+  gem 'childprocess', '0.3.6'
+end
