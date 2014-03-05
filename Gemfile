@@ -61,4 +61,7 @@ group :development, :test do
   gem 'jazz_hands'
 end
 
-gem 'rails_12factor', group: [ :production ]
+group :production do
+  gem 'rails_12factor'
+  gem 'thin'
+end
