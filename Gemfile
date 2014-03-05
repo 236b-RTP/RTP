@@ -59,3 +59,5 @@ group :development, :test do
   gem 'childprocess', '~> 0.5.1'
   gem 'jazz_hands'
 end
+
+gem 'rails_12factor', group: [ :production ]
