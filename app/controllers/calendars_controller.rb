@@ -1,4 +1,7 @@
 class CalendarsController < ApplicationController
+  before_action :signin_required
+  before_action :user_preferences_required
+
   def index
   end
 
@@ -9,5 +12,12 @@ class CalendarsController < ApplicationController
   end
 
   def add_task
+  end
+
+  private
+
+  #
+  def user_preferences_required
+    redirect_to(new_user_preference_path(current_user)) unless current_user.preference.present?
   end
 end

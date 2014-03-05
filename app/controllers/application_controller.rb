@@ -28,4 +28,27 @@ class ApplicationController < ActionController::Base
   end
 
   helper_method :current_user
+
+  # redirects if user is signed in
+  def signout_required
+    if current_user.present?
+      if block_given?
+        redirect_to yield
+      else
+        redirect_to calendars_path
+      end
+    end
+  end
+
+  # redirects if user is not signed in
+  def signin_required
+    unless current_user.present?
+      flash[:error] = 'You must be signed in to view that page.'
+      if block_given?
+        redirect_to yield
+      else
+        redirect_to signin_path
+      end
+    end
+  end
 end

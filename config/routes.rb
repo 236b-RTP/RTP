@@ -23,13 +23,16 @@ Rtp::Application.routes.draw do
     end
   end
 
-  resources :users, except: [ :index ]
+  resources :users, except: [ :index ] do
+    resources :preferences, except: [ :destroy, :index ]
+  end
 
   # root and matches
   root 'static_pages#welcome'
   get '/signup',   to: 'users#new'
   get '/help',     to: 'static_pages#help'
   get '/settings', to: 'static_pages#settings'
+  get '/signin',   to: 'user_sessions#new'
 
 
   # The priority is based upon order of creation: first created -> highest priority.

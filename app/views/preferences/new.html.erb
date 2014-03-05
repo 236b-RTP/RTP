@@ -1,0 +1,58 @@
+<% content_for :page_title, 'Preferences | ' %>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="page-header">
+        <h1>Preferences</h1>
+      </div>
+      <%= render partial: 'shared/flash_messages' %>
+      <%= form_for([@user, @preference]) do |f| %>
+          <div class="radio">
+            <label>
+              <%= f.radio_button(:profile_type, 'early') %>
+              <strong>Early Riser</strong>
+              <p>
+                Description of Early Riser preference type.
+              </p>
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <%= f.radio_button(:profile_type, 'late') %>
+              <strong>Night Owl</strong>
+              <p>
+                Description of Night Owl preference type.
+              </p>
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <%= f.radio_button(:profile_type, 'mix') %>
+              <strong>In-Betweener</strong>
+              <p>
+                Description of In-Betweener preference type.
+              </p>
+            </label>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <%= f.label(:start_time, 'Start Time') %>
+                <%= f.time_field(:start_time, class: "form-control") %>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <%= f.label(:end_time, 'End Time') %>
+                <%= f.time_field(:end_time, class: "form-control") %>
+              </div>
+            </div>
+
+          </div>
+
+
+          <%= f.submit 'Save and Continue', class: 'btn btn-success' %>
+      <% end %>
+    </div>
+  </div>
+</div>
