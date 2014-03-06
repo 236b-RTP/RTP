@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-  - 2.1.1
+  - 2.0.0
 before_script:
   - psql -c 'CREATE ROLE rtp NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN;' -U postgres
   - psql -c 'CREATE DATABASE rtp_test WITH OWNER rtp;' -U postgres
