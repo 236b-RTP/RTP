@@ -8,19 +8,21 @@ root = @
 jQuery ($) ->
   return unless $(document.body).hasClass("calendars-index")
 
+  # loads calendar
+  calendar = $("#calendar").fullCalendar({
+    defaultView: "agendaWeek"
+  })
+
   # resizes task list when window is resized
   taskList = $(".tasks-list")
   resizeFn = ->
     height = $(window).height()
-    offset = taskList.offset()
-    taskList.height(height - offset.top - 16)
+    taskListOffset = taskList.offset()
+    taskList.height(height - taskListOffset.top - 16)
+    calendarOffset = calendar.offset()
+    calendar.fullCalendar("option", "height", height - calendarOffset.top - 16)
   $(window).on("resize", resizeFn)
   resizeFn()
-
-  # loads calendar
-  $("#calendar").fullCalendar({
-    defaultView: "agendaWeek"
-  })
 
   # show new task dialog
   newTaskDialog = $("#newTaskDialog").modal({
