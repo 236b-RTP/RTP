@@ -13,6 +13,13 @@ jQuery ($) ->
     defaultView: "agendaWeek"
   })
 
+  # loads mini-calendar
+  $("#mini-calendar").datepicker({
+    onSelect: (dateText) ->
+      mom = $.fullCalendar.moment(dateText)
+      calendar.fullCalendar('gotoDate', mom)
+  })
+
   # resizes task list when window is resized
   taskList = $(".tasks-list")
   resizeFn = ->
