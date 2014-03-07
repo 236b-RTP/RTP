@@ -42,6 +42,7 @@ jQuery ($) ->
 
   newTaskDialog.on "show.bs.modal", ->
     newTaskDialog.find("input.select-date").datepicker()
+    $(".basic").spectrum();
 
   newTaskDialog.on "hide.bs.modal", ->
     newTaskDialog.find("input.select-date").datepicker("destroy")

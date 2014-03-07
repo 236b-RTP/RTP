@@ -17,4 +17,5 @@
 //= require bootstrap
 //= require moment-with-langs
 //= require fullcalendar/fullcalendar
+//= require spectrum
 //= require_tree .

@@ -8,28 +8,78 @@
         <div class="modal-body">
           <!-- form -->
           <div class="form-group">
-            <label class="control-label col-xs-2" for="">Title:</label>
+            <label class="control-label col-xs-2" for="title">Title:</label>
             <div class="col-xs-10">
-              <input class="form-control" type="text" name="title" placeholder="Task name" />
+              <input class="form-control" id="title" type="text" name="title" placeholder="Task name" />
             </div>
           </div>
 
           <div class="form-group has-feedback">
-            <label class="control-label col-xs-2" for="">Due date:</label>
+            <label class="control-label col-xs-2" for="due-date">Due date:</label>
             <div class="col-xs-4">
-              <input class="form-control select-date" type="text" name="due" />
+              <input class="form-control select-date" id="due-date" type="text" name="due-date" />
               <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
             </div>
 
-            <label class="control-label col-xs-2" for="">Duration:</label>
+            <label class="control-label col-xs-2" for="due-time">Due time:</label>
             <div class="col-xs-4">
-              <input class="form-control" type="text" name="due" />
+              <input class="form-control" id="due-time" type="time" name="due-time">
+            </div>
+          </div>
+
+          <div class="form-group has-feedback">
+            <label class="control-label col-xs-2" for="duration">Duration:</label>
+            <div class="col-xs-4">
+              <input class="form-control" id="duration" type="text" name="duration" />
               <span class="form-control-feedback">min</span>
             </div>
           </div>
 
           <div class="form-group">
-            <button class="btn btn-default">Tag Color</button>
+            <label class="col-xs-2 control-label">Priority:</label>
+            <div class="col-xs-10">
+              <label class="radio-inline">
+                <input type="radio" name="priority" value="low"> Low
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="priority" value="medium"> Medium
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="priority" value="high"> High
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-xs-2 control-label">Difficulty:</label>
+            <div class="col-xs-10">
+              <label class="radio-inline">
+                <input type="radio" name="difficulty" value="low"> Low
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="difficulty" value="medium"> Medium
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="difficulty" value="high"> High
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group has-feedback">
+            <label class="col-xs-2 control-label" for="tag-name">Tag:</label>
+            <div class="col-xs-10">
+              <input class="form-control" id="tag-name" type="text" name="tag-name" />
+              <span class="form-control-feedback colorpicker">
+                <input type="text" class="basic" id="tag-color" value="orange" name="tag-color" />
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-xs-2" for="details">Details:</label>
+            <div class="col-xs-10">
+              <textarea class="form-control" id="details" rows="3" style="resize: vertical;" name="details"></textarea>
+            </div>
           </div>
 
         </div>
