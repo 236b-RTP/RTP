@@ -20,7 +20,7 @@ jQuery ($) ->
       calendar.fullCalendar('gotoDate', mom)
   })
 
-  # resizes task list when window is resized
+  # resizes task list and calendar height when window is resized
   taskList = $(".tasks-list")
   resizeFn = ->
     height = $(window).height()
@@ -39,3 +39,9 @@ jQuery ($) ->
   })
   $("#newTaskButton").on "click", ->
     newTaskDialog.modal("show")
+
+  newTaskDialog.on "show.bs.modal", ->
+    newTaskDialog.find("input.select-date").datepicker()
+
+  newTaskDialog.on "hide.bs.modal", ->
+    newTaskDialog.find("input.select-date").datepicker("destroy")

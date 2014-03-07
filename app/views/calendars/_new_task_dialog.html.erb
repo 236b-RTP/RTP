@@ -13,12 +13,25 @@
               <input class="form-control" type="text" name="title" placeholder="Task name" />
             </div>
           </div>
-          <div class="form-group">
+
+          <div class="form-group has-feedback">
             <label class="control-label col-xs-2" for="">Due date:</label>
-            <div class="col-xs-10">
+            <div class="col-xs-4">
+              <input class="form-control select-date" type="text" name="due" />
+              <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+
+            <label class="control-label col-xs-2" for="">Duration:</label>
+            <div class="col-xs-4">
               <input class="form-control" type="text" name="due" />
+              <span class="form-control-feedback">min</span>
             </div>
           </div>
+
+          <div class="form-group">
+            <button class="btn btn-default">Tag Color</button>
+          </div>
+
         </div>
         <div class="modal-footer">
           <!-- buttons -->
