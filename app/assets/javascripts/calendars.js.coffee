@@ -37,7 +37,7 @@ jQuery ($) ->
     keyboard: false,
     show: false
   })
-  $("#newTaskButton").on "click", ->
+  $("#new-task-button").on "click", ->
     newTaskDialog.modal("show")
 
   newTaskDialog.on "show.bs.modal", ->
@@ -46,3 +46,19 @@ jQuery ($) ->
 
   newTaskDialog.on "hide.bs.modal", ->
     newTaskDialog.find("input.select-date").datepicker("destroy")
+
+# show new event dialog
+  newEventDialog = $("#newEventDialog").modal({
+    backdrop: "static",
+    keyboard: false,
+    show: false
+  })
+  $("#new-event-button").on "click", ->
+    newEventDialog.modal("show")
+
+  newEventDialog.on "show.bs.modal", ->
+    newEventDialog.find("input.select-date").datepicker()
+    $(".basic").spectrum();
+
+  newEventDialog.on "hide.bs.modal", ->
+    newEventDialog.find("input.select-date").datepicker("destroy")

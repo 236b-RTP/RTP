@@ -1,0 +1,57 @@
+<div class="modal fade" id="newEventDialog" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form class="form-horizontal">
+        <div class="modal-header">
+          <h4 class="modal-title">New Event</h4>
+        </div>
+        <div class="modal-body">
+          <!-- form -->
+          <div class="form-group">
+            <label class="control-label col-xs-2" for="title">Title:</label>
+            <div class="col-xs-10">
+              <input class="form-control" id="title" type="text" name="title" placeholder="Task name" />
+            </div>
+          </div>
+
+          <div class="form-group has-feedback">
+            <label class="control-label col-xs-2" for="start-date">Start:</label>
+            <div class="col-xs-4">
+              <input class="form-control select-date" id="start-date" type="text" name="start-date" />
+              <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+
+            <div class="col-xs-3">
+              <input class="form-control" id="start-time" type="time" name="start-time">
+            </div>
+          </div>
+
+          <div class="form-group has-feedback">
+            <label class="control-label col-xs-2" for="end-date">End:</label>
+            <div class="col-xs-4">
+              <input class="form-control select-date" id="end-date" type="text" name="end-date" />
+              <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+
+            <div class="col-xs-3">
+              <input class="form-control" id="end-time" type="time" name="end-time">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label col-xs-2" for="event-details">Details:</label>
+            <div class="col-xs-10">
+              <textarea class="form-control" id="event-details" rows="3" style="resize: vertical;" name="event-details"></textarea>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <!-- buttons -->
+          <button class="btn btn-default" type="button" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" type="submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

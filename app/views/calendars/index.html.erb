@@ -5,6 +5,10 @@
       <div id="mini-calendar">
         <!-- mini calendar -->
       </div>
+      <div id="new-event-button">
+        <button class="btn btn-primary btn-block" type="button" id="newEventButton">New Event</button>
+      </div>
+
     </div>
 
     <div class="calendar col-xs-7">
@@ -14,7 +18,7 @@
     </div>
 
     <div class="tasks col-xs-3">
-      <button class="btn btn-success btn-block" type="button" id="newTaskButton">New task</button>
+      <button class="btn btn-success btn-block" type="button" id="new-task-button">New Task</button>
 
       <ul class="tasks-tabs nav nav-tabs nav-justified">
         <li class="active"><a class="bg-success" href="#">To Do</a></li>
@@ -43,3 +47,4 @@
 </div>
 
 <%= render partial: "new_task_dialog" %>
+<%= render partial: "new_event_dialog" %>
