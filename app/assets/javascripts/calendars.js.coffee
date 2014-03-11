@@ -47,7 +47,10 @@ jQuery ($) ->
   newTaskDialog.on "hide.bs.modal", ->
     newTaskDialog.find("input.select-date").datepicker("destroy")
 
-# show new event dialog
+  # saves new task to database
+
+
+  # show new event dialog
   newEventDialog = $("#newEventDialog").modal({
     backdrop: "static",
     keyboard: false,
@@ -62,3 +65,5 @@ jQuery ($) ->
 
   newEventDialog.on "hide.bs.modal", ->
     newEventDialog.find("input.select-date").datepicker("destroy")
+
+# saves new event to database
