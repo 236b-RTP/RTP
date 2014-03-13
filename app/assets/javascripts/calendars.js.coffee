@@ -98,3 +98,5 @@ jQuery ($) ->
       $(document.createElement('div')).addClass('task-due-date').append(document.createTextNode(formattedDate(task.due_date)))
     )
     taskList.append(taskEl)
+
+  # render tasks and events to calendar
