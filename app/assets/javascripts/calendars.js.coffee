@@ -5,13 +5,21 @@
 root = @
 { jQuery } = root
 
+
+# constants
+MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+
 jQuery ($) ->
   return unless $(document.body).hasClass("calendars-index")
+  TASKS = root.TASKS
+
 
   # loads calendar
   calendar = $("#calendar").fullCalendar({
     defaultView: "agendaWeek"
   })
+
 
   # loads mini-calendar
   $("#mini-calendar").datepicker({
@@ -19,6 +27,7 @@ jQuery ($) ->
       mom = $.fullCalendar.moment(dateText)
       calendar.fullCalendar('gotoDate', mom)
   })
+
 
   # resizes task list and calendar height when window is resized
   taskList = $(".tasks-list")
@@ -30,6 +39,7 @@ jQuery ($) ->
     calendar.fullCalendar("option", "height", height - calendarOffset.top - 16)
   $(window).on("resize", resizeFn)
   resizeFn()
+
 
   # show new task dialog
   newTaskDialog = $("#newTaskDialog").modal({
@@ -46,8 +56,6 @@ jQuery ($) ->
 
   newTaskDialog.on "hide.bs.modal", ->
     newTaskDialog.find("input.select-date").datepicker("destroy")
-
-  # saves new task to database
 
 
   # show new event dialog
@@ -66,4 +74,27 @@ jQuery ($) ->
   newEventDialog.on "hide.bs.modal", ->
     newEventDialog.find("input.select-date").datepicker("destroy")
 
-# saves new event to database
+
+  # dynamically adds the tasks to the To Do task list
+  trimmedTitle = (title) ->
+    return title unless title.length > 25
+    title.substr(0, 25) + '...'
+
+  formattedDate = (date) ->
+    date = new Date(date)
+    month = date.getMonth()
+    day = date.getDate()
+    "#{MONTHS[month]} #{day}"
+
+  $.each TASKS, (index, task) ->
+    taskEl = $(document.createElement('div')).addClass('task-instance')
+    taskEl.append(
+      $(document.createElement('div')).addClass('task-tag-color').css('background-color', task.tag_color)
+    )
+    taskEl.append(
+      $(document.createElement('div')).addClass('task-name').append(document.createTextNode(trimmedTitle(task.title)))
+    )
+    taskEl.append(
+      $(document.createElement('div')).addClass('task-due-date').append(document.createTextNode(formattedDate(task.due_date)))
+    )
+    taskList.append(taskEl)

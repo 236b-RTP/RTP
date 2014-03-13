@@ -48,3 +48,6 @@
 
 <%= render partial: "new_task_dialog" %>
 <%= render partial: "new_event_dialog" %>
+<script>
+  var TASKS = <%= render(partial: "task_list.json").html_safe %>;
+</script>

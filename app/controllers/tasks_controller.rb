@@ -9,8 +9,11 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
+    @task.due_date = Chronic.parse("#{params[:task][:due_date]} #{params[:task][:due_time]}")
+
     if @task.save
       flash[:success] = "Your task has been created."
+      redirect_to calendars_path
     else
       flash.now[:error] = "<ol><li>#{@task.errors.full_messages.join('</li><li>')}</li></ol>".html_safe
       render :new
@@ -32,6 +35,6 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :description, :tag, :priority, :difficulty)
+    params.require(:task).permit(:title, :description, :tag_name, :tag_color, :priority, :difficulty, :duration)
   end
 end

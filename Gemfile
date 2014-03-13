@@ -54,14 +54,15 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.14.1'
   gem 'guard'
   gem 'guard-rspec'
-  gem 'capybara'
+  gem 'capybara' # for feature testing
   gem 'spork-rails', '~> 4.0.0'
   gem 'guard-spork', '~> 1.5.0'
   gem 'childprocess', '~> 0.5.1'
-  gem 'jazz_hands'
 end
 
 group :production do
-  gem 'rails_12factor'
-  gem 'thin'
+  gem 'rails_12factor' # needed for heroku assets
+  gem 'thin' # web server for heroku
 end
+
+gem 'chronic' # date-time parsing
