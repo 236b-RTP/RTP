@@ -3,6 +3,7 @@ class CalendarsController < ApplicationController
   before_action :user_preferences_required
 
   def index
+    @task = Task.new
   end
 
   def preferences
@@ -20,4 +21,6 @@ class CalendarsController < ApplicationController
   def user_preferences_required
     redirect_to(new_user_preference_path(current_user)) unless current_user.preference.present?
   end
+
+
 end

@@ -1,83 +1,83 @@
 <div class="modal fade" id="newTaskDialog" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form class="form-horizontal">
+      <%= form_for(@task, html: { class: "form-horizontal" }) do |f| %>
         <div class="modal-header">
           <h4 class="modal-title">New Task</h4>
         </div>
         <div class="modal-body">
           <!-- form -->
           <div class="form-group">
-            <label class="control-label col-xs-2" for="title">Title:</label>
+            <%= f.label(:title, 'Title:', class: 'control-label col-xs-2') %>
             <div class="col-xs-10">
-              <input class="form-control" id="title" type="text" name="title" placeholder="Task name" />
+              <%= f.text_field(:title, class: 'form-control', placeholder: 'Task name') %>
             </div>
           </div>
 
           <div class="form-group has-feedback">
-            <label class="control-label col-xs-2" for="due-date">Due date:</label>
+            <%= f.label(:due_date, 'Due Date:', class: 'control-label col-xs-2') %>
             <div class="col-xs-4">
-              <input class="form-control select-date" id="due-date" type="text" name="due_date" />
+              <%= f.text_field(:due_date, class: 'form-control select-date') %>
               <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
             </div>
 
-            <label class="control-label col-xs-2" for="due-time">Due time:</label>
+            <%= label_tag('task[due_time]', 'Due Time:', class: 'control-label col-xs-2') %>
             <div class="col-xs-4">
-              <input class="form-control" id="due-time" type="time" name="due_time">
+              <%= time_field_tag('task[due_time]', nil, class: 'form-control') %>
             </div>
           </div>
 
           <div class="form-group has-feedback">
-            <label class="control-label col-xs-2" for="duration">Duration:</label>
+            <%= label_tag('task[duration]', 'Duration:', class: 'control-label col-xs-2') %>
             <div class="col-xs-4">
-              <input class="form-control" id="duration" type="text" name="duration" />
+              <%= text_field_tag('task[duration]', nil, class: 'form-control') %>
               <span class="form-control-feedback">min</span>
             </div>
           </div>
 
           <div class="form-group">
-            <label class="col-xs-2 control-label">Priority:</label>
+            <%= f.label(:priority, 'Priority:', class: 'control-label col-xs-2') %>
             <div class="col-xs-10">
               <label class="radio-inline">
-                <input type="radio" name="priority" value="low"> Low
+                <%= f.radio_button(:priority, 'low') %> Low
               </label>
               <label class="radio-inline">
-                <input type="radio" name="priority" value="medium"> Medium
+                <%= f.radio_button(:priority, 'medium') %> Medium
               </label>
               <label class="radio-inline">
-                <input type="radio" name="priority" value="high"> High
+                <%= f.radio_button(:priority, 'high') %> High
               </label>
             </div>
           </div>
 
           <div class="form-group">
-            <label class="col-xs-2 control-label">Difficulty:</label>
+            <%= f.label(:difficulty, 'Difficulty:', class: 'control-label col-xs-2') %>
             <div class="col-xs-10">
               <label class="radio-inline">
-                <input type="radio" name="difficulty" value="low"> Low
+                <%= f.radio_button(:difficulty, 'low') %> Low
               </label>
               <label class="radio-inline">
-                <input type="radio" name="difficulty" value="medium"> Medium
+                <%= f.radio_button(:difficulty, 'medium') %> Medium
               </label>
               <label class="radio-inline">
-                <input type="radio" name="difficulty" value="high"> High
+                <%= f.radio_button(:difficulty, 'high') %> High
               </label>
             </div>
           </div>
 
           <div class="form-group has-feedback">
-            <label class="col-xs-2 control-label" for="tag-name">Tag:</label>
+            <%= f.label(:tag_name, 'Tag:', class: 'control-label col-xs-2') %>
             <div class="col-xs-10">
-              <input class="form-control" id="tag-name" type="text" name="tag_name" />
+              <%= f.text_field(:tag_name, class: 'form-control') %>
               <span class="form-control-feedback colorpicker">
-                <input type="text" class="basic" id="tag-color" value="orange" name="tag_color" />
+                <%= f.text_field(:tag_color, class: 'basic', value: 'orange') %>
               </span>
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="control-label col-xs-2" for="task-details">Details:</label>
-            <div class="col-xs-10">
+          <div class="row">
+            <div class="col-xs-12">
+              <%= f.label(:description, 'Description:', class: 'control-label') %>
               <textarea class="form-control" id="task-details" rows="3" style="resize: vertical;" name="task_details"></textarea>
             </div>
           </div>
@@ -85,10 +85,10 @@
         </div>
         <div class="modal-footer">
           <!-- buttons -->
-          <button class="btn btn-default" type="button" data-dismiss="modal">Cancel</button>
-          <button class="btn btn-primary" type="submit">Save</button>
+          <%= button_tag 'Cancel', type: 'button', data: { dismiss: 'modal' }, class: 'btn btn-default' %>
+          <%= f.submit 'Save', class: 'btn btn-primary' %>
         </div>
-      </form>
+      <% end %>
     </div>
   </div>
 </div>
