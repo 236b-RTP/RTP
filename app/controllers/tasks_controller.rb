@@ -1,5 +1,3 @@
-require 'pry'
-
 class TasksController < ApplicationController
   def index
   end
