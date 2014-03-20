@@ -1,5 +1,6 @@
 require_relative 'day.rb'
 require_relative 'task_placer.rb'
+require_relative 'pref_time_bulider.rb'
 
 class PrefTime
 	attr_accessor :pref, :time, :date
@@ -19,8 +20,8 @@ class PrefTime
 end
 
 class Scheduler
-	def initialize (tasks)
-		@refered_times = Array.new(7){Array.new(8,0)}
+	def initialize (tasks, events)
+		@prefered_times = Array.new(7){Array.new(8,0)}
 		@prefered_times_test = [[ 10, 10, 5, 2, 3, 0, 8, 8 ], 
 								[ 10, 10, 5, 2, 3, 0, 8, 8 ], 
 								[ 10, 10, 5, 2, 3, 0, 8, 8 ], 
@@ -87,11 +88,13 @@ class Scheduler
 	def load_events
 		#get events from database put in week days
 
+
 	end
 
 	def load_prefered_times
 		#need some predefined schemas for what tmies users prefer
-
+		pref = Preferecnes.where(user_id = <user goes here>)	
+		@prefered_times = week_preferences(pref)
 	end
 
 

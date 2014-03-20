@@ -8,15 +8,10 @@ end
 class Day
 
 	def initialize(wake, sleep)
-		total_seconds = sleep - wake.to_i
-		@minutes = ((total_seconds % 3600) / 60).to_i
-		seconds_diff = (start_time - end_time).to_i.abs
+		daylength = sleep.hour - wake.hour
 		@filled = []
-
-		@hours = total_seconds / 3600
-		
-		@day = Array.new(@minuits, 0)
-		@day = Array.new(@hours, 0)
+	
+		#@day = Array.new(daylength, 0)
 
 	end
 
