@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
   has_many :user_sessions
   has_one :preference
+  has_many :events
+  has_many :tasks
 
   # callbacks
   before_save { email.downcase! }

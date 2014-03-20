@@ -9,6 +9,7 @@ class CreateTasks < ActiveRecord::Migration
       t.datetime :due_date
       t.integer :priority
       t.integer :difficulty
+      t.integer :user_id
 
       t.timestamps
     end

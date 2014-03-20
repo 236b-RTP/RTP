@@ -33,6 +33,7 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :description, :tag_name, :tag_color, :priority, :difficulty, :duration)
+    #need to get user id from the session!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    params.require(:task).permit(:title, :description, :tag_name, :tag_color, :priority, :difficulty, :duration, )
   end
 end
