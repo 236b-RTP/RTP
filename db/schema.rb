@@ -55,7 +55,6 @@ ActiveRecord::Schema.define(version: 20140313024039) do
     t.datetime "due_date"
     t.integer  "priority"
     t.integer  "difficulty"
-    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "tag_color"

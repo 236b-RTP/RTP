@@ -10,6 +10,7 @@ class TasksController < ApplicationController
     @task.due_date = Chronic.parse("#{params[:task][:due_date]} #{params[:task][:due_time]}")
 
     if @task.save
+      TaskEvent.create!(user: current_user, item: @task)
       flash[:success] = "Your task has been created."
       redirect_to calendars_path
     else
@@ -33,7 +34,6 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    #need to get user id from the session!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    params.require(:task).permit(:title, :description, :tag_name, :tag_color, :priority, :difficulty, :duration, )
+    params.require(:task).permit(:title, :description, :tag_name, :tag_color, :priority, :difficulty, :duration)
   end
 end

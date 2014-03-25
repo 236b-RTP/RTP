@@ -1,8 +1,9 @@
 class User < ActiveRecord::Base
   has_many :user_sessions
   has_one :preference
-  has_many :events
-  has_many :tasks
+  has_many :task_events
+  has_many :events, through: :task_events, source: :item, source_type: 'Event'
+  has_many :tasks,  through: :task_events, source: :item, source_type: 'Task'
 
   # callbacks
   before_save { email.downcase! }

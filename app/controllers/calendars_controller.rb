@@ -4,9 +4,9 @@ class CalendarsController < ApplicationController
 
   def index
     @task = Task.new
-    @tasks = Task.all
+    @tasks = current_user.tasks
     @event = Event.new
-    @events = Event.all
+    @events = current_user.events
   end
 
   def preferences
