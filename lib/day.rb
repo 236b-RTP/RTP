@@ -6,11 +6,11 @@ class Block
 end
 
 class Day
-
-	def initialize(wake, sleep)
+	attr_accessor :filled, :date
+	def initialize(wake, sleep, date)
 		daylength = sleep.hour - wake.hour
 		@filled = []
-	
+		@date = date 
 		#@day = Array.new(daylength, 0)
 
 	end

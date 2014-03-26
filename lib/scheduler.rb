@@ -4,14 +4,9 @@ require_relative 'pref_time_bulider.rb'
 
 class PrefTime
 	attr_accessor :pref, :time, :date
-	def initialize (pref, time)
+	def initialize (pref, time, day)
 		@pref = pref
 		@time = time
-		@date = get_date(week_day)
-	end
-
-	def get_date (week_day)
-		#need to convert array spot to an actual date
 	end
 
 	def <=> (another)
@@ -21,55 +16,49 @@ end
 
 class Scheduler
 	def initialize (tasks, events)
-		@prefered_times = Array.new(7){Array.new(8,0)}
-		@prefered_times_test = [[ 10, 10, 5, 2, 3, 0, 8, 8 ], 
-								[ 10, 10, 5, 2, 3, 0, 8, 8 ], 
-								[ 10, 10, 5, 2, 3, 0, 8, 8 ], 
-								[ 10, 10, 5, 2, 3, 0, 8, 8 ], 
-								[ 10, 10, 5, 2, 3, 0, 8, 8 ], 
-								[ 10, 10, 5, 2, 3, 0, 8, 8 ],
-								[ 10, 10, 5, 2, 3, 0, 8, 8 ],
-								]
-
-		load_prefered_times
-		@week = Array.new(7, Day.new)
+		user_pref = Preferecnes.where(user_id = <user goes here>)
+		#change to be users location time
+		@today = Time.now
+		@prefered_times = load_prefered_times(user_pref)
+		@week = Array.new(7){|e|  e = Day.new(user_pref.start, user_pref.end, make_date(@today.wday, e))}
 		load_events
 		task_placer = TaskPlacer.new
 		@tasks = task_placer.order_tasks(tasks)
-		
+		#returns weekday number starting at 0 for sunday
+		#this may only give server time and not loval time of user so ????
+				
 	end
 
 	def schedule(week_day, time)
 		#making a deep copy
 		remaining = Marshal.load(Marshal.dump(@tasks))
-		couldnt_schedule= []
+		couldnt_schedule = []
 		while !remaining.empty? do
-			best_task remaining.shift
+			best_task = remaining.shift
 			scheduled = false
 			#find prefered poition closest to current time
-			d = week_day
+			d = @today.wday
 
 			#will need a circular check and note that it is circular 
 			#should grab week schedule one week from current wednessday to next tuesday 
 			
-			tested_week = false
-			while !scheduled &&  !tested_week do 
+			tested_week = 0
+			while !scheduled &&  tested_week <7 do 
 
 				check_day = @prefered_times[d%7].map.with_index{|e, i| PrefTime.new(e, i)}
 				best_times = check_day.sort.reverse
 				while !best_times.empty? do
 
 					pref_time = best_times.shift
-					#probably could do something about that remaining[0][:duration] since ugle
+					#probably could do something about that remaining[0][:duration] since ugly
 					busy = @week[d].busy(Block.new(pref_time.time, pref_time.time+best_task[:duration]))
 					if !busy && pref_time.date < best_task[:due_date]
 						scheduled = true
 						@week[d].insert(Block.new(pref_time.time, pref_time.time+best_task[:duration]))
 					end
 				end
-				d+=1 
-
-				#some tested week update if gone through week
+				d+=1
+				tested_week+=1 
 
 			end
 
@@ -82,6 +71,8 @@ class Scheduler
 			#do sme error for eadh not scheduled
 		end
 
+		return @week
+
 	end
 
 
@@ -91,11 +82,12 @@ class Scheduler
 
 	end
 
-	def load_prefered_times
-		#need some predefined schemas for what tmies users prefer
-		pref = Preferecnes.where(user_id = <user goes here>)	
+	def load_prefered_times(pref)
+		#need some predefined schemas for what times users prefer
 		@prefered_times = week_preferences(pref)
 	end
 
-
+	def make_date(today, weekday)
+		return today > weekday ? Time.now +(60*60*24*(7-today+weekday): Time.now +(60*60*24*(weekday-today)
+	end
 end
