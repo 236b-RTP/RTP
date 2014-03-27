@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="1685716737">
+    <data-source source="LOCAL" name="Rails RTP: development" uuid="900f35fb-4c3e-4278-a33d-3c32503efb28">
+      <driver-ref>postgresql</driver-ref>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql:rtp</jdbc-url>
+      <user-name>rtp</user-name>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="Rails RTP: test" uuid="16c47b6c-b7bd-4f54-a0b5-e3db99c2e6ed">
+      <driver-ref>postgresql</driver-ref>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql:rtp_test</jdbc-url>
+      <user-name>rtp</user-name>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="Rails RTP: production" uuid="5ff64a8b-6ff4-4ebf-a07a-1286eb965124">
+      <driver-ref>postgresql</driver-ref>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql:rtp</jdbc-url>
+      <user-name>rtp</user-name>
+      <user-password>dfd8dfdedfda</user-password>
+      <libraries />
+    </data-source>
+  </component>
+</project>
+

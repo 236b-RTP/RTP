@@ -29,7 +29,6 @@ class TaskPlacer
 		end
 	end
 	
-	private
 	
 	def pref_order(tasks)
 		#tasks with sooner end dates come first
@@ -46,7 +45,7 @@ class TaskPlacer
 			order<<[task, o_num]
 		 end
 		#return order.sort.reverse
-		return order.sort{|a b| b[1]<=>a[1]}
+		return order.sort{|a, b| b[1]<=>a[1]}
 
 	end
 	
@@ -72,9 +71,9 @@ class TaskPlacer
 end
 
 a = TaskPlacer.new
-b = a.task_order(1, 30, 30)
-puts b.to_s
-b = a.task_order(5, 7, 9)
-puts b.to_s
-
+today = DateTime.now
+tomorrow = DateTime.now + (60*60*24)
+start = DateTime.now
+finishTime = DateTime.now + (60*60*2)
+a.sep_tasks([{title: "hello", start_time: start, end_time: finishTime, priority: 3 }])
 
