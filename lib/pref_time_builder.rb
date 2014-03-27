@@ -1,9 +1,9 @@
 def week_preferences (preferences)
-	if(early = pref.type)
+	if('early' = pref[:profile_type])
 		return earlybird(pref.start, pref.end)
-	elsif (night = pref.type)
+	elsif ('late' = pref[:profile_type])
 		return nightowl(pref.start, pref.end)
-	elsif(defailt = pref.type)
+	elsif('mix' = pref[:profile_type])
 		return default(pref.start, pref.end)
 	end
 

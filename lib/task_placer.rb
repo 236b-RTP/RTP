@@ -14,10 +14,10 @@ class TaskPlacer
 				max_scale = sep_tasks[0][1]
 				best = sep_tasks.take_while{|e| e[1]>=max_scale}
 				pref_order(best)
-				sep_tasks-best
-				final_order+best
+				sep_tasks-=best
+				final_order+=best
 			end
-
+			return final_order
 		else
 			raise ArgumentError
 		end
@@ -26,7 +26,7 @@ class TaskPlacer
 	
 	def pref_order(tasks)
 		#tasks with sooner end dates come first
-		tasks.sort!{|a,b| a[:end_time].to_time<=>b[:end_time].to_time}
+		tasks.sort!{|a,b| a[:due_date].to_time<=>b[:due_date].to_time}
 	end
 
 	def sep_tasks(tasks)
@@ -34,7 +34,9 @@ class TaskPlacer
 		#order = {1 => [], 2 => [], 3 => [], 4 => [], 5 => [], 6 => [], 7 => [], 8 => [], 9 => [], 10 => []}
 		order = []
 		tasks.each do |task|
-			o_num = task_scale(task[:priority], Time.now-task[:created_at].to_time, task[:due_date]-task[:created_at].to_time)
+			cur = Time.now - task[:created_at].to_time
+			fin = task[:due_date].to_time - task[:created_at].to_time
+			o_num = task_scale(task[:priority], cur, fin)
 			#order[o_num]<< [task]
 			order<<[task, o_num]
 		 end
@@ -48,7 +50,10 @@ class TaskPlacer
 	#DUE IS NOT THE DUE DATE BUT THE TIME FROM WHEN CREATED TO WHEN DUE
 
 	def task_scale(p, elapsed, due)
-		if p.between?(1,5) && elapsed>0 && due>=elapsed && due>0
+		puts p.to_s
+		puts elapsed.to_s
+		puts due.to_s
+		if p.between?(1,5) && elapsed>=0.0 && due>=elapsed && due>0.0
 			p_factor = -0.3-((p/100.0)*p)
 			#p_factor = -0.3
 			d_factor = (10.0-p)/due
@@ -69,5 +74,5 @@ today = DateTime.now
 tomorrow = DateTime.now + (60*60*24)
 start = DateTime.now
 finishTime = DateTime.now + (60*60*2)
-a.sep_tasks([{title: "hello", start_time: start, end_time: finishTime, priority: 3 }])
-
+c = a.order_tasks([{title: "hello", start_time: start, end_time: finishTime, priority: 3 , created_at: today, due_date: tomorrow}, {title: "hello2*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow}])
+puts c.to_s
