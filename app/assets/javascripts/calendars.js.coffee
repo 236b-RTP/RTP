@@ -21,14 +21,14 @@ jQuery ($) ->
   calendar = $("#calendar").fullCalendar({
     defaultView: "agendaWeek"
     timezone: "local"
-    events: _.map EVENTS, (value, key) ->
-      {
-        title: value.title
-        start: value.start_time
-        end: value.end_time
-      }
-
-    eventClick: (event) ->
+#    events: _.map EVENTS, (value, key) ->
+#      {
+#        title: value.title
+#        start: value.start_time
+#        end: value.end_time
+#      }
+#
+#    eventClick: (event) ->
 
   })
 
@@ -79,10 +79,10 @@ jQuery ($) ->
 
   ## render tasks and events to calendar
 
-  # creates a model that extends the Backbone view
-  class ItemView extends View
-    tagName: "div"
-    template: _.template($(""))
+#  # creates a model that extends the Backbone view
+#  class ItemView extends View
+#    tagName: "div"
+#    template: _.template($(""))
 
   class AppView extends View
     tagName: "div" # creates a div
