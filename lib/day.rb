@@ -18,11 +18,11 @@ class Day
 	def busy(time)
 		busy = false
 		@filled.each do |spot|
-			busy ||= time.t[:begin].between{spot.t[:begin], spot.t[:end]}
-			busy ||= time.t[:end].between{spot.t[:begin], spot.t[:end]}
+			busy ||= time.t[:begin].between?{spot.t[:begin], spot.t[:end]}
+			busy ||= time.t[:end].between?{spot.t[:begin], spot.t[:end]}
 			#check spot isnt between the time
-			busy ||= spot.t[:begin].between{time.t[:begin], time.t[:end]}
-			busy ||= spot.t[:end].between{time.t[:begin], time.t[:end]}
+			busy ||= spot.t[:begin].between?{time.t[:begin], time.t[:end]}
+			busy ||= spot.t[:end].between?{time.t[:begin], time.t[:end]}
 
 		end
 		return busy

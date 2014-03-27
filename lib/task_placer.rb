@@ -18,12 +18,6 @@ class TaskPlacer
 				final_order+best
 			end
 
-			#sep_tasks.each{|key, val| }
-
-			#DO THE PREFERENCE CHECKS TO ORDER
-			#MAKE SURE TO TAKE THINGS WITH PRIOR DUE DATES BEFORE THINGS WITH = ORDER BUT LATER DATES
-
-
 		else
 			raise ArgumentError
 		end
@@ -32,7 +26,7 @@ class TaskPlacer
 	
 	def pref_order(tasks)
 		#tasks with sooner end dates come first
-		tasks.sort!{|a,b| a[:end_time]<=>b[:end_time]}
+		tasks.sort!{|a,b| a[:end_time].to_time<=>b[:end_time].to_time}
 	end
 
 	def sep_tasks(tasks)
@@ -40,7 +34,7 @@ class TaskPlacer
 		#order = {1 => [], 2 => [], 3 => [], 4 => [], 5 => [], 6 => [], 7 => [], 8 => [], 9 => [], 10 => []}
 		order = []
 		tasks.each do |task|
-			o_num = task_scale(task[:priority], Time.now-task[:start_time], task[:end_time]-task[:start_time])
+			o_num = task_scale(task[:priority], Time.now-task[:created_at].to_time, task[:due_date]-task[:created_at].to_time)
 			#order[o_num]<< [task]
 			order<<[task, o_num]
 		 end
