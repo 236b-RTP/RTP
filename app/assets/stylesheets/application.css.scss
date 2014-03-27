@@ -22,11 +22,29 @@ body, html {
   height: 100%;
 }
 
-.container img {
+.welcome-blurb img {
   height: 250px;
   padding: 5px;
 }
 
 textarea {
   resize: vertical;
+}
+
+.navbar-brand {
+  padding: 5px;
+}
+
+.navbar-brand-text {
+  float: left;
+  line-height: 100%;
+  font-size: 1.5em;
+  color: #fff;
+  padding: 16px 0;
+  font-family: Papyrus, fantasy;
+}
+
+.navbar-brand-text:hover {
+  color: #fff;
+  text-decoration: none;
 }

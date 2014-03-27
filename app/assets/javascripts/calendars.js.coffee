@@ -52,8 +52,8 @@ jQuery ($) ->
 
   # dynamically adds the tasks to the To Do task list
   trimmedTitle = (title) ->
-    return title unless title.length > 25
-    title.substr(0, 25) + '...'
+    return title unless title.length > 15
+    title.substr(0, 15) + '...'
 
   formattedDate = (date) ->
     date = new Date(date)

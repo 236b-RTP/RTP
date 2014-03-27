@@ -29,12 +29,21 @@
   width: 100%;
 }
 
+.tasks-tabs > li > a {
+  padding: 5px;
+  width: 70px;
+}
+
 #newItemDialog .colorpicker {
   width: 60px;
 }
 
 #newItemDialog .glyphicon-calendar {
   cursor: pointer;
+}
+
+#mini-calendar {
+  font-size: 1em;
 }
 
 .sp-container {
@@ -54,12 +63,12 @@
 
 .task-instance {
   position: relative;
-  margin: 1em;
+  margin: 0.8em;
   padding: 5px 5px 5px 20px;
   border-radius: 10px;
   background-color: #eee;
   border: 1px solid #fff;
-  height: 60px;
+  height: 40px;
   overflow: hidden;
 
   .task-tag-color {
@@ -73,9 +82,10 @@
   .task-due-date {
     position: absolute;
     right: 5px;
-    top: 20%;
-    width: 80px;
+    top: 15%;
+    width: 50px;
     padding: 5px;
+    font-size: 0.9em;
     // background-color: #a70304 // red
     background-color: #da8005; // orange
     // background-color: #02ae4c; // green
