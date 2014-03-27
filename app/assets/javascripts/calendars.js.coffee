@@ -27,6 +27,9 @@ jQuery ($) ->
         start: value.start_time
         end: value.end_time
       }
+
+    eventClick: (event) ->
+
   })
 
 
@@ -52,8 +55,8 @@ jQuery ($) ->
 
   # dynamically adds the tasks to the To Do task list
   trimmedTitle = (title) ->
-    return title unless title.length > 15
-    title.substr(0, 15) + '...'
+    return title unless title.length > 13
+    title.substr(0, 13) + '...'
 
   formattedDate = (date) ->
     date = new Date(date)
@@ -77,6 +80,10 @@ jQuery ($) ->
   ## render tasks and events to calendar
 
   # creates a model that extends the Backbone view
+  class ItemView extends View
+    tagName: "div"
+    template: _.template($(""))
+
   class AppView extends View
     tagName: "div" # creates a div
     template: _.template($("#new_item_dialog_template").html(), null, { variable: "model" }) # content of div
@@ -93,9 +100,11 @@ jQuery ($) ->
         keyboard: false,
         show: true
       })
+
       dialog.on "hidden.bs.modal", => # remove all elements from memory
         @formView.remove()
         @remove()
+
       @$el.find("form").on "submit", ->
         params = {}
         itemType = $(@).find("input[name=item_type]:checked").val()
@@ -103,6 +112,7 @@ jQuery ($) ->
           alert("Please select an item type.")
           return false
         params[itemType] = $(@).serializeObject()
+
         $.ajax({
           cache: false
           data: params
@@ -115,6 +125,7 @@ jQuery ($) ->
         })
 
         false
+
     render: ->
       @$el.html(@template(@model)) # renders the dialog view
       @
