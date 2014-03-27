@@ -1,0 +1,156 @@
+<script type="text/template" id="new_item_dialog_template">
+  <div class="modal fade" id="newItemDialog" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form class="form-horizontal">
+          <div class="modal-header">
+            <h4 class="modal-title">New Item</h4>
+          </div>
+
+          <div class="modal-body">
+          </div>
+
+          <div class="modal-footer">
+            <!-- buttons -->
+            <%= button_tag 'Cancel', type: 'button', data: { dismiss: 'modal' }, class: 'btn btn-default' %>
+            <%= submit_tag 'Save', class: 'btn btn-primary' %>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="new_item_content_template">
+
+  <div class="form-group">
+    <%= label_tag(:title, 'Title:', class: 'control-label col-xs-2') %>
+    <div class="col-xs-10">
+      <%= text_field_tag(:title, nil, class: 'form-control') %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <%= label_tag(:description, 'Details:', class: 'control-label col-xs-2') %>
+    <div class="col-xs-10">
+      <%= text_area_tag(:description, nil, class: 'form-control', rows: '3') %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="radio">
+          <label>
+            <%= radio_button_tag(:item_type, 'task') %>
+            <strong>Task</strong>
+            <p>
+              A "to do" item that does not have a scheduled time.
+            </p>
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <%= radio_button_tag(:item_type, 'event') %>
+            <strong>Event</strong>
+            <p>
+              A scheduled item that has a start and end time.
+            </p>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{ if (model.get("item_type") == "event") { }}
+
+    <div class="form-group">
+      <%= label_tag('start_date', 'Start:', class: 'control-label col-xs-2') %>
+      <div class="col-xs-4 has-feedback">
+        <%= text_field_tag('start_date', nil, class: 'form-control select-date') %>
+        <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+      </div>
+
+      <div class="col-xs-4">
+        <%= time_field_tag('start_time', nil, class: 'form-control') %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= label_tag('end_date', 'End:', class: 'control-label col-xs-2') %>
+      <div class="col-xs-4 has-feedback">
+        <%= text_field_tag('end_date', nil, class: 'form-control select-date') %>
+        <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+      </div>
+
+      <div class="col-xs-4">
+        <%= time_field_tag('end_time', nil, class: 'form-control') %>
+      </div>
+    </div>
+
+  {{ } else if (model.get("item_type") == "task") { }}
+
+    <div class="form-group">
+      <%= label_tag(:due_date, 'Due Date:', class: 'control-label col-xs-2') %>
+      <div class="col-xs-4 has-feedback">
+        <%= text_field_tag(:due_date, nil, class: 'form-control select-date') %>
+        <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+      </div>
+
+      <%= label_tag('due_time', 'Due Time:', class: 'control-label col-xs-2') %>
+      <div class="col-xs-4">
+        <%= time_field_tag('due_time', nil, class: 'form-control') %>
+      </div>
+    </div>
+
+    <div class="form-group has-feedback">
+      <%= label_tag(:duration, 'Duration:', class: 'control-label col-xs-2') %>
+      <div class="col-xs-4">
+        <%= text_field_tag(:duration, nil, class: 'form-control') %>
+        <span class="form-control-feedback">min</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= label_tag(:priority, 'Priority:', class: 'control-label col-xs-2') %>
+      <div class="col-xs-10">
+        <label class="radio-inline">
+          <%= radio_button_tag(:priority, 1) %> Low
+        </label>
+        <label class="radio-inline">
+          <%= radio_button_tag(:priority, 2) %> Medium
+        </label>
+        <label class="radio-inline">
+          <%= radio_button_tag(:priority, 3) %> High
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= label_tag(:difficulty, 'Difficulty:', class: 'control-label col-xs-2') %>
+      <div class="col-xs-10">
+        <label class="radio-inline">
+          <%= radio_button_tag(:difficulty, 1) %> Low
+        </label>
+        <label class="radio-inline">
+          <%= radio_button_tag(:difficulty, 2) %> Medium
+        </label>
+        <label class="radio-inline">
+          <%= radio_button_tag(:difficulty, 3) %> High
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group has-feedback">
+      <%= label_tag(:tag_name, 'Tag:', class: 'control-label col-xs-2') %>
+      <div class="col-xs-10">
+        <%= text_field_tag(:tag_name, nil, class: 'form-control') %>
+        <span class="form-control-feedback colorpicker">
+          <%= text_field_tag(:tag_color, nil, class: 'spectrum', value: 'orange') %>
+        </span>
+      </div>
+    </div>
+
+  {{ } }}
+</script>

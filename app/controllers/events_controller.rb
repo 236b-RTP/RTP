@@ -6,14 +6,24 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = Event.new(task_params)
+    @event = Event.new(event_params)
+    @event.start_time = Chronic.parse("#{params[:event][:start_date]} #{params[:event][:start_time]}")
+    @event.end_time = Chronic.parse("#{params[:event][:end_date]} #{params[:event][:end_time]}")
 
     if @event.save
-      flash[:success] = "Your event has been created."
-      redirect_to calendars_path
+      task_event = TaskEvent.create!(user: current_user, item: @event)
+      respond_to do |format|
+        format.html { redirect_to calendars_path }
+        format.json { render json: task_event }
+      end
     else
-      flash.now[:error] = "<ol><li>#{@event.errors.full_messages.join('</li><li>')}</li></ol>".html_safe
-      render :new
+      respond_to do |format|
+        format.html do
+          flash.now[:error] = "<ol><li>#{@event.errors.full_messages.join('</li><li>')}</li></ol>".html_safe
+          render :new
+        end
+        format.json { render json: { error: true }, status: 400 }
+      end
     end
   end
 
@@ -32,6 +42,6 @@ class EventsController < ApplicationController
   private
 
   def event_params
-    params.require(:event).permit(:title, :description, :start_time, :end_time)
+    params.require(:event).permit(:title, :description)
   end
 end

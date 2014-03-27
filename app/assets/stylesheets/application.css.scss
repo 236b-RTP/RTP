@@ -9,10 +9,10 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require_tree .
  *= require fullcalendar/fullcalendar
  *= require jquery-ui/jquery-ui
  *= require spectrum
+ *= require_tree .
  */
 
 @import 'bootstrap';

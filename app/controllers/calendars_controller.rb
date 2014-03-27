@@ -3,9 +3,7 @@ class CalendarsController < ApplicationController
   before_action :user_preferences_required
 
   def index
-    @task = Task.new
     @tasks = current_user.tasks
-    @event = Event.new
     @events = current_user.events
   end
 

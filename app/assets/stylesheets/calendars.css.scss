@@ -29,11 +29,21 @@
   width: 100%;
 }
 
-#newTaskDialog .colorpicker {
+#newItemDialog .colorpicker {
   width: 60px;
 }
 
-#newTaskDialog .sp-replacer {
+#newItemDialog .glyphicon-calendar {
+  cursor: pointer;
+}
+
+.sp-container {
+  background-color: #fff;
+  border: solid 1px #aaa;
+  border-radius: 5px;
+}
+
+#newItemDialog .sp-replacer {
   background-color: #fff;
   border: none;
 }
