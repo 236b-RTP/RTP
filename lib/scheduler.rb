@@ -80,7 +80,6 @@ class Scheduler
 		events = Events.where(belongs_to == <user id goes here>)
 		#get events from database put in week days
 
-
 	end
 
 	def load_prefered_times(pref)
