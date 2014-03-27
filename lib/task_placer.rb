@@ -7,12 +7,12 @@ class TaskPlacer
 	end
 	#on equal checks 
 	def order_tasks (tasks)
-		if tasks.class = Array && !tasks.empty?
+		if tasks.class == Array && !tasks.empty? #changed this to be == from =
 			sep_tasks = sep_tasks(tasks)
 			final_order=[]
 			while !sep_tasks.empty?
 				max_scale = sep_tasks[0][1]
-				best = spe_tasks.take_while{|e| e[1]>=max_scale}
+				best = sep_tasks.take_while{|e| e[1]>=max_scale}
 				pref_order(best)
 				sep_tasks-best
 				final_order+best

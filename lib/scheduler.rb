@@ -16,7 +16,7 @@ end
 
 class Scheduler
 	def initialize (tasks, events)
-		user_pref = Preferecnes.where(user_id = <user goes here>)
+		user_pref = Preferences.where(user_id = <user goes here>)
 		#change to be users location time
 		@today = Time.now
 		@prefered_times = load_prefered_times(user_pref)
