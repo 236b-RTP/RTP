@@ -7,6 +7,7 @@ class PrefTime
 	def initialize (pref, time, day)
 		@pref = pref
 		@time = time
+		@date = date
 	end
 
 	def <=> (another)
@@ -18,7 +19,7 @@ class Scheduler
 	def initialize (tasks, events)
 		user_pref = Preferences.where(user_id = <user goes here>)
 		#change to be users location time
-		@today = Time.now
+		@today = DateTime.now
 		@prefered_times = load_prefered_times(user_pref)
 		@week = Array.new(7){|e|  e = Day.new(user_pref.start, user_pref.end, make_date(@today.wday, e))}
 		load_events(@week, user_id)
@@ -77,8 +78,15 @@ class Scheduler
 
 	#takes in array and user id, fills array with events that user owns
 	def load_events(week)
-		events = Events.where(belongs_to == <user id goes here>)
+		events = current_user.events
 		#get events from database put in week days
+		week.each do|wday| 
+			deay_events = events.select{|e| e[:start_date].to_date == wday.date.to_day}
+			day_events.each do |e|
+				#make e a block object
+				day.insert()
+			end
+		end 
 
 	end
 
@@ -88,6 +96,6 @@ class Scheduler
 	end
 
 	def make_date(today, weekday)
-		return today > weekday ? Time.now +(60*60*24*(7-today+weekday): Time.now +(60*60*24*(weekday-today)
+		return today > weekday ? DateTime.now +(7-today+weekday) : DateTime.now +(weekday-today)
 	end
 end

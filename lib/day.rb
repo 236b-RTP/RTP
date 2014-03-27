@@ -28,11 +28,15 @@ class Day
 		return busy
 	end
 
-	def insert (time)
 
-		if !busy(time) && time.class == Block
+	#events can be at the same time need to change shit
+	def insert (time, if_task)
+
+		if !busy(time) && time.class == Block && if_task
 			@filled << time
 			return true
+		elsif !if_task && time.class == Block
+			@filled << time
 		else
 			return false
 		end
