@@ -21,7 +21,7 @@ class Scheduler
 		@today = Time.now
 		@prefered_times = load_prefered_times(user_pref)
 		@week = Array.new(7){|e|  e = Day.new(user_pref.start, user_pref.end, make_date(@today.wday, e))}
-		load_events
+		load_events(@week, user_id)
 		task_placer = TaskPlacer.new
 		@tasks = task_placer.order_tasks(tasks)
 		#returns weekday number starting at 0 for sunday
@@ -67,7 +67,7 @@ class Scheduler
 			end
 		end
 
-		if !couldnt_schedulse.empty?
+		if !couldnt_schedule.empty?
 			#do sme error for eadh not scheduled
 		end
 
@@ -75,8 +75,9 @@ class Scheduler
 
 	end
 
-
-	def load_events
+	#takes in array and user id, fills array with events that user owns
+	def load_events(week)
+		events = Events.where(belongs_to == <user id goes here>)
 		#get events from database put in week days
 
 
