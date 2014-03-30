@@ -13,23 +13,12 @@ MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 
 
 jQuery ($) ->
   return unless $(document.body).hasClass("calendars-index")
-  TASKS = root.TASKS
-  EVENTS = root.EVENTS
 
 
   # loads calendar
   calendar = $("#calendar").fullCalendar({
     defaultView: "agendaWeek"
     timezone: "local"
-#    events: _.map EVENTS, (value, key) ->
-#      {
-#        title: value.title
-#        start: value.start_time
-#        end: value.end_time
-#      }
-#
-#    eventClick: (event) ->
-
   })
 
 
@@ -53,46 +42,18 @@ jQuery ($) ->
   resizeFn()
 
 
-  # dynamically adds the tasks to the To Do task list
-  trimmedTitle = (title) ->
-    return title unless title.length > 13
-    title.substr(0, 13) + '...'
-
-  formattedDate = (date) ->
-    date = new Date(date)
-    month = date.getMonth()
-    day = date.getDate()
-    "#{MONTHS[month]} #{day}"
-
-  $.each TASKS, (index, task) ->
-    taskEl = $(document.createElement('div')).addClass('task-instance')
-    taskEl.append(
-      $(document.createElement('div')).addClass('task-tag-color').css('background-color', task.tag_color)
-    )
-    taskEl.append(
-      $(document.createElement('div')).addClass('task-name').append(document.createTextNode(trimmedTitle(task.title)))
-    )
-    taskEl.append(
-      $(document.createElement('div')).addClass('task-due-date').append(document.createTextNode(formattedDate(task.due_date)))
-    )
-    taskList.append(taskEl)
-
   ## render tasks and events to calendar
 
-#  # creates a model that extends the Backbone view
-#  class ItemView extends View
-#    tagName: "div"
-#    template: _.template($(""))
+  # creates a model that extends the Backbone view
 
   class AppView extends View
     tagName: "div" # creates a div
     template: _.template($("#new_item_dialog_template").html(), null, { variable: "model" }) # content of div
     initialize: ->
       @render()
-      @eventTask = new EventTask({ tag_color: "green" })
-      @eventTask.on "change:item_type", =>
+      @model.on "change:item_type", =>
         @formView.render()
-      @formView = new FormView({ model: @eventTask })
+      @formView = new FormView({ model: @model })
       @$el.find("div.modal-body").append(@formView.render().el) # appends the content of the form to the modal's body
       dialog = @$el.appendTo(document.body).find("#newItemDialog")
       dialog.modal({
@@ -130,27 +91,91 @@ jQuery ($) ->
       @$el.html(@template(@model)) # renders the dialog view
       @
 
+
   # creates the content of the new item form
   class EventTask extends Model
+    dialogTitle: ->
+      if @exists() then 'Edit Item' else 'New Item'
+    exists: ->
+      @id?
+    initialize: ->
+      model = { item: Item }
+      for own key, model of model
+        @set(key, new model(@get(key)))
+      return
+
+
+  class Item extends Model
+    trimmedTitle: ->
+      title = @get("title")
+      return title unless title.length > 13
+      title.substr(0, 13) + '...'
+    formattedDueDate: ->
+      date = new Date(@get("due_date"))
+      month = date.getMonth()
+      day = date.getDate()
+      "#{MONTHS[month]} #{day}"
+
+
+  class EventTaskCollection extends Collection
+    model: EventTask
+
+
+  EventTasks = new EventTaskCollection()
+
+
+  class TaskView extends View
+    tagName: "div"
+    template: _.template($("#task_template").html(), null, { variable: "model" })
+    initialize: ->
+      @$el.addClass("task-instance")
+    render: ->
+      @$el.html(@template(@model))
+      @
+
+
+  # controls when views get added or removed
+  class TaskApp extends View
+    el: $("div.tasks-list")
+    initialize: ->
+      @listenTo(EventTasks, "reset", @addAll)
+    addAll: ->
+      EventTasks.each(@addOne, @)
+    addOne: (eventTask) ->
+      if eventTask.get("item_type") == "Task"
+        view = new TaskView({ model: eventTask.get("item") })
+        @$el.append(view.render().el)
+      else
+        @addEvent(eventTask)
+    addEvent: (eventTask) ->
+      event = eventTask.get("item")
+      calendar.fullCalendar("addEventSource", {
+        events: [{
+          title: event.get("title")
+          start: event.get("start_time")
+          end: event.get("end_time")
+        }]
+      })
+
 
   class FormView extends View
     tagName: "div"
     template: _.template($("#new_item_content_template").html(), null, { variable: "model" })
     bindings: {
-      "input[name=item_type]": "item_type"
-      "input[name=title]": "title"
+      "input[name=item_type]"     : "item_type"
+      "input[name=title]"         : "title"
       "textarea[name=description]": "description"
-      "input[name=start_date]": "start_date"
-      "input[name=start_time]": "start_time"
-      "input[name=end_date]": "end_date"
-      "input[name=end_time]": "end_time"
-      "input[name=due_date]": "due_date"
-      "input[name=due_time]": "due_time"
-      "input[name=duration]": "duration"
-      "input[name=priority]": "priority"
-      "input[name=difficulty]": "difficulty"
-      "input[name=tag_name]": "tag_name"
-      "input[name=tag_color]": "tag_color"
+      "input[name=start_date]"    : "start_date"
+      "input[name=start_time]"    : "start_time"
+      "input[name=end_date]"      : "end_date"
+      "input[name=end_time]"      : "end_time"
+      "input[name=due_date]"      : "due_date"
+      "input[name=due_time]"      : "due_time"
+      "input[name=duration]"      : "duration"
+      "input[name=priority]"      : "priority"
+      "input[name=difficulty]"    : "difficulty"
+      "input[name=tag_name]"      : "tag_name"
+      "input[name=tag_color]"     : "tag_color"
     }
     render: ->
       @$el.html(@template(@model)) # renders the dialog view
@@ -170,5 +195,22 @@ jQuery ($) ->
         false
       @
 
+
   $("#new-item-button").on "click", ->
-    new AppView()
+    new AppView({ model: new EventTask({ tag_color: "green" }) })
+
+    
+  new TaskApp()
+
+
+  # gets all the event tasks and loads them into the EventTask collection
+  $.ajax({
+    cache: false
+    dataType: 'json'
+    error: ->
+      alert("Failed to fetch calendar items. Please reload the page.")
+    success: (data) ->
+      EventTasks.reset(data)
+    type: "GET"
+    url: "/task_events.json"
+  })

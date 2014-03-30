@@ -1,1 +1,0 @@
-json.array!(@tasks, :id, :title, :description, :tag_name, :tag_color, :due_date)

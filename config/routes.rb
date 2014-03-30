@@ -15,6 +15,8 @@ Rtp::Application.routes.draw do
     end
   end
 
+  resources :task_events
+
   resources :calendars, only: [ :index ] do
     member do
       get 'preferences'

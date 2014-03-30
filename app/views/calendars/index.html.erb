@@ -42,8 +42,5 @@
   </div>
 </div>
 
-<%= render partial: "new_item_dialog" %>
-<script>
-  var TASKS = <%= render(partial: "task_list.json").html_safe %>;
-  var EVENTS = <%= render(partial: "event_list.json").html_safe %>;
-</script>
+<%= render partial: "item_dialog" %>
+<%= render partial: "task_view" %>

@@ -4,7 +4,7 @@
       <div class="modal-content">
         <form class="form-horizontal">
           <div class="modal-header">
-            <h4 class="modal-title">New Item</h4>
+            <h4 class="modal-title">{{= model.dialogTitle() }}</h4>
           </div>
 
           <div class="modal-body">
@@ -12,6 +12,9 @@
 
           <div class="modal-footer">
             <!-- buttons -->
+            {{ if (model.exists()) { }}
+              <%= button_tag 'Delete', type: 'button', class: 'btn btn-danger btn-delete' %>
+            {{ } }}
             <%= button_tag 'Cancel', type: 'button', data: { dismiss: 'modal' }, class: 'btn btn-default' %>
             <%= submit_tag 'Save', class: 'btn btn-primary' %>
           </div>
@@ -38,30 +41,32 @@
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2">
-        <div class="radio">
-          <label>
-            <%= radio_button_tag(:item_type, 'task') %>
-            <strong>Task</strong>
-            <p>
-              A "to do" item that does not have a scheduled time.
-            </p>
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <%= radio_button_tag(:item_type, 'event') %>
-            <strong>Event</strong>
-            <p>
-              A scheduled item that has a start and end time.
-            </p>
-          </label>
+  {{ if (!model.exists()) { }}
+    <div class="form-group">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div class="radio">
+            <label>
+              <%= radio_button_tag(:item_type, 'task') %>
+              <strong>Task</strong>
+              <p>
+                A "to do" item that does not have a scheduled time.
+              </p>
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <%= radio_button_tag(:item_type, 'event') %>
+              <strong>Event</strong>
+              <p>
+                A scheduled item that has a start and end time.
+              </p>
+            </label>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  {{ } }}
 
   {{ if (model.get("item_type") == "event") { }}
 

@@ -1,0 +1,9 @@
+<script type="text/template" id="task_template">
+  <div class="task-tag-color" style="background-color: {{= model.get("tag_color") }};"></div>
+  <div class="task-name">
+    {{= model.trimmedTitle() }}
+  </div>
+  <div class="task-due-date">
+    {{= model.formattedDueDate() }}
+  </div>
+</script>
