@@ -21,6 +21,7 @@
 #= require underscore
 #= require backbone
 #= require backbone-stickit
+#= require backbone-deep-model
 #= require_self
 #= require_tree .
 

@@ -47,7 +47,7 @@
         <div class="col-md-8 col-md-offset-2">
           <div class="radio">
             <label>
-              <%= radio_button_tag(:item_type, 'task') %>
+              <%= radio_button_tag(:item_type, 'Task') %>
               <strong>Task</strong>
               <p>
                 A "to do" item that does not have a scheduled time.
@@ -56,7 +56,7 @@
           </div>
           <div class="radio">
             <label>
-              <%= radio_button_tag(:item_type, 'event') %>
+              <%= radio_button_tag(:item_type, 'Event') %>
               <strong>Event</strong>
               <p>
                 A scheduled item that has a start and end time.
@@ -68,7 +68,7 @@
     </div>
   {{ } }}
 
-  {{ if (model.get("item_type") == "event") { }}
+  {{ if (model.get("item_type") == "Event") { }}
 
     <div class="form-group">
       <%= label_tag('start_date', 'Start:', class: 'control-label col-xs-2') %>
@@ -94,7 +94,7 @@
       </div>
     </div>
 
-  {{ } else if (model.get("item_type") == "task") { }}
+  {{ } else if (model.get("item_type") == "Task") { }}
 
     <div class="form-group">
       <%= label_tag(:due_date, 'Due Date:', class: 'control-label col-xs-2') %>

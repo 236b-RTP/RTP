@@ -4,7 +4,7 @@
 
 root = @
 { jQuery, _, Backbone } = root
-{ Model, View, Collection } = Backbone # puts model, view, and collection into the global namespace from Backbone
+{ Model, View, Collection, DeepModel } = Backbone # puts model, view, and collection into the global namespace from Backbone
 
 
 # constants
@@ -93,25 +93,20 @@ jQuery ($) ->
 
 
   # creates the content of the new item form
-  class EventTask extends Model
+  class EventTask extends DeepModel
+    defaults: {
+      item: { tag_color: "orange" }
+    }
     dialogTitle: ->
       if @exists() then 'Edit Item' else 'New Item'
     exists: ->
       @id?
-    initialize: ->
-      model = { item: Item }
-      for own key, model of model
-        @set(key, new model(@get(key)))
-      return
-
-
-  class Item extends Model
     trimmedTitle: ->
-      title = @get("title")
+      title = @get("item.title")
       return title unless title.length > 13
       title.substr(0, 13) + '...'
     formattedDueDate: ->
-      date = new Date(@get("due_date"))
+      date = new Date(@get("item.due_date"))
       month = date.getMonth()
       day = date.getDate()
       "#{MONTHS[month]} #{day}"
@@ -127,12 +122,16 @@ jQuery ($) ->
   class TaskView extends View
     tagName: "div"
     template: _.template($("#task_template").html(), null, { variable: "model" })
+    events: {
+      "click": "edit"
+    }
     initialize: ->
       @$el.addClass("task-instance")
     render: ->
       @$el.html(@template(@model))
       @
-
+    edit: ->
+      new AppView({ model: @model })
 
   # controls when views get added or removed
   class TaskApp extends View
@@ -143,17 +142,16 @@ jQuery ($) ->
       EventTasks.each(@addOne, @)
     addOne: (eventTask) ->
       if eventTask.get("item_type") == "Task"
-        view = new TaskView({ model: eventTask.get("item") })
+        view = new TaskView({ model: eventTask })
         @$el.append(view.render().el)
       else
         @addEvent(eventTask)
     addEvent: (eventTask) ->
-      event = eventTask.get("item")
       calendar.fullCalendar("addEventSource", {
         events: [{
-          title: event.get("title")
-          start: event.get("start_time")
-          end: event.get("end_time")
+          title: eventTask.get("item.title")
+          start: eventTask.get("item.start_time")
+          end: eventTask.get("item.end_time")
         }]
       })
 
@@ -163,19 +161,19 @@ jQuery ($) ->
     template: _.template($("#new_item_content_template").html(), null, { variable: "model" })
     bindings: {
       "input[name=item_type]"     : "item_type"
-      "input[name=title]"         : "title"
-      "textarea[name=description]": "description"
-      "input[name=start_date]"    : "start_date"
-      "input[name=start_time]"    : "start_time"
-      "input[name=end_date]"      : "end_date"
-      "input[name=end_time]"      : "end_time"
-      "input[name=due_date]"      : "due_date"
-      "input[name=due_time]"      : "due_time"
-      "input[name=duration]"      : "duration"
-      "input[name=priority]"      : "priority"
-      "input[name=difficulty]"    : "difficulty"
-      "input[name=tag_name]"      : "tag_name"
-      "input[name=tag_color]"     : "tag_color"
+      "input[name=title]"         : "item.title"
+      "textarea[name=description]": "item.description"
+      "input[name=start_date]"    : "item.start_date"
+      "input[name=start_time]"    : "item.start_time"
+      "input[name=end_date]"      : "item.end_date"
+      "input[name=end_time]"      : "item.end_time"
+      "input[name=due_date]"      : "item.due_date"
+      "input[name=due_time]"      : "item.due_time"
+      "input[name=duration]"      : "item.duration"
+      "input[name=priority]"      : "item.priority"
+      "input[name=difficulty]"    : "item.difficulty"
+      "input[name=tag_name]"      : "item.tag_name"
+      "input[name=tag_color]"     : "item.tag_color"
     }
     render: ->
       @$el.html(@template(@model)) # renders the dialog view
@@ -197,11 +195,10 @@ jQuery ($) ->
 
 
   $("#new-item-button").on "click", ->
-    new AppView({ model: new EventTask({ tag_color: "green" }) })
+    new AppView({ model: new EventTask() })
 
     
   new TaskApp()
-
 
   # gets all the event tasks and loads them into the EventTask collection
   $.ajax({
