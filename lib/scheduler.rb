@@ -41,7 +41,6 @@ class Scheduler
 			d = @today.wday
 			
 			while !scheduled &&  d <  @today.wday+7 do 
-
 				check_day = @prefered_times[d%7].map.with_index{|e, i| PrefTime.new(e, i)}
 				#custom sort on Preftimes
 				best_times = check_day.sort.reverse
