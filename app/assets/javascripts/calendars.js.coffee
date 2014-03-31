@@ -45,10 +45,12 @@ jQuery ($) ->
   ## render tasks and events to calendar
 
   # creates a model that extends the Backbone view
-
   class AppView extends View
     tagName: "div" # creates a div
     template: _.template($("#new_item_dialog_template").html(), null, { variable: "model" }) # content of div
+    events: {
+      "click .btn-delete": "removeItem"
+    }
     initialize: ->
       @render()
       @model.on "change:item_type", =>
@@ -72,17 +74,20 @@ jQuery ($) ->
         unless itemType?
           alert("Please select an item type.")
           return false
+        itemType = itemType.toLowerCase()
         params[itemType] = $(@).serializeObject()
 
         $.ajax({
           cache: false
           data: params
+          dataType: "json"
           error: ->
             alert("Failed to save new item. Please try again.")
-          success: ->
-            window.location.reload()
+          success: (data) ->
+            dialog.modal("hide")
+            EventTasks.add(new EventTask(data))
           type: "POST"
-          url: "/#{itemType}s"
+          url: "/#{itemType}s.json"
         })
 
         false
@@ -90,6 +95,24 @@ jQuery ($) ->
     render: ->
       @$el.html(@template(@model)) # renders the dialog view
       @
+
+    removeItem: ->
+      if confirm("Are you sure you want to delete this item?")
+        itemType = @model.get("item_type").toLowerCase()
+        $.ajax({
+          cache: false
+          dataType: "json"
+          data: {
+            _method: "DELETE"
+          }
+          error: ->
+            alert("Unable to delete item. Please try again.")
+          success: =>
+            @$el.find("#newItemDialog").modal("hide")
+            EventTasks.remove(@model)
+          type: "POST"
+          url: "/#{itemType}s/#{@model.get("item.id")}"
+        })
 
 
   # creates the content of the new item form
@@ -127,23 +150,26 @@ jQuery ($) ->
     }
     initialize: ->
       @$el.addClass("task-instance")
+      @listenTo(@model, "remove", @remove)
     render: ->
       @$el.html(@template(@model))
       @
     edit: ->
       new AppView({ model: @model })
 
+
   # controls when views get added or removed
   class TaskApp extends View
     el: $("div.tasks-list")
     initialize: ->
       @listenTo(EventTasks, "reset", @addAll)
+      @listenTo(EventTasks, "add", @addOne)
     addAll: ->
       EventTasks.each(@addOne, @)
     addOne: (eventTask) ->
       if eventTask.get("item_type") == "Task"
         view = new TaskView({ model: eventTask })
-        @$el.append(view.render().el)
+        @$el.prepend(view.render().el)
       else
         @addEvent(eventTask)
     addEvent: (eventTask) ->

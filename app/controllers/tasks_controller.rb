@@ -10,17 +10,12 @@ class TasksController < ApplicationController
     @task.due_date = Chronic.parse("#{params[:task][:due_date]} #{params[:task][:due_time]}")
 
     if @task.save
-      task_event = TaskEvent.create!(user: current_user, item: @task)
+      @task_event = TaskEvent.create!(user: current_user, item: @task)
       respond_to do |format|
-        format.html { redirect_to calendars_path }
-        format.json { render json: task_event }
+        format.json
       end
     else
       respond_to do |format|
-        format.html do
-          flash.now[:error] = "<ol><li>#{@task.errors.full_messages.join('</li><li>')}</li></ol>".html_safe
-          render :new
-        end
         format.json { render json: { error: true }, status: 400 }
       end
     end
@@ -33,6 +28,12 @@ class TasksController < ApplicationController
   end
 
   def destroy
+    task = Task.find(params[:id])
+    task.task_event.destroy
+    task.destroy
+    respond_to do |format|
+      format.json { render json: { error: false } }
+    end
   end
 
   def search
