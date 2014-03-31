@@ -15,7 +15,7 @@ Rtp::Application.routes.draw do
     end
   end
 
-  resources :task_events
+  resources :task_events, only: [ :index, :show ]
 
   resources :calendars, only: [ :index ] do
     member do
