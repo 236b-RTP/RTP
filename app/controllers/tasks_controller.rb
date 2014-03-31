@@ -25,6 +25,18 @@ class TasksController < ApplicationController
   end
 
   def update
+    @task = Task.find(params[:id])
+    @task.due_date = Chronic.parse("#{params[:task][:due_date]} #{params[:task][:due_time]}")
+
+    if @task.update_attributes(task_params)
+      respond_to do |format|
+        format.json
+      end
+    else
+      respond_to do |format|
+        format.json { render json: { error: true }, status: 400 }
+      end
+    end
   end
 
   def destroy

@@ -12,10 +12,10 @@
 
           <div class="modal-footer">
             <!-- buttons -->
-            {{ if (model.exists()) { }}
+            {{ if (!model.isNew()) { }}
               <%= button_tag 'Delete', type: 'button', class: 'btn btn-danger btn-delete pull-left' %>
             {{ } }}
-            <%= button_tag 'Cancel', type: 'button', data: { dismiss: 'modal' }, class: 'btn btn-default' %>
+            <%= button_tag 'Cancel', type: 'button', data: { dismiss: 'modal' }, class: 'btn btn-default btn-cancel' %>
             <%= submit_tag 'Save', class: 'btn btn-primary' %>
           </div>
 
@@ -41,7 +41,7 @@
     </div>
   </div>
 
-  {{ if (!model.exists()) { }}
+  {{ if (model.isNew()) { }}
     <div class="form-group">
       <div class="row">
         <div class="col-md-8 col-md-offset-2">

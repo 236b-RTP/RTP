@@ -3,7 +3,7 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 root = @
-{ jQuery, _, Backbone } = root
+{ jQuery, _, Backbone, moment } = root
 { Model, View, Collection, DeepModel } = Backbone # puts model, view, and collection into the global namespace from Backbone
 
 
@@ -50,9 +50,11 @@ jQuery ($) ->
     template: _.template($("#new_item_dialog_template").html(), null, { variable: "model" }) # content of div
     events: {
       "click .btn-delete": "removeItem"
+      "click .btn-cancel": "resetItem"
     }
     initialize: ->
       @render()
+      @originalAttributes = @model.toJSON()
       @model.on "change:item_type", =>
         @formView.render()
       @formView = new FormView({ model: @model })
@@ -68,27 +70,37 @@ jQuery ($) ->
         @formView.remove()
         @remove()
 
-      @$el.find("form").on "submit", ->
+      form = @$el.find("form").on "submit", =>
         params = {}
-        itemType = $(@).find("input[name=item_type]:checked").val()
+        itemType = @model.get("item_type")
         unless itemType?
           alert("Please select an item type.")
           return false
         itemType = itemType.toLowerCase()
-        params[itemType] = $(@).serializeObject()
+        params[itemType] = form.serializeObject()
 
-        $.ajax({
+        ajaxParams = {
           cache: false
           data: params
           dataType: "json"
           error: ->
             alert("Failed to save new item. Please try again.")
-          success: (data) ->
+          success: (data) =>
             dialog.modal("hide")
-            EventTasks.add(new EventTask(data))
+            if @model.isNew()
+              EventTasks.add(new EventTask(data))
+            else
+              @model.set(data)
+              @model.updateDueDate()
           type: "POST"
           url: "/#{itemType}s.json"
-        })
+        }
+
+        unless @model.isNew()
+          ajaxParams.url = "/#{itemType}s/#{@model.get("item.id")}.json"
+          ajaxParams.data._method = "PUT"
+
+        $.ajax(ajaxParams)
 
         false
 
@@ -114,16 +126,24 @@ jQuery ($) ->
           url: "/#{itemType}s/#{@model.get("item.id")}"
         })
 
+    resetItem: ->
+      @model.set(@originalAttributes)
+
 
   # creates the content of the new item form
   class EventTask extends DeepModel
     defaults: {
       item: { tag_color: "orange" }
     }
+    initialize: ->
+      @updateDueDate()
+    updateDueDate: ->
+      if @get("item.due_date")?
+        due_date = moment(@get("item.due_date"))
+        @set("item.due_date", due_date.format("MM/DD/YYYY"))
+        @set("item.due_time", due_date.format("HH:mm"))
     dialogTitle: ->
-      if @exists() then 'Edit Item' else 'New Item'
-    exists: ->
-      @id?
+      if @isNew() then 'New Item' else 'Edit Item'
     trimmedTitle: ->
       title = @get("item.title")
       return title unless title.length > 13
@@ -151,6 +171,7 @@ jQuery ($) ->
     initialize: ->
       @$el.addClass("task-instance")
       @listenTo(@model, "remove", @remove)
+      @listenTo(@model, "change", @render)
     render: ->
       @$el.html(@template(@model))
       @
