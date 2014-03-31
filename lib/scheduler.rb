@@ -5,9 +5,9 @@ require_relative 'pref_time_bulider.rb'
 class PrefTime
 	#dont need dates insert into a day which has date
 	attr_accessor :pref, :time
-	def initialize (pref, time, day)
+	def initialize (pref, time, morning)
 		@pref = pref
-		@time = time
+		@time = (morning.to_time+(time*60**2)).to_datetime
 	end
 
 	def <=> (another)
@@ -21,7 +21,7 @@ class Scheduler
 		#change to be users location time
 		@today = DateTime.now
 		@prefered_times = load_prefered_times(user_pref)
-		@week = Array.new(7){|e|  e = Day.new(user_pref.start, user_pref.end, make_date(@today.wday, e))}
+		@week = Array.new(7){|e|  e = Day.new(user_pref[:start_time], user_pref[:end_time], make_date(@today.wday, e))}
 		load_events(@week)
 		task_placer = TaskPlacer.new
 		@tasks = task_placer.order_tasks(tasks)
@@ -41,16 +41,16 @@ class Scheduler
 			d = @today.wday
 			
 			while !scheduled &&  d <  @today.wday+7 do 
-				check_day = @prefered_times[d%7].map.with_index{|e, i| PrefTime.new(e, i)}
+				check_day = @prefered_times[d%7].map.with_index{|e, i| PrefTime.new(e, i, )}
 				#custom sort on Preftimes
 				best_times = check_day.sort.reverse
 
 				while !best_times.empty? && scheduled == false do
 					pref_time = best_times.shift
-					busy = @week[d].busy(Block.new(pref_time.time, pref_time.time+best_task[:duration]))
+					busy = @week[d].busy(pref_time.time pref_time.time+(best_task[:duration]/60))
 					if !busy && @week[d].date < best_task[:due_date]
 						scheduled = true
-						@week[d].insert(Block.new(pref_time.time, pref_time.time+best_task[:duration]))
+						@week[d].insert(pref_time.time, pref_time.time+(best_task[:duration]/60))
 					end
 				end
 				d+=1
@@ -78,7 +78,7 @@ class Scheduler
 			deay_events = events.select{|ev| e[:start_date].to_date == wday.date.to_date}
 			day_events.each do |d_e|
 				#make e a block object
-				day.insert(Block.new(d_e[:start_time], d_e[:end_time]), false)
+				day.insert(d_e[:start_time].hour, d_e[:end_time].hour, false)
 			end
 		end 
 
