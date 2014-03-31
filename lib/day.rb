@@ -1,7 +1,8 @@
+require 'date'
 class Block
 	attr_accessor :t
 	def initialize (start, stop)
-		@t = {:begin start, :end stop}
+		@t = {:begin => start, :end => stop}
 	end
 end
 
@@ -18,11 +19,11 @@ class Day
 	def busy(time)
 		busy = false
 		@filled.each do |spot|
-			busy ||= time.t[:begin].between?{spot.t[:begin], spot.t[:end]}
-			busy ||= time.t[:end].between?{spot.t[:begin], spot.t[:end]}
+			busy ||= time.t[:begin].between?(spot.t[:begin], spot.t[:end])
+			busy ||= time.t[:end].between?(spot.t[:begin], spot.t[:end])
 			#check spot isnt between the time
-			busy ||= spot.t[:begin].between?{time.t[:begin], time.t[:end]}
-			busy ||= spot.t[:end].between?{time.t[:begin], time.t[:end]}
+			busy ||= spot.t[:begin].between?(time.t[:begin], time.t[:end])
+			busy ||= spot.t[:end].between?(time.t[:begin], time.t[:end])
 
 		end
 		return busy
@@ -43,3 +44,6 @@ class Day
 
 end
 
+d = Day.new(DateTime.now-6, DateTime.now+5, DateTime.now)
+b = Block.new(DateTime.now.to_time - 7*60**2, DateTime.now.to_time - 6*60**2)
+puts d.insert(b, true)
