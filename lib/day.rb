@@ -1,4 +1,5 @@
 require 'date'
+require_relative('utility.rb')
 class Block
 	attr_accessor :t
 	def initialize (start, stop)
@@ -49,6 +50,6 @@ end
 d = Day.new(DateTime.now-6, DateTime.now+5, DateTime.now)
 b = Block.new(DateTime.now.to_time - 7*60**2, DateTime.now.to_time - 6*60**2)
 =end
+ 
 
-
-puts d.insert(8, 18 true)
+other = change_dt(DateTime.now, -4)
