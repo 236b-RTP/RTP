@@ -17,8 +17,7 @@ class Day
 
 	end
 
-	def busy(start, fin)
-		time = Block.new(start, fin)
+	def busy(time)
 		busy = false
 		@filled.each do |spot|
 			busy ||= time.t[:begin].between?(spot.t[:begin], spot.t[:end])
@@ -35,11 +34,12 @@ class Day
 	#events can be at the same time need to change shit
 	def insert (start, fin, if_task)
 		time = Block.new(start, fin)
-		if !busy(time) && if_task
+		if !busy(start, fin) && if_task
 			@filled << time
 			return true
 		elsif !if_task && time.class == Block
 			@filled << time
+			return true
 		else
 			return false
 		end
@@ -53,3 +53,6 @@ b = Block.new(DateTime.now.to_time - 7*60**2, DateTime.now.to_time - 6*60**2)
  
 
 other = change_dt(DateTime.now, -4)
+d = Day.new(change_dt(DateTime.now, -4), change_dt(DateTime.now, 4), DateTime.now)
+puts d.insert(change_dt(DateTime.now, -2), change_dt(DateTime.now, 1), false)
+puts d.insert(change_dt(DateTime.now, -1), change_dt(DateTime.now, 0), true)
