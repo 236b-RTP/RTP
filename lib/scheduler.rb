@@ -1,26 +1,14 @@
 require_relative 'day.rb'
 require_relative 'task_placer.rb'
 require_relative 'pref_time_bulider.rb'
-
-class PrefTime
-	#dont need dates insert into a day which has date
-	attr_accessor :pref, :time
-	def initialize (pref, time, morning)
-		@pref = pref
-		@time = (morning.to_time+(time*60**2)).to_datetime
-	end
-
-	def <=> (another)
-		@pref <=> another.pref
-	end
-end
+require_relative 'utility.rb'
 
 class Scheduler
 	def initialize (tasks, events)
 		user_pref = current_user.preferences
 		#change to be users location time
 		@today = DateTime.now
-		@prefered_times = load_prefered_times(user_pref)
+		@prefered_times =  week_preferences(user_pref)
 		@week = Array.new(7){|e|  e = Day.new(user_pref[:start_time], user_pref[:end_time], make_date(@today.wday, e))}
 		load_events(@week)
 		task_placer = TaskPlacer.new
@@ -41,16 +29,14 @@ class Scheduler
 			d = @today.wday
 			
 			while !scheduled &&  d <  @today.wday+7 do 
-				check_day = @prefered_times[d%7].map.with_index{|e, i| PrefTime.new(e, i, )}
+				check_day = @prefered_times[d%7]
 				#custom sort on Preftimes
 				best_times = check_day.sort.reverse
 
 				while !best_times.empty? && scheduled == false do
 					pref_time = best_times.shift
-					busy = @week[d].busy(pref_time.time pref_time.time+(best_task[:duration]/60))
-					if !busy && @week[d].date < best_task[:due_date]
-						scheduled = true
-						@week[d].insert(pref_time.time, pref_time.time+(best_task[:duration]/60))
+					if @week[d].date < best_task[:due_date]
+						scheduled = @week[d].insert(pref_time.time, change_dt(pref_time.time, (best_task[:duration]/60), true)
 					end
 				end
 				d+=1
@@ -75,18 +61,13 @@ class Scheduler
 		events = current_user.events
 		#get events from database put in week days
 		week.each do|wday| 
-			deay_events = events.select{|ev| e[:start_date].to_date == wday.date.to_date}
+			deay_events = events.select{|ev| ev[:start_date].to_date == wday.date.to_date}
 			day_events.each do |d_e|
 				#make e a block object
 				day.insert(d_e[:start_time].hour, d_e[:end_time].hour, false)
 			end
 		end 
 
-	end
-
-	def load_prefered_times(pref)
-		#need some predefined schemas for what times users prefer
-		@prefered_times = week_preferences(pref)
 	end
 
 	def make_date(today, weekday)
