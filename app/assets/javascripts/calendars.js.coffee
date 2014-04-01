@@ -175,6 +175,14 @@ jQuery ($) ->
         model: @
         id: @get("item.id")
       }
+    dueDateColor: ->
+      if moment(@getOriginalDate("item.due_date")).isBefore(moment().add("days", 1))
+        "#a70304"
+      else if moment(@getOriginalDate("item.due_date")).isBefore(moment().add("days", 2))
+        "#da8005"
+      else
+        "#02ae4c"
+
 
 
   class EventTaskCollection extends Collection
