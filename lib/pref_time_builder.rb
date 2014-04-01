@@ -6,21 +6,11 @@ class PrefTime
 	attr_accessor :pref, :time
 	def initialize (pref, hour, morning)
 		@pref = pref
-		@time = change_dt(morning.to_time, hour)
+		@time = change_dt(morning.to_datetime, hour)
 	end
 
 	def <=> (another)
 		@pref <=> another.pref
-	end
-end
-
-def week_preferences (pref)
-	if('early' == pref[:profile_type])
-		return earlybird(pref[:start_time], pref[:end_time])
-	elsif ('late' == pref[:profile_type])
-		return nightowl(pref[:start_time], pref[:end_time])
-	elsif('mix' == pref[:profile_type])
-		return default(pref[:start_time], pref[:end_time])
 	end
 end
 
@@ -74,6 +64,7 @@ def prefh (hour, type, day, rise)
 		if hour >= (day/3)*2 then return PrefTime.new(7, hour, rise) end
 	end
 end
+
 
 d = DateTime.new(2014, 4, 2, 8, 0, 0)
 

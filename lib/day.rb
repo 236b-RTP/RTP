@@ -33,7 +33,9 @@ class Day
 
 	#events can be at the same time need to change shit
 	def insert (start, fin, if_task)
-		time = Block.new(start, fin)
+		#preftimes made by preftime builder have the date when rise time was created 
+		dif = (@date - start)*24*60**2
+		time = Block.new(start+dif, fin+dif)
 		if !busy(time) && if_task
 			@filled << time
 			return true
