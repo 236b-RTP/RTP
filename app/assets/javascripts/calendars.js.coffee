@@ -179,6 +179,25 @@ jQuery ($) ->
 
   class EventTaskCollection extends Collection
     model: EventTask
+    comparator: (taskA, taskB) ->
+      taskAType = taskA.get("item_type")
+      taskBType = taskB.get("item_type")
+      if taskAType == "Event" && taskBType == "Task"
+        return -1
+      else if taskAType == "Task" && taskBType == "Event"
+        return 1
+      else if taskAType == "Event" && taskBType == "Event"
+        return 0
+      else
+        taskADue = taskA.getOriginalDate("item.due_date")
+        taskBDue = taskB.getOriginalDate("item.due_date")
+        if moment(taskADue).isBefore(taskBDue)
+          return -1
+        else if moment(taskADue).isAfter(taskBDue)
+          return 1
+        else
+          return 0
+
 
 
   EventTasks = new EventTaskCollection()
@@ -212,7 +231,13 @@ jQuery ($) ->
     addOne: (eventTask) ->
       if eventTask.get("item_type") == "Task"
         view = new TaskView({ model: eventTask })
-        @$el.prepend(view.render().el)
+        index = EventTasks.indexOf(eventTask)
+        previous = EventTasks.at(index - 1)
+        previousView = previous && previous.view
+        if index == 0 || !previous || !previousView
+          @$el.append(view.render().el)
+        else
+          previousView.$el.before(view.render().el)
       else
         @addEvent(eventTask)
     addEvent: (eventTask) ->
