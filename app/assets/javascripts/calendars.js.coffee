@@ -19,6 +19,8 @@ jQuery ($) ->
   calendar = $("#calendar").fullCalendar({
     defaultView: "agendaWeek"
     timezone: "local"
+    eventClick: (event) ->
+      new AppView({ model: event.model })
   })
 
 
@@ -136,12 +138,17 @@ jQuery ($) ->
       item: { tag_color: "orange" }
     }
     initialize: ->
-      @updateDueDate()
-    updateDueDate: ->
-      if @get("item.due_date")?
-        due_date = moment(@get("item.due_date"))
-        @set("item.due_date", due_date.format("MM/DD/YYYY"))
-        @set("item.due_time", due_date.format("HH:mm"))
+      @originalDates = {}
+      @updateDates("due", "start", "end")
+    getOriginalDate: (attribute) ->
+      @originalDates[attribute]
+    updateDates: (types...) ->
+      for type in types
+        if @get("item.#{type}_date")?
+          @originalDates["item.#{type}_date"] = @get("item.#{type}_date")
+          date = moment(@get("item.#{type}_date"))
+          @set("item.#{type}_date", date.format("MM/DD/YYYY"))
+          @set("item.#{type}_time", date.format("HH:mm"))
     dialogTitle: ->
       if @isNew() then 'New Item' else 'Edit Item'
     trimmedTitle: ->
@@ -197,8 +204,9 @@ jQuery ($) ->
       calendar.fullCalendar("addEventSource", {
         events: [{
           title: eventTask.get("item.title")
-          start: eventTask.get("item.start_time")
-          end: eventTask.get("item.end_time")
+          start: eventTask.getOriginalDate("item.start_date")
+          end: eventTask.getOriginalDate("item.end_date")
+          model: eventTask
         }]
       })
 
