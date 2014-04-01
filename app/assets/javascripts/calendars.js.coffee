@@ -20,7 +20,7 @@ jQuery ($) ->
     defaultView: "agendaWeek"
     timezone: "local"
     eventClick: (event) ->
-      new AppView({ model: event.model })
+      new AppView({ model: event.model }, event)
   })
 
 
@@ -54,7 +54,7 @@ jQuery ($) ->
       "click .btn-delete": "removeItem"
       "click .btn-cancel": "resetItem"
     }
-    initialize: ->
+    initialize: (options, calendarEvent) ->
       @render()
       @originalAttributes = @model.toJSON()
       @model.on "change:item_type", =>
@@ -93,7 +93,10 @@ jQuery ($) ->
               EventTasks.add(new EventTask(data))
             else
               @model.set(data)
-              @model.updateDueDate()
+              @model.updateDates()
+              if calendarEvent?
+                _.extend(calendarEvent, @model.fullCalendarParams())
+                calendar.fullCalendar("updateEvent", calendarEvent)
           type: "POST"
           url: "/#{itemType}s.json"
         }
@@ -138,11 +141,12 @@ jQuery ($) ->
       item: { tag_color: "orange" }
     }
     initialize: ->
-      @originalDates = {}
-      @updateDates("due", "start", "end")
+      @updateDates()
     getOriginalDate: (attribute) ->
       @originalDates[attribute]
-    updateDates: (types...) ->
+    updateDates: ->
+      @originalDates = {}
+      types = ["due", "start", "end"]
       for type in types
         if @get("item.#{type}_date")?
           @originalDates["item.#{type}_date"] = @get("item.#{type}_date")
@@ -160,6 +164,13 @@ jQuery ($) ->
       month = date.getMonth()
       day = date.getDate()
       "#{MONTHS[month]} #{day}"
+    fullCalendarParams: ->
+      {
+        title: @get("item.title")
+        start: jQuery.fullCalendar.moment(@getOriginalDate("item.start_date"))
+        end: jQuery.fullCalendar.moment(@getOriginalDate("item.end_date"))
+        model: @
+      }
 
 
   class EventTaskCollection extends Collection
@@ -202,12 +213,7 @@ jQuery ($) ->
         @addEvent(eventTask)
     addEvent: (eventTask) ->
       calendar.fullCalendar("addEventSource", {
-        events: [{
-          title: eventTask.get("item.title")
-          start: eventTask.getOriginalDate("item.start_date")
-          end: eventTask.getOriginalDate("item.end_date")
-          model: eventTask
-        }]
+        events: [eventTask.fullCalendarParams()]
       })
 
 

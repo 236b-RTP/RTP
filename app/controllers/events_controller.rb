@@ -26,6 +26,15 @@ class EventsController < ApplicationController
   end
 
   def update
+    @event = Event.find(params[:id])
+    @event.start_date = Chronic.parse("#{params[:event][:start_date]} #{params[:event][:start_time]}")
+    @event.end_date = Chronic.parse("#{params[:event][:end_date]} #{params[:event][:end_time]}")
+
+    unless @event.update_attributes(event_params)
+      respond_to do |format|
+        format.json { render json: { error: true }, status: 400 }
+      end
+    end
   end
 
   def destroy
