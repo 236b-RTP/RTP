@@ -51,10 +51,11 @@ end
 =begin
 d = Day.new(DateTime.now-6, DateTime.now+5, DateTime.now)
 b = Block.new(DateTime.now.to_time - 7*60**2, DateTime.now.to_time - 6*60**2)
-=end
+
  
 
 other = change_dt(DateTime.now, -4)
 d = Day.new(change_dt(DateTime.now, -4), change_dt(DateTime.now, 4), DateTime.now)
 puts d.insert(change_dt(DateTime.now, -2), change_dt(DateTime.now, 1), false)
 puts d.insert(change_dt(DateTime.now, -1), change_dt(DateTime.now, 0), true)
+=end
