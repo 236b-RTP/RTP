@@ -19,6 +19,9 @@ jQuery ($) ->
   calendar = $("#calendar").fullCalendar({
     defaultView: "agendaWeek"
     timezone: "local"
+    eventClick: (event) ->
+      new AppView({ model: event.model }, event)
+      console.log(event.id)
   })
 
 
@@ -52,7 +55,7 @@ jQuery ($) ->
       "click .btn-delete": "removeItem"
       "click .btn-cancel": "resetItem"
     }
-    initialize: ->
+    initialize: (options, @calendarEvent) ->
       @render()
       @originalAttributes = @model.toJSON()
       @model.on "change:item_type", =>
@@ -91,7 +94,10 @@ jQuery ($) ->
               EventTasks.add(new EventTask(data))
             else
               @model.set(data)
-              @model.updateDueDate()
+              @model.updateDates()
+              if @calendarEvent?
+                _.extend(@calendarEvent, @model.fullCalendarParams())
+                calendar.fullCalendar("updateEvent", @calendarEvent)
           type: "POST"
           url: "/#{itemType}s.json"
         }
@@ -122,6 +128,8 @@ jQuery ($) ->
           success: =>
             @$el.find("#newItemDialog").modal("hide")
             EventTasks.remove(@model)
+            if @calendarEvent?
+              calendar.fullCalendar("removeEvents", [@calendarEvent.id])
           type: "POST"
           url: "/#{itemType}s/#{@model.get("item.id")}"
         })
@@ -136,12 +144,18 @@ jQuery ($) ->
       item: { tag_color: "orange" }
     }
     initialize: ->
-      @updateDueDate()
-    updateDueDate: ->
-      if @get("item.due_date")?
-        due_date = moment(@get("item.due_date"))
-        @set("item.due_date", due_date.format("MM/DD/YYYY"))
-        @set("item.due_time", due_date.format("HH:mm"))
+      @updateDates()
+    getOriginalDate: (attribute) ->
+      @originalDates[attribute]
+    updateDates: ->
+      @originalDates = {}
+      types = ["due", "start", "end"]
+      for type in types
+        if @get("item.#{type}_date")?
+          @originalDates["item.#{type}_date"] = @get("item.#{type}_date")
+          date = moment(@get("item.#{type}_date"))
+          @set("item.#{type}_date", date.format("MM/DD/YYYY"))
+          @set("item.#{type}_time", date.format("HH:mm"))
     dialogTitle: ->
       if @isNew() then 'New Item' else 'Edit Item'
     trimmedTitle: ->
@@ -153,10 +167,45 @@ jQuery ($) ->
       month = date.getMonth()
       day = date.getDate()
       "#{MONTHS[month]} #{day}"
+    fullCalendarParams: ->
+      {
+        title: @get("item.title")
+        start: jQuery.fullCalendar.moment(@getOriginalDate("item.start_date"))
+        end: jQuery.fullCalendar.moment(@getOriginalDate("item.end_date"))
+        model: @
+        id: @get("item.id")
+      }
+    dueDateColor: ->
+      if moment(@getOriginalDate("item.due_date")).isBefore(moment().add("days", 1))
+        "#a70304"
+      else if moment(@getOriginalDate("item.due_date")).isBefore(moment().add("days", 2))
+        "#da8005"
+      else
+        "#02ae4c"
+
 
 
   class EventTaskCollection extends Collection
     model: EventTask
+    comparator: (taskA, taskB) ->
+      taskAType = taskA.get("item_type")
+      taskBType = taskB.get("item_type")
+      if taskAType == "Event" && taskBType == "Task"
+        return -1
+      else if taskAType == "Task" && taskBType == "Event"
+        return 1
+      else if taskAType == "Event" && taskBType == "Event"
+        return 0
+      else
+        taskADue = taskA.getOriginalDate("item.due_date")
+        taskBDue = taskB.getOriginalDate("item.due_date")
+        if moment(taskADue).isBefore(taskBDue)
+          return -1
+        else if moment(taskADue).isAfter(taskBDue)
+          return 1
+        else
+          return 0
+
 
 
   EventTasks = new EventTaskCollection()
@@ -190,16 +239,18 @@ jQuery ($) ->
     addOne: (eventTask) ->
       if eventTask.get("item_type") == "Task"
         view = new TaskView({ model: eventTask })
-        @$el.prepend(view.render().el)
+        index = EventTasks.indexOf(eventTask)
+        previous = EventTasks.at(index - 1)
+        previousView = previous && previous.view
+        if index == 0 || !previous || !previousView
+          @$el.append(view.render().el)
+        else
+          previousView.$el.before(view.render().el)
       else
         @addEvent(eventTask)
     addEvent: (eventTask) ->
       calendar.fullCalendar("addEventSource", {
-        events: [{
-          title: eventTask.get("item.title")
-          start: eventTask.get("item.start_time")
-          end: eventTask.get("item.end_time")
-        }]
+        events: [eventTask.fullCalendarParams()]
       })
 
 

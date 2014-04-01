@@ -1,1 +1,1 @@
-json.partial! "task_events/task_event", task_event: @task.task_event
+json.partial! "task_events/task_event", task_event: @event.task_event

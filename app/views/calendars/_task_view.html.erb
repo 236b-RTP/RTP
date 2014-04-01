@@ -3,7 +3,7 @@
   <div class="task-name">
     {{= model.trimmedTitle() }}
   </div>
-  <div class="task-due-date">
+  <div class="task-due-date" style="background-color: {{= model.dueDateColor() }};">
     {{= model.formattedDueDate() }}
   </div>
 </script>
