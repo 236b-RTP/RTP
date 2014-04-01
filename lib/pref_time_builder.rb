@@ -26,7 +26,7 @@ end
 
 def earlybird (rise, bed)
 	day = bed.hour - rise.hour
-	puts day.to_s
+	#puts day.to_s
 	week = Array.new(7){|d| d = Array.new(day).map.with_index{|h, i| prefh(i,1,day, rise)}}
 	return week
 end
@@ -65,7 +65,7 @@ def prefh (hour, type, day, rise)
 	end
 end
 
-
+=begin
 d = DateTime.new(2014, 4, 2, 8, 0, 0)
 
 person = {profile_type: 'early', start_time: change_dt(d, 0), end_time: change_dt(d, 7)}
@@ -85,3 +85,4 @@ person = {profile_type: 'late', start_time: change_dt(d, 0), end_time: change_dt
 wp = week_preferences(person)
 
 puts wp.to_s
+=end
