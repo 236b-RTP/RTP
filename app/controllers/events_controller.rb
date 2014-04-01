@@ -38,6 +38,12 @@ class EventsController < ApplicationController
   end
 
   def destroy
+    event = Event.find(params[:id])
+    event.task_event.destroy
+    event.destroy
+    respond_to do |format|
+      format.json { render json: { error: false } }
+    end
   end
 
   def search

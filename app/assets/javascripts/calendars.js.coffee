@@ -21,6 +21,7 @@ jQuery ($) ->
     timezone: "local"
     eventClick: (event) ->
       new AppView({ model: event.model }, event)
+      console.log(event.id)
   })
 
 
@@ -54,7 +55,7 @@ jQuery ($) ->
       "click .btn-delete": "removeItem"
       "click .btn-cancel": "resetItem"
     }
-    initialize: (options, calendarEvent) ->
+    initialize: (options, @calendarEvent) ->
       @render()
       @originalAttributes = @model.toJSON()
       @model.on "change:item_type", =>
@@ -94,9 +95,9 @@ jQuery ($) ->
             else
               @model.set(data)
               @model.updateDates()
-              if calendarEvent?
-                _.extend(calendarEvent, @model.fullCalendarParams())
-                calendar.fullCalendar("updateEvent", calendarEvent)
+              if @calendarEvent?
+                _.extend(@calendarEvent, @model.fullCalendarParams())
+                calendar.fullCalendar("updateEvent", @calendarEvent)
           type: "POST"
           url: "/#{itemType}s.json"
         }
@@ -127,6 +128,8 @@ jQuery ($) ->
           success: =>
             @$el.find("#newItemDialog").modal("hide")
             EventTasks.remove(@model)
+            if @calendarEvent?
+              calendar.fullCalendar("removeEvents", [@calendarEvent.id])
           type: "POST"
           url: "/#{itemType}s/#{@model.get("item.id")}"
         })
@@ -170,6 +173,7 @@ jQuery ($) ->
         start: jQuery.fullCalendar.moment(@getOriginalDate("item.start_date"))
         end: jQuery.fullCalendar.moment(@getOriginalDate("item.end_date"))
         model: @
+        id: @get("item.id")
       }
 
 
