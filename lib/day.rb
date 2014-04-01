@@ -34,7 +34,7 @@ class Day
 	#events can be at the same time need to change shit
 	def insert (start, fin, if_task)
 		time = Block.new(start, fin)
-		if !busy(start, fin) && if_task
+		if !busy(time) && if_task
 			@filled << time
 			return true
 		elsif !if_task && time.class == Block
