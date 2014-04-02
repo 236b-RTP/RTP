@@ -133,5 +133,5 @@ tomorrow = DateTime.now + (60*60*24)
 start = DateTime.now
 finishTime = DateTime.now + (60*60*2)
 
-tasks = [{title: "hello", start_time: start, end_time: finishTime, priority: 3 , created_at: today, due_date: tomorrow}, {title: "hello2*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow}])
+tasks = [{title: "hello", start_time: start, end_time: finishTime, priority: 3 , created_at: today, due_date: tomorrow}, {title: "hello2*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow}]
 

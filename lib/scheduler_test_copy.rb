@@ -123,5 +123,5 @@ finishTime = DateTime.now +1
 tasks = [{title: "hello", start_time: start, end_time: finishTime, priority: 3 , created_at: today, due_date: tomorrow}, 
 	{title: "hello2*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow}]
 
-#s = scheduler.new(user_pref, tasks, events)
+s = scheduler.new(user_pref, tasks, events)
 
