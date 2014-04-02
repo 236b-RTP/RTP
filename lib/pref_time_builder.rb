@@ -6,6 +6,7 @@ class PrefTime
 	#dont need dates insert into a day which has date
 	attr_accessor :pref, :time
 	def initialize (pref, hour, morning)
+		#puts "hour in preftime " + hour.to_s
 		@pref = pref
 		@time = change_dt(morning.to_datetime, hour)
 	end
@@ -28,27 +29,29 @@ end
 def earlybird (rise, bed)
 	@today = DateTime.now
 	day = bed.hour - rise.hour
-	week = Array.new(7){|d| d = Array.new(day){|i| prefh(i,1,day, change_dt(make_date(@today.wday, d), rise.hour))}}
+	week = Array.new(7){|d| d = Array.new(day){|i| i = prefh(i,1,day, change_dt(make_date(@today.wday, d), rise.hour))}}
 	return week
 end
 
 def nightowl (rise, bed)
 	@today = DateTime.now
 	day = bed.hour - rise.hour
-	week = Array.new(7){|d| d = Array.new(day){|i| prefh(i,2,day, change_dt(make_date(@today.wday, d), rise.hour))}}
+	week = Array.new(7){|d| d = Array.new(day){|i| i = prefh(i,2,day, change_dt(make_date(@today.wday, d), rise.hour))}}
 	return week
 end
 
 def default (rise, bed)
 	@today = DateTime.now
 	day = bed.hour - rise.hour
-	week = Array.new(7){|d| d = Array.new(day){|i| prefh(i,3,day, change_dt(make_date(@today.wday, d), rise.hour))}}
+	week = Array.new(7){|d| d = Array.new(day){|i| i = prefh(i,3,day, change_dt(make_date(@today.wday, d), rise.hour))}}
 	return week
 end
 
 
 def prefh (hour, type, day, rise)
 	# 1 is early bird 2 is nightowl
+	puts "prefh" + hour.to_s
+
 	if(type == 1)
 		if hour < day/3 then return PrefTime.new(10, hour, rise) end
 		if hour>= day/3 && hour < (day/3)*2 then return PrefTime.new(7, hour, rise) end
