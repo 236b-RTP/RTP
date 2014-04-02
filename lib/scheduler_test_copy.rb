@@ -12,7 +12,7 @@ class Scheduler
 		@today = DateTime.now
 		@prefered_times =  week_preferences(user_pref)
 		@week = Array.new(7){|e|  e = Day.new(user_pref[:start_time], user_pref[:end_time], make_date(@today.wday, e))}
-		load_events(@week, events)
+		load_events(events)
 		task_placer = TaskPlacer.new
 		@tasks = task_placer.order_tasks(tasks)
 		#returns weekday number starting at 0 for sunday
@@ -20,7 +20,7 @@ class Scheduler
 				
 	end
 
-	def schedule(week_day, time)
+	def schedule
 		#making a deep copy
 		remaining = Marshal.load(Marshal.dump(@tasks))
 		couldnt_schedule = []
@@ -123,5 +123,11 @@ finishTime = DateTime.now +1
 tasks = [{title: "hello", start_time: start, end_time: finishTime, priority: 3 , created_at: today, due_date: tomorrow}, 
 	{title: "hello2*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow}]
 
-s = scheduler.new(user_pref, tasks, events)
+s = Scheduler.new(user_pref, tasks, events)
+
+ar = s.schedule
+
+ar[0].each do |day|
+	puts day.filled.to_s
+end
 

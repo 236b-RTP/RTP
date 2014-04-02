@@ -20,7 +20,7 @@ class Scheduler
 				
 	end
 
-	def schedule(week_day, time)
+	def schedule
 		#making a deep copy
 		remaining = Marshal.load(Marshal.dump(@tasks))
 		couldnt_schedule = []
