@@ -115,8 +115,8 @@ events = [{start_time: es, end_time: ee}, {start_time: es + 1, end_time: ee + 1}
 	{start_time: es + 3, end_time: ee + 3}, {start_time: es + 4, end_time: ee + 4}, {start_time: es + 5, end_time: ee + 5}, {start_time: es + 6, end_time: ee + 6},]
 
 load_events(@week, events)
-=begin
+
 @week.each do |day|
 	puts day.filled.to_s
 end
-=end
+
