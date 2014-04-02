@@ -76,12 +76,12 @@ class Scheduler
 end
 
 
-
+=begin
 d = DateTime.now.midnight
 
 
 user_pref = {profile_type: 'early', start_time: change_dt(d, 7), end_time: change_dt(d, 18)}
-=begin
+
 #change to be users location time
 @today = DateTime.now
 		
@@ -95,7 +95,7 @@ user_pref = {profile_type: 'early', start_time: change_dt(d, 7), end_time: chang
 end
 
 
-=end
+
 
 es = change_dt(DateTime.now.midnight, 12)
 ee = change_dt(DateTime.now.midnight, 14)
@@ -110,13 +110,13 @@ events = [{start_time: es, end_time: ee}, {start_time: es + 1, end_time: ee + 1}
 events = [{start_time: es, end_time: ee}, {start_time: es2, end_time: ee2}, {start_time: es3, end_time: ee3},
 	{start_time: es + 1, end_time: ee + 1}, {start_time: es + 2, end_time: ee + 2}, {start_time: es + 3, end_time: ee + 3}, 
 	{start_time: es + 4, end_time: ee + 4}, {start_time: es + 5, end_time: ee + 5}, {start_time: es + 6, end_time: ee + 6},]
-=begin
+
 load_events(@week, events)
 
 @week.each do |day|
 	puts day.filled.to_s
 end
-=end
+
 
 today = DateTime.now
 tomorrow = today+1
@@ -144,5 +144,5 @@ ar[0].each do |day|
 		puts "\t end time "+b.t[:end].to_s
 	end
 end
-
+=end
 
