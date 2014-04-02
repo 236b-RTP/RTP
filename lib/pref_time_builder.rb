@@ -27,19 +27,19 @@ end
 def earlybird (rise, bed)
 	day = bed.hour - rise.hour
 	#puts day.to_s
-	week = Array.new(7){|d| d = Array.new(day){|i| prefh(i,1,day, make_date(@today.wday, d).midnight())}}
+	week = Array.new(7){|d| d = Array.new(day){|i| prefh(i,1,day, change_dt(make_date(@today.wday, d), rise.hour))}}
 	return week
 end
 
 def nightowl (rise, bed)
 	day = bed.hour - rise.hour
-	week = Array.new(7){|d| d = Array.new(day){|i| prefh(i,2,day, make_date(@today.wday, d).midnight())}}
+	week = Array.new(7){|d| d = Array.new(day){|i| prefh(i,2,day, change_dt(make_date(@today.wday, d), rise.hour))}}
 	return week
 end
 
 def default (rise, bed)
 	day = bed.hour - rise.hour
-	week = Array.new(7){|d| d = Array.new(day){|i| prefh(i,3,day, make_date(@today.wday, d).midnight())}}
+	week = Array.new(7){|d| d = Array.new(day){|i| prefh(i,3,day, change_dt(make_date(@today.wday, d), rise.hour))}}
 	return week
 end
 
