@@ -123,8 +123,14 @@ tomorrow = today+1
 start = DateTime.now
 finishTime = DateTime.now +1
 
-tasks = [{title: "hello", start_time: start, end_time: finishTime, priority: 3 , created_at: today, due_date: tomorrow, duration: 60}, 
-	{title: "hello2*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60}]
+tasks = [{title: "hello1*****", start_time: start, end_time: finishTime, priority: 3 , created_at: today, due_date: tomorrow, duration: 60}, 
+	{title: "hello2*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
+	{title: "hello3*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
+	{title: "hello4*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
+	{title: "hello5*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
+	{title: "hello6*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
+	{title: "hello7*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
+	{title: "hello8*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60}]
 
 s = Scheduler.new(user_pref, tasks, events)
 

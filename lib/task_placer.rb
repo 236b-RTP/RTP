@@ -26,7 +26,7 @@ class TaskPlacer
 	
 	def pref_order(tasks)
 		#tasks with sooner end dates come first
-		tasks.sort!{|a,b| a[:due_date].to_time<=>b[:due_date].to_time}
+		tasks.sort!{|a,b| a[0][:due_date].to_time<=>b[0][:due_date].to_time}
 	end
 
 	def sep_tasks(tasks)
