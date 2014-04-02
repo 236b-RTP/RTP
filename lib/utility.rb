@@ -12,3 +12,6 @@ def betwixt? (i,f,s)
 	return i>f && i<s
 end
 
+def change_dt_sec(d, amount)
+	(d.to_time + amount).to_datetime
+end

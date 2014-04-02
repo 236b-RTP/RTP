@@ -20,6 +20,8 @@ class Day
 		daylength = sleep.hour - wake.hour
 		@filled = []
 		@date = date 
+		@sleep = sleep
+		@wake = wake
 		#@day = Array.new(daylength, 0)
 
 	end
@@ -28,11 +30,11 @@ class Day
 		busy = false
 		@filled.each do |spot|
 			#non incusive som times can abut eachother a to 2:00 b from 2:00 accepted
-			busy ||= time.t[:begin].between?(spot.t[:begin], spot.t[:end]) && !time.t[:begin]==spot.t[:end]
-			busy ||= time.t[:end].between?(spot.t[:begin], spot.t[:end]) && !time.t[:end]==spot.t[:begin]
+			busy ||= change_dt_sec(time.t[:begin], 1).between?(spot.t[:begin], spot.t[:end]) && !time.t[:begin]==spot.t[:end]
+			busy ||= change_dt_sec(time.t[:end], -1).between?(spot.t[:begin], spot.t[:end]) && !time.t[:end]==spot.t[:begin]
 			#check spot isnt between the time
-			busy ||= spot.t[:begin].between?(time.t[:begin], time.t[:end]) && !time.t[:begin]==spot.t[:end]
-			busy ||= spot.t[:end].between?(time.t[:begin], time.t[:end]) && !time.t[:end]==spot.t[:begin]
+			busy ||= change_dt_sec(spot.t[:begin], 1).between?(time.t[:begin], time.t[:end]) && !time.t[:end]==spot.t[:begin]
+			busy ||= change_dt_sec(spot.t[:end], -1).between?(time.t[:begin], time.t[:end]) && !time.t[:begin]==spot.t[:end]
 
 		end
 		return busy
