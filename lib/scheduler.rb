@@ -72,9 +72,6 @@ class Scheduler
 		end 
 	end
 
-	def make_date(today, weekday)
-		return today > weekday ? DateTime.now + (7-today+weekday) : DateTime.now + (weekday-today)
-	end
 end
 
 

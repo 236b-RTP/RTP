@@ -19,9 +19,9 @@ class Day
 	def initialize(wake, sleep, date)
 		daylength = sleep.hour - wake.hour
 		@filled = []
-		@date = date 
-		@sleep = sleep
-		@wake = wake
+		@date = date
+		#@sleep = change_dt(sleep
+		#@wake = wake
 		#@day = Array.new(daylength, 0)
 
 	end

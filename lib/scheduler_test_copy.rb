@@ -73,9 +73,6 @@ class Scheduler
 	
 	end
 
-	def make_date(today, weekday)
-		return today > weekday ? DateTime.now + (7-today+weekday) : DateTime.now + (weekday-today)
-	end
 end
 
 
@@ -90,10 +87,16 @@ user_pref = {profile_type: 'early', start_time: change_dt(d, 7), end_time: chang
 		
 @week = Array.new(7){|e|  e = Day.new(user_pref[:start_time], user_pref[:end_time], make_date(@today.wday, e))}
 
+
+
 @week.each do |day|
+	puts "here"
 	puts day.date.to_s
 end
+
+
 =end
+
 es = change_dt(DateTime.now.midnight, 12)
 ee = change_dt(DateTime.now.midnight, 14)
 es2 = change_dt(DateTime.now.midnight, 13)
@@ -135,4 +138,5 @@ ar[0].each do |day|
 		puts "\t end time "+b.t[:end].to_s
 	end
 end
+
 
