@@ -28,11 +28,11 @@ class Day
 		busy = false
 		@filled.each do |spot|
 			#non incusive som times can abut eachother a to 2:00 b from 2:00 accepted
-			busy ||= betwixt?(time.t[:begin], spot.t[:begin], spot.t[:end])
-			busy ||= betwixt?(time.t[:end], spot.t[:begin], spot.t[:end])
+			busy ||= time.t[:begin].between?(spot.t[:begin], spot.t[:end]) && !time.t[:begin]==spot.t[:end]
+			busy ||= time.t[:end].between?(spot.t[:begin], spot.t[:end]) && !time.t[:end]==spot.t[:begin]
 			#check spot isnt between the time
-			busy ||= betwixt?(spot.t[:begin], time.t[:begin], time.t[:end])
-			busy ||= betwixt?(spot.t[:end], time.t[:begin], time.t[:end])
+			busy ||= spot.t[:begin].between?(time.t[:begin], time.t[:end]) && !time.t[:begin]==spot.t[:end]
+			busy ||= spot.t[:end].between?(time.t[:begin], time.t[:end]) && !time.t[:end]==spot.t[:begin]
 
 		end
 		return busy
