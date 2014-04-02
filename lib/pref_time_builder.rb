@@ -26,19 +26,21 @@ def week_preferences (pref)
 end
 
 def earlybird (rise, bed)
+	@today = DateTime.now
 	day = bed.hour - rise.hour
-	#puts day.to_s
 	week = Array.new(7){|d| d = Array.new(day){|i| prefh(i,1,day, change_dt(make_date(@today.wday, d), rise.hour))}}
 	return week
 end
 
 def nightowl (rise, bed)
+	@today = DateTime.now
 	day = bed.hour - rise.hour
 	week = Array.new(7){|d| d = Array.new(day){|i| prefh(i,2,day, change_dt(make_date(@today.wday, d), rise.hour))}}
 	return week
 end
 
 def default (rise, bed)
+	@today = DateTime.now
 	day = bed.hour - rise.hour
 	week = Array.new(7){|d| d = Array.new(day){|i| prefh(i,3,day, change_dt(make_date(@today.wday, d), rise.hour))}}
 	return week
@@ -66,14 +68,22 @@ def prefh (hour, type, day, rise)
 	end
 end
 
+=begin
+d = DateTime.now.midnight
+puts " rise "+ d.hour.to_s
 
-d = DateTime.new(2014, 4, 2, 8, 0, 0)
+puts "change by 0 " + change_dt(d, 8).hour.to_s
 
-person = {profile_type: 'early', start_time: change_dt(d, 0), end_time: change_dt(d, 7)}
+person = {profile_type: 'early', start_time: change_dt(d, 8), end_time: change_dt(d, 15)}
 
 wp = week_preferences(person)
 
-puts wp.to_s
+wp.each do |d|
+	d.each do|h|
+		puts h.pref
+		puts h.time
+	end
+end
 
 person = {profile_type: 'mix', start_time: change_dt(d, 0), end_time: change_dt(d, 7)}
 
@@ -87,3 +97,4 @@ wp = week_preferences(person)
 
 puts wp.to_s
 
+=end
