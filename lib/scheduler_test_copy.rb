@@ -37,8 +37,8 @@ class Scheduler
 
 				while !best_times.empty? && scheduled == false do
 					pref_time = best_times.shift
-					if @week[d].date < best_task[:due_date]
-						scheduled = @week[d].insert(pref_time.time, change_dt(pref_time.time, (best_task[:duration]/60)), true)
+					if @week[d].date < best_task[0][:due_date]
+						scheduled = @week[d].insert(pref_time.time, change_dt(pref_time.time, (best_task[0][:duration]/60)), true)
 					end
 				end
 				d+=1
@@ -120,8 +120,8 @@ tomorrow = today+1
 start = DateTime.now
 finishTime = DateTime.now +1
 
-tasks = [{title: "hello", start_time: start, end_time: finishTime, priority: 3 , created_at: today, due_date: tomorrow}, 
-	{title: "hello2*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow}]
+tasks = [{title: "hello", start_time: start, end_time: finishTime, priority: 3 , created_at: today, due_date: tomorrow, duration: 60}, 
+	{title: "hello2*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60}]
 
 s = Scheduler.new(user_pref, tasks, events)
 
