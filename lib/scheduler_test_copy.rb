@@ -128,6 +128,11 @@ s = Scheduler.new(user_pref, tasks, events)
 ar = s.schedule
 
 ar[0].each do |day|
-	puts day.filled.to_s
+	puts "date"+day.date.to_s
+	day.filled.each do |b|
+		puts "\t is task? "+b.is_task?.to_s
+		puts "\t start time "+b.t[:begin].to_s
+		puts "\t end time "+b.t[:end].to_s
+	end
 end
 

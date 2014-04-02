@@ -3,10 +3,15 @@ require_relative 'utility.rb'
 require 'active_support/all'
 
 class Block
-	attr_accessor :t
-	def initialize (start, stop)
+	attr_accessor :t 
+	def initialize (start, stop, type)
 		@t = {:begin => start, :end => stop}
+		@type = type
 	end
+	def is_task?
+		return @type
+	end
+
 end
 
 class Day
@@ -37,7 +42,7 @@ class Day
 	#events can be at the same time need to change shit
 	def insert (start, fin, if_task)
 		#preftimes made by preftime builder have the date when rise time was created 
-		time = Block.new(start, fin)
+		time = Block.new(start, fin, if_task)
 		if !busy(time) && if_task
 			@filled << time
 			return true
@@ -52,7 +57,7 @@ class Day
 end
 #=begin
 d = Day.new(DateTime.now-6, DateTime.now+5, DateTime.now)
-b = Block.new(DateTime.now.to_time - 7*60**2, DateTime.now.to_time - 6*60**2)
+#b = Block.new(DateTime.now.to_time - 7*60**2, DateTime.now.to_time - 6*60**2, )
 
  
 
