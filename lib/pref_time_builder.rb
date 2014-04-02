@@ -1,5 +1,6 @@
 require 'date'
 require_relative 'utility.rb'
+require 'active_support/all'
 
 class PrefTime
 	#dont need dates insert into a day which has date
@@ -65,7 +66,7 @@ def prefh (hour, type, day, rise)
 	end
 end
 
-=begin
+
 d = DateTime.new(2014, 4, 2, 8, 0, 0)
 
 person = {profile_type: 'early', start_time: change_dt(d, 0), end_time: change_dt(d, 7)}
@@ -85,4 +86,4 @@ person = {profile_type: 'late', start_time: change_dt(d, 0), end_time: change_dt
 wp = week_preferences(person)
 
 puts wp.to_s
-=end
+

@@ -2,6 +2,7 @@ require_relative 'day.rb'
 require_relative 'task_placer.rb'
 require_relative 'pref_time_builder.rb'
 require_relative 'utility.rb'
+require 'active_support/all'
 require 'pry'
 
 class Scheduler

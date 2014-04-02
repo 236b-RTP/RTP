@@ -1,5 +1,7 @@
 require 'date'
 require_relative('utility.rb')
+require 'active_support/all'
+
 class Block
 	attr_accessor :t
 	def initialize (start, stop)
