@@ -1,7 +1,7 @@
 require 'time_utilities'
 
 class Scheduler
-  def initialize(user, task)
+  def initialize(user, task = nil)
     @user = user
     @user_preference = @user.preference
     @today = DateTime.now
@@ -11,7 +11,9 @@ class Scheduler
     load_events(@user.events)
 
     tasks = @user.tasks.select { |task| task.start_date.present? }
-    tasks << task
+    if task.present?
+      tasks << task
+    end
 
     task_placer = TaskPlacer.new(tasks)
     @tasks = task_placer.order_tasks
@@ -51,7 +53,12 @@ class Scheduler
       #do some error for each not scheduled
     end
 
-    return @week, couldnt_schedule
+    @week.each do |day|
+      tasks = day.filled.select { |task| task.is_task? }
+      tasks.each do |block|
+        block.item.update_attributes(start_date: block.t[:begin], end_date: block.t[:end])
+      end
+    end
   end
 
   private

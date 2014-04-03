@@ -28,6 +28,7 @@ class PreferencesController < ApplicationController
     @user = current_user
     @preference = @user.preference
     if @preference.update_attributes(preferences_params)
+      Task.reschedule!(current_user)
       redirect_to calendars_path
     else
       flash.now[:error] = "<ol><li>#{@preference.errors.full_messages.join('</li><li>')}</li></ol>".html_safe

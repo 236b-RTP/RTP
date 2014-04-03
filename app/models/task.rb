@@ -4,12 +4,13 @@ class Task < ActiveRecord::Base
 
   def schedule!
     scheduler = Scheduler.new(user, self)
-    cal = scheduler.schedule
-    cal[0].each do |day|
-      tasks = day.filled.select { |task| task.is_task? }
-      tasks.each do |block|
-        block.item.update_attributes(start_date: block.t[:begin], end_date: block.t[:end])
-      end
+    scheduler.schedule
+  end
+
+  class << self
+    def reschedule!(user)
+      scheduler = Scheduler.new(user)
+      scheduler.schedule
     end
   end
 end
