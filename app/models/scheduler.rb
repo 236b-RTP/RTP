@@ -53,6 +53,25 @@ class Scheduler
       #do some error for each not scheduled
     end
 
+    def schedule_spread
+      remaining = Marshal.load(Marshal.dump(@tasks))
+      couldnt_schedule = []
+      pre_time_ar = Marshal.load(Marshal.dump(@preferred_times))
+      while !remaining.empty? do
+        best_task = remaining.shift
+        scheduled = false
+        weeks_best_times = pre_time_ar.select()
+        # find preferred position closest to current time
+
+        while !scheduled &&  do
+        check_day = @preferred_times[d%7]
+        #custom sort on Preftimes
+        best_times = check_day.sort.reverse
+
+      end
+
+    end
+
     @week.each do |day|
       tasks = day.filled.select { |task| task.is_task? }
       tasks.each do |block|
@@ -70,6 +89,17 @@ class Scheduler
         #make e a block object
         wday.insert(d_e.start_date, d_e.end_date, false, d_e)
       end
+    end
+  end
+
+  def weeks_best_times(preftimes)
+    best_times = []
+    preftimes.each do |day|
+      #get times with highest priority get earliest time?? may not want earliest time want something grr
+      candidates = day.select{|p| p.pref == day.max.pref}
+      best_time = candidates.sort{|a,b| a.time<=>b.time}.shift
+      best_times << best_time
+      day.remove(best_time)
     end
   end
 end
