@@ -20,4 +20,6 @@ def run_scheduler
 			block.item.update(start_date: block.t[:begin], end_date: block.t[:end])
 		end
 	end
+	puts "************** SECOND CALL TO CAL[0]"
+	puts cal[0].to_s
 end

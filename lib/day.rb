@@ -3,7 +3,7 @@ require_relative 'utility.rb'
 require 'active_support/all'
 
 class Block
-	attr_accessor :t 
+	attr_accessor :t, :item
 	def initialize (start, stop, type, item)
 		@t = {:begin => start, :end => stop}
 		@type = type
