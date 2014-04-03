@@ -181,10 +181,18 @@ jQuery ($) ->
         "#da8005"
       else
         "#02ae4c"
-    schedule: ->
-      console.log("I am scheduled")
-
-
+    schedule: (view) ->
+      view.hide()
+      $.ajax {
+        cache: false
+        dataType: 'json'
+        error: ->
+          alert('Unable to schedule task. Please try again.')
+        success: ->
+          loadAllTasks()
+        type: 'POST'
+        url: "/tasks/#{@get("item.id")}/schedule"
+      }
 
   class EventTaskCollection extends Collection
     model: EventTask
@@ -271,11 +279,12 @@ jQuery ($) ->
         else
           previousView.$el.before(view.render().el)
     addEvent: (eventTask) ->
-      return unless eventTask.get("item_type") == "Event"
+      return unless eventTask.get("item.start_date")?
       calendar.fullCalendar("addEventSource", {
         events: [eventTask.fullCalendarParams()]
       })
     addAllEvents: ->
+      calendar.fullCalendar('removeEvents')
       EventTasks.each(@addEvent, @)
     filter: ->   # populates display tasks
       activeTab = @tabs.find("li.active")
@@ -336,20 +345,22 @@ jQuery ($) ->
     accept: ".task-instance"
     drop: (event, ui) ->
       if confirm("Are you sure you want to add this task to your calendar?")
-        ui.draggable.data("model").schedule()
+        ui.draggable.data("model").schedule(ui.draggable)
   })
 
 
   new TaskApp()
 
   # gets all the event tasks and loads them into the EventTask collection
-  $.ajax({
-    cache: false
-    dataType: 'json'
-    error: ->
-      alert("Failed to fetch calendar items. Please reload the page.")
-    success: (data) ->
-      EventTasks.reset(data)
-    type: "GET"
-    url: "/task_events.json"
-  })
+  loadAllTasks = ->
+    $.ajax({
+      cache: false
+      dataType: 'json'
+      error: ->
+        alert("Failed to fetch calendar items. Please reload the page.")
+      success: (data) ->
+        EventTasks.reset(data)
+      type: "GET"
+      url: "/task_events.json"
+    })
+  loadAllTasks()

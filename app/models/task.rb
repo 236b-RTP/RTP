@@ -3,7 +3,7 @@ class Task < ActiveRecord::Base
   has_one :user, through: :task_event
 
   def schedule!
-    scheduler = Scheduler.new(user)
+    scheduler = Scheduler.new(user, self)
     cal = scheduler.schedule
     cal[0].each do |day|
       tasks = day.filled.select { |task| task.is_task? }

@@ -1,7 +1,7 @@
 require 'time_utilities'
 
 class Scheduler
-  def initialize(user)
+  def initialize(user, task)
     @user = user
     @user_preference = @user.preference
     @today = DateTime.now
@@ -10,7 +10,10 @@ class Scheduler
 
     load_events(@user.events)
 
-    task_placer = TaskPlacer.new(@user.tasks)
+    tasks = @user.tasks.select { |task| task.start_date.present? }
+    tasks << task
+
+    task_placer = TaskPlacer.new(tasks)
     @tasks = task_placer.order_tasks
   end
 

@@ -13,6 +13,10 @@ Rtp::Application.routes.draw do
     collection do
       post 'search'
     end
+
+    member do
+      post 'schedule'
+    end
   end
 
   resources :task_events, only: [ :index, :show ]

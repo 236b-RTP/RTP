@@ -48,6 +48,15 @@ class TasksController < ApplicationController
   def search
   end
 
+  def schedule
+    task = Task.find(params[:id])
+    task.schedule!
+
+    respond_to do |format|
+      format.json { render json: { error: false } }
+    end
+  end
+
   private
 
   def task_params
