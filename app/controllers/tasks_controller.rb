@@ -19,6 +19,8 @@ class TasksController < ApplicationController
         format.json { render json: { error: true }, status: 400 }
       end
     end
+    #Run the scheduler!
+    run_scheduler
   end
 
   def edit

@@ -7,7 +7,7 @@ require 'pry'
 
 class Scheduler
 	def initialize ()
-		user_pref = current_user.preferences
+		user_pref = current_user.preference
 		#change to be users location time
 		@today = DateTime.now
 		@prefered_times =  week_preferences(user_pref)
