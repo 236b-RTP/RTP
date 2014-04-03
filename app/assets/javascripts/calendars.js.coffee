@@ -339,7 +339,7 @@ jQuery ($) ->
         ui.draggable.data("model").schedule()
   })
 
-    
+
   new TaskApp()
 
   # gets all the event tasks and loads them into the EventTask collection
