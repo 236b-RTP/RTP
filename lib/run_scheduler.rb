@@ -8,8 +8,7 @@ def run_scheduler
 	d = DateTime.now.midnight
 	user_pref = {profile_type: 'early', start_time: change_dt(d, 7), end_time: change_dt(d, 18)}
 	user = current_user
-	tasks = []
-	events = []
+	tasks, events = [], []
 	user.tasks.map { |e| tasks << e}
 	user.events.map { |e| events << e}
 	main_calendar = Scheduler.new(user_pref, tasks, events)
@@ -17,8 +16,8 @@ def run_scheduler
 	puts cal[0].to_s
 	cal[0].each do |day|
 		tasks = day.filled.select{|task| task.is_task?}
-		tasks.each do |task|
-			#updates here
+		tasks.each do |block|
+			block.item.update(start_date: block.t[:begin], end_date: block.t[:end])
 		end
 	end
 end
