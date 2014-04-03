@@ -293,7 +293,7 @@ jQuery ($) ->
         if activeTab.hasClass("todo")
           !model.get("item.start_date")
         else if activeTab.hasClass("doing")
-          model.get("item.start_date")? && moment(model.getOriginalDate("item.end_date")).isBefore(moment())
+          model.get("item.start_date")? && moment().isBefore(model.getOriginalDate("item.due_date"))
         else
           false
 
