@@ -11,7 +11,7 @@ class Scheduler
 		#change to be users location time
 		@today = DateTime.now
 		@prefered_times =  week_preferences(user_pref)
-		@week = Array.new(7){|e|  e = Day.new(user_pref[:start_time], user_pref[:end_time], make_date(@today.wday, e))}
+		@week = Array.new(7){|e|  e = Day.new(user_pref[:start_date], user_pref[:end_date], make_date(@today.wday, e))}
 		load_events(events)
 		task_placer = TaskPlacer.new
 		@tasks = task_placer.order_tasks(tasks)
@@ -38,7 +38,7 @@ class Scheduler
 				while !best_times.empty? && scheduled == false do
 					pref_time = best_times.shift
 					if @week[d].date < best_task[0][:due_date]
-						scheduled = @week[d].insert(pref_time.time, change_dt(pref_time.time, (best_task[0][:duration]/60)), true)
+						scheduled = @week[d].insert(pref_time.time, change_dt(pref_time.time, (best_task[0][:duration]/60)), true, best_task[0])
 					end
 				end
 				d+=1
@@ -51,7 +51,7 @@ class Scheduler
 		end
 
 		if !couldnt_schedule.empty?
-			#do sme error for eadh not scheduled
+			#do some error for eadh not scheduled
 		end
 
 		return @week, couldnt_schedule
@@ -63,11 +63,11 @@ class Scheduler
 		events = event_arr
 		#get events from database put in week days
 		@week.each do|wday| 
-			day_events = events.select{|ev| ev[:start_time].to_date == wday.date.to_date}
+			day_events = events.select{|ev| ev[:start_date].to_date == wday.date.to_date}
 			puts
 			day_events.each do |d_e|
 				#make e a block object
-				wday.insert(d_e[:start_time], d_e[:end_time], false)
+				wday.insert(d_e[:start_date], d_e[:end_date], false)
 			end
 		end 
 	
@@ -103,13 +103,13 @@ es2 = change_dt(DateTime.now.midnight, 13)
 ee2 = change_dt(DateTime.now.midnight, 15)
 es3 = change_dt(DateTime.now.midnight, 15)
 ee3 = change_dt(DateTime.now.midnight, 17)
-events = [{start_time: es, end_time: ee}, {start_time: es + 1, end_time: ee + 1}, {start_time: es + 2, end_time: ee + 2}, 
-	{start_time: es + 3, end_time: ee + 3}, {start_time: es + 4, end_time: ee + 4}, {start_time: es + 5, end_time: ee + 5},
-	 {start_time: es + 6, end_time: ee + 6},]
+events = [{start_date: es, end_date: ee}, {start_date: es + 1, end_date: ee + 1}, {start_date: es + 2, end_date: ee + 2}, 
+	{start_date: es + 3, end_date: ee + 3}, {start_date: es + 4, end_date: ee + 4}, {start_date: es + 5, end_date: ee + 5},
+	 {start_date: es + 6, end_date: ee + 6},]
 
-events = [{start_time: es, end_time: ee}, {start_time: es2, end_time: ee2}, {start_time: es3, end_time: ee3},
-	{start_time: es + 1, end_time: ee + 1}, {start_time: es + 2, end_time: ee + 2}, {start_time: es + 3, end_time: ee + 3}, 
-	{start_time: es + 4, end_time: ee + 4}, {start_time: es + 5, end_time: ee + 5}, {start_time: es + 6, end_time: ee + 6},]
+events = [{start_date: es, end_date: ee}, {start_date: es2, end_date: ee2}, {start_date: es3, end_date: ee3},
+	{start_date: es + 1, end_date: ee + 1}, {start_date: es + 2, end_date: ee + 2}, {start_date: es + 3, end_date: ee + 3}, 
+	{start_date: es + 4, end_date: ee + 4}, {start_date: es + 5, end_date: ee + 5}, {start_date: es + 6, end_date: ee + 6},]
 
 load_events(@week, events)
 
@@ -123,14 +123,14 @@ tomorrow = today+1
 start = DateTime.now
 finishTime = DateTime.now +1
 
-tasks = [{title: "hello1*****", start_time: start, end_time: finishTime, priority: 3 , created_at: today, due_date: tomorrow, duration: 60}, 
-	{title: "hello2*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
-	{title: "hello3*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
-	{title: "hello4*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
-	{title: "hello5*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
-	{title: "hello6*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
-	{title: "hello7*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
-	{title: "hello8*****", start_time: start, end_time: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60}]
+tasks = [{title: "hello1*****", start_date: start, end_date: finishTime, priority: 3 , created_at: today, due_date: tomorrow, duration: 60}, 
+	{title: "hello2*****", start_date: start, end_date: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
+	{title: "hello3*****", start_date: start, end_date: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
+	{title: "hello4*****", start_date: start, end_date: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
+	{title: "hello5*****", start_date: start, end_date: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
+	{title: "hello6*****", start_date: start, end_date: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
+	{title: "hello7*****", start_date: start, end_date: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60},
+	{title: "hello8*****", start_date: start, end_date: finishTime, priority: 1 , created_at: today, due_date: tomorrow, duration: 60}]
 
 s = Scheduler.new(user_pref, tasks, events)
 
