@@ -181,6 +181,8 @@ jQuery ($) ->
         "#da8005"
       else
         "#02ae4c"
+    schedule: ->
+      console.log("I am scheduled")
 
 
 
@@ -216,7 +218,18 @@ jQuery ($) ->
       "click": "edit"
     }
     initialize: ->
-      @$el.addClass("task-instance")
+      @$el.addClass("task-instance").draggable({
+        revert: "invalid"
+        helper: "clone"
+        appendTo: "body"
+        zIndex: 9999
+        start: (event, ui) ->
+          $(@).addClass("invisible")
+          ui.helper.width($(@).width()).css("border", "2px solid black")
+        stop: ->
+          $(@).removeClass("invisible")
+      })
+      @$el.data("model", @model)
       @listenTo(@model, "remove", @remove)
       @listenTo(@model, "change", @render)
     render: ->
@@ -318,6 +331,13 @@ jQuery ($) ->
 
   $("#new-item-button").on "click", ->
     new AppView({ model: new EventTask() })
+
+  $(".calendar").droppable({
+    accept: ".task-instance"
+    drop: (event, ui) ->
+      if confirm("Are you sure you want to add this task to your calendar?")
+        ui.draggable.data("model").schedule()
+  })
 
     
   new TaskApp()
