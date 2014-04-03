@@ -207,7 +207,6 @@ jQuery ($) ->
           return 0
 
 
-
   EventTasks = new EventTaskCollection()
 
 
@@ -232,15 +231,19 @@ jQuery ($) ->
   class TaskApp extends View
     el: $("div.tasks-list")
     initialize: ->
-      @listenTo(EventTasks, "reset", @addAll)
-      @listenTo(EventTasks, "add", @addOne)
+      @displayedTasks = new EventTaskCollection()
+      @tabs = $("ul.tasks-tabs")
+      @listenTo(@displayedTasks, "reset", @addAll)
+      @listenTo(@displayedTasks, "add", @addOne)
+      @listenTo(EventTasks, "reset", @filter)
+      @listenTo(EventTasks, "add", @filter)
     addAll: ->
-      EventTasks.each(@addOne, @)
+      @displayedTasks.each(@addOne, @)
     addOne: (eventTask) ->
       if eventTask.get("item_type") == "Task"
         view = new TaskView({ model: eventTask })
-        index = EventTasks.indexOf(eventTask)
-        previous = EventTasks.at(index - 1)
+        index = @displayedTasks.indexOf(eventTask)
+        previous = @displayedTasks.at(index - 1)
         previousView = previous && previous.view
         if index == 0 || !previous || !previousView
           @$el.append(view.render().el)
@@ -252,6 +255,15 @@ jQuery ($) ->
       calendar.fullCalendar("addEventSource", {
         events: [eventTask.fullCalendarParams()]
       })
+    filter: ->   # populates display tasks
+      activeTab = @tabs.find("li.active")
+      console.log(activeTab)
+      if activeTab.hasClass("todo")
+        @displayedTasks = EventTasks.filter (model) ->
+          return true if model.get("item_type") == "Event"
+          console.log(model)
+          !model.get("item.start_date")
+
 
 
   class FormView extends View
