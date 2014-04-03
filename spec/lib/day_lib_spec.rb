@@ -1,18 +1,11 @@
-require 'rspec'
-require_relative 'day.rb'
-describe Day do 
-	before do
-		@d = Day.new
-		@busy = {begin: 10, end: 20}
-	end
+require 'spec_helper'
 
-	it "can be initialized" do
-		Day.new.wont_be_nil
-	end
+describe Day do
+  it "can be initialized" do
+    pending
+  end
 
-	it "can insert busy" do
-		d.insert(@busy).to be true
-	end
-		
-
+  it "can insert busy" do
+    pending
+  end
 end
