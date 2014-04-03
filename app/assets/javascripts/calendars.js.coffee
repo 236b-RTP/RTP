@@ -233,7 +233,7 @@ jQuery ($) ->
         zIndex: 9999
         start: (event, ui) ->
           $(@).addClass("invisible")
-          ui.helper.width($(@).width()).css("border", "2px solid black")
+          ui.helper.width($(@).width()).css("border", "1.5px solid black")
         stop: ->
           $(@).removeClass("invisible")
       })

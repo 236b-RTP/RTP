@@ -5,7 +5,7 @@ class Scheduler
     @user = user
     @user_preference = @user.preference
     @today = DateTime.now
-    @prefered_times = PreferredTime.week_preferences(@user_preference)
+    @preferred_times = PreferredTime.week_preferences(@user_preference)
     @week = Array.new(7) { |e| Day.new(@user_preference.start_time, @user_preference.end_time, make_date(@today.wday, e)) }
 
     load_events(@user.events)
@@ -26,11 +26,11 @@ class Scheduler
     while !remaining.empty? do
       best_task = remaining.shift
       scheduled = false
-      #find prefered poition closest to current time
+      # find preferred position closest to current time
       d = @today.wday
 
       while !scheduled && d < @today.wday + 7 do
-        check_day = @prefered_times[d%7]
+        check_day = @preferred_times[d%7]
         #custom sort on Preftimes
         best_times = check_day.sort.reverse
 
