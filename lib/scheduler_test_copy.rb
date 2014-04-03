@@ -67,7 +67,7 @@ class Scheduler
 			puts
 			day_events.each do |d_e|
 				#make e a block object
-				wday.insert(d_e[:start_date], d_e[:end_date], false)
+				wday.insert(d_e[:start_date], d_e[:end_date], false, d_e)
 			end
 		end 
 	

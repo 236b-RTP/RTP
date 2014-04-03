@@ -38,7 +38,7 @@ class Scheduler
 				while !best_times.empty? && scheduled == false do
 					pref_time = best_times.shift
 					if @week[d].date < best_task[0][:due_date]
-						scheduled = @week[d].insert(pref_time.time, change_dt(pref_time.time, (best_task[0][:duration]/60)), true)
+						scheduled = @week[d].insert(pref_time.time, change_dt(pref_time.time, (best_task[0][:duration]/60)), true, best_task[0])
 					end
 				end
 				d+=1
@@ -83,8 +83,7 @@ def load_events(week, event_arr)
 		puts
 		day_events.each do |d_e|
 			#make e a block object
-			wday.insert(d_e[:start_date], d_e[:end_date], false)
-		end
+			wday.insert(d_e[:start_date], d_e[:end_date], false, d_e)
 	end 
 
 end

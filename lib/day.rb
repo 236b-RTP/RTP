@@ -4,9 +4,10 @@ require 'active_support/all'
 
 class Block
 	attr_accessor :t 
-	def initialize (start, stop, type)
+	def initialize (start, stop, type, item)
 		@t = {:begin => start, :end => stop}
 		@type = type
+		@item = item
 	end
 	def is_task?
 		return @type
@@ -41,10 +42,10 @@ class Day
 
 
 	#events can be at the same time need to change shit
-	def insert (start, fin, if_task)
+	def insert (start, fin, if_task, item)
 		#preftimes made by preftime builder have the date when rise time was created 
 		if start.between?(@wake, @sleep)&& fin.between?(@wake, @sleep)
-			time = Block.new(start, fin, if_task)
+			time = Block.new(start, fin, if_task, item)
 			if !busy(time) && if_task
 				@filled << time
 				return true
