@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140401015055) do
+ActiveRecord::Schema.define(version: 20140403001033) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,8 +50,8 @@ ActiveRecord::Schema.define(version: 20140401015055) do
     t.string   "title"
     t.text     "description"
     t.string   "tag_name"
-    t.datetime "start_time"
-    t.datetime "end_time"
+    t.datetime "start_date"
+    t.datetime "end_date"
     t.datetime "due_date"
     t.integer  "priority"
     t.integer  "difficulty"
