@@ -21,7 +21,6 @@ jQuery ($) ->
     timezone: "local"
     eventClick: (event) ->
       new AppView({ model: event.model }, event)
-      console.log(event.id)
   })
 
 
@@ -233,11 +232,20 @@ jQuery ($) ->
     initialize: ->
       @displayedTasks = new EventTaskCollection()
       @tabs = $("ul.tasks-tabs")
+      @tabs.on "click", "a", (event) =>
+        target = $(event.target).closest("li")
+        return false if target.hasClass("active")
+        @tabs.find("li.active").removeClass("active")
+        target.addClass("active")
+        @filter()
+        false
       @listenTo(@displayedTasks, "reset", @addAll)
       @listenTo(@displayedTasks, "add", @addOne)
-      @listenTo(EventTasks, "reset", @filter)
-      @listenTo(EventTasks, "add", @filter)
+      @listenTo(EventTasks, "add reset", @filter)
+      @listenTo(EventTasks, "add", @addEvent)
+      @listenTo(EventTasks, "reset", @addAllEvents)
     addAll: ->
+      @$el.empty()
       @displayedTasks.each(@addOne, @)
     addOne: (eventTask) ->
       if eventTask.get("item_type") == "Task"
@@ -249,20 +257,24 @@ jQuery ($) ->
           @$el.append(view.render().el)
         else
           previousView.$el.before(view.render().el)
-      else
-        @addEvent(eventTask)
     addEvent: (eventTask) ->
+      return unless eventTask.get("item_type") == "Event"
       calendar.fullCalendar("addEventSource", {
         events: [eventTask.fullCalendarParams()]
       })
+    addAllEvents: ->
+      EventTasks.each(@addEvent, @)
     filter: ->   # populates display tasks
       activeTab = @tabs.find("li.active")
-      console.log(activeTab)
-      if activeTab.hasClass("todo")
-        @displayedTasks = EventTasks.filter (model) ->
-          return true if model.get("item_type") == "Event"
-          console.log(model)
+      @displayedTasks.reset EventTasks.filter (model) ->
+        return false if model.get("item_type") == "Event"
+        if activeTab.hasClass("todo")
           !model.get("item.start_date")
+        else if activeTab.hasClass("doing")
+          model.get("item.start_date")? && moment(model.getOriginalDate("item.end_date")).isBefore(moment())
+        else
+          false
+
 
 
 
