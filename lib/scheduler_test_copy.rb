@@ -11,7 +11,7 @@ class Scheduler
 		#change to be users location time
 		@today = DateTime.now
 		@prefered_times =  week_preferences(user_pref)
-		@week = Array.new(7){|e|  e = Day.new(user_pref[:start_date], user_pref[:end_date], make_date(@today.wday, e))}
+		@week = Array.new(7){|e|  e = Day.new(user_pref[:start_time], user_pref[:end_time], make_date(@today.wday, e))}
 		load_events(events)
 		task_placer = TaskPlacer.new
 		@tasks = task_placer.order_tasks(tasks)

@@ -1,3 +1,4 @@
+require 'run_scheduler'
 class TasksController < ApplicationController
 
   respond_to :json
@@ -14,13 +15,14 @@ class TasksController < ApplicationController
 
     if @task.save
       @task_event = TaskEvent.create!(user: current_user, item: @task)
+      #Run the scheduler!
+      run_scheduler
+      @task_event
     else
       respond_to do |format|
         format.json { render json: { error: true }, status: 400 }
       end
     end
-    #Run the scheduler!
-    run_scheduler
   end
 
   def edit

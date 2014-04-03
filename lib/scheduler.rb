@@ -84,7 +84,7 @@ def load_events(week, event_arr)
 		day_events.each do |d_e|
 			#make e a block object
 			wday.insert(d_e[:start_date], d_e[:end_date], false, d_e)
+		end
 	end 
 
 end
-
