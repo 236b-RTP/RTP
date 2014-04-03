@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 require_relative 'day.rb'
 require_relative 'task_placer.rb'
 require_relative 'pref_time_builder.rb'
@@ -24,28 +22,3 @@ def run_scheduler
 		end
 	end
 end
-=======
-def run_scheduler
-	user_pref = {profile_type: 'early', start_time: change_dt(d, 7), end_time: change_dt(d, 18)}
-	user = current_user
-	
-	main_calendar = Scheduler.new(user_pref, user.tasks, user.events)
-	cal = main_calendar.schedule
-=begin
-	cal[0].each do |day|
-		tasks = day.filled.select{|task| task.is_task?}
-		tasks.each do |task|
-			#updates here
-		end
-	end
-=end
-
-end			
->>>>>>> 7eb058aead4e8427880b062b7e6ba718a4cc28c0
-=======
-user_pref = {profile_type: 'early', start_time: change_dt(d, 7), end_time: change_dt(d, 18)}
-user = current_user
-
-main_calendar = Scheduler.new(user_pref, user.tasks, user.events)
-main_calendar.schedule
->>>>>>> 0b141943796c3dd0a8864bd28150df1baa406ecc
