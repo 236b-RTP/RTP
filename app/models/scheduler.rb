@@ -1,4 +1,5 @@
 require 'time_utilities'
+#require 'active_support/all'
 
 class Scheduler
   def initialize(user, task = nil)
@@ -52,7 +53,7 @@ class Scheduler
     if !couldnt_schedule.empty?
       #do some error for each not scheduled
     end
-
+    #why is this here should be in outer script
     @week.each do |day|
       tasks = day.filled.select { |task| task.is_task? }
       tasks.each do |block|
@@ -60,27 +61,38 @@ class Scheduler
       end
     end
   end
+=begin
+  def schedule_spread
+    remaining = Marshal.load(Marshal.dump(@tasks))
+    couldnt_schedule = []
+    pre_time_ar = Marshal.load(Marshal.dump(@preferred_times))
+    while !multi_arr_empty?(pre_time_ar) && !remaining.empty? do
+      #need to remove best times from pref time ar - may not do what is intended
+      best_times = weeks_best_times(pre_time_ar)
+      pre_time_ar-best_times
+      best_times.each do |slot|
+          #for times match best tasks or for tasks match best times????
+         
+          scheduled = false
+          count = 0
+          while count<remaining.size && scheduled == false
+            if slot.time < remaining[count].due_date
+              task = remaining[count]
+              day = @week.select{ |day| slot.time.to_date == day.date.to_date }[0]
+              scheduled = day.insert(pref_time.time, change_dt(pref_time.time, (task.duration / 60)), true, task)
+              if scheduled
+                remaining.delete_at(count)
+              end
+            end
+            count += 1
+          end
+      end
 
-  # def schedule_spread
-  #   remaining = Marshal.load(Marshal.dump(@tasks))
-  #   couldnt_schedule = []
-  #   pre_time_ar = Marshal.load(Marshal.dump(@preferred_times))
-  #   while !remaining.empty? do
-  #     best_task = remaining.shift
-  #     scheduled = false
-  #     weeks_best_times = pre_time_ar.select()
-  #     # find preferred position closest to current time
-
-  #     while !scheduled &&  do
-  #       check_day = @preferred_times[d%7]
-  #       #custom sort on Preftimes
-  #       best_times = check_day.sort.reverse
-
-  #     end
-
-  #   end
-  # end
-
+    end
+    #need to work out script issue
+    #return @week, remaining
+  end
+=end
   private
 
   def load_events(events)
@@ -92,15 +104,24 @@ class Scheduler
       end
     end
   end
-
+=begin
+  #need to add null checks max may be null
   def weeks_best_times(preftimes)
     best_times = []
     preftimes.each do |day|
       #get times with highest priority get earliest time?? may not want earliest time want something grr
       candidates = day.select{|p| p.pref == day.max.pref}
-      best_time = candidates.sort{|a,b| a.time<=>b.time}.shift
-      best_times << best_time
-      day.remove(best_time)
+      # if night owl take latest of best times 
+      if !candidates.empty?
+        if(user_preference.profile_type == 'late')
+          best_time = candidates.sort{|a,b| b.time<=>a.time}.shift
+        else
+          best_time = candidates.sort{|a,b| a.time<=>b.time}.shift
+        end
+        best_times << best_time
+      end
     end
+    return best_times
   end
+=end
 end

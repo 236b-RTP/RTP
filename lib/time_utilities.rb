@@ -13,3 +13,11 @@ end
 def change_dt_sec(d, amount)
   (d.to_time + amount).to_datetime
 end
+
+def multi_arr_empty?(arr)
+	not_empty = false
+	arr.each |inarr|
+		not_empty ||= !inarr.empty?
+	end
+	return !not_empty
+end
