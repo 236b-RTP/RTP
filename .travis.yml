@@ -7,6 +7,7 @@ before_script:
 script: "RAILS_ENV=test bundle exec rake db:schema:load; bundle exec rspec spec"
 deploy:
   provider: heroku
+  app: 'real-time-productivity'
   api_key:
     secure: aBwT8V3rYxjfCL8ZEI4AKX4wIpbinHwnj72Mwpcp5OkUl9EvWpUnCtzmtavOBkR0nRrvMHc7spm3pdU8ffOYMGEMrK0+CJvJ8xCNdQKK9UZ/VHc8bnJZpP4Xe8bqCgfc40zWb2IP9Z5qlEJqFFcxjURSDTAAme1P4MtzNF8Et54=
   run: "rake db:migrate"
