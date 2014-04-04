@@ -173,6 +173,7 @@ jQuery ($) ->
         end: jQuery.fullCalendar.moment(@getOriginalDate("item.end_date"))
         model: @
         id: @get("item.id")
+        className: @className()
       }
     dueDateColor: ->
       if moment(@getOriginalDate("item.due_date")).isBefore(moment().add("days", 1))
@@ -193,6 +194,8 @@ jQuery ($) ->
         type: 'POST'
         url: "/tasks/#{@get("item.id")}/schedule"
       }
+    className: ->
+      "fc-taskevent-#{@get("item_type").toLowerCase()}"
 
   class EventTaskCollection extends Collection
     model: EventTask
