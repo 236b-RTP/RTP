@@ -61,25 +61,25 @@ class Scheduler
     end
   end
 
-  def schedule_spread
-    remaining = Marshal.load(Marshal.dump(@tasks))
-    couldnt_schedule = []
-    pre_time_ar = Marshal.load(Marshal.dump(@preferred_times))
-    while !remaining.empty? do
-      best_task = remaining.shift
-      scheduled = false
-      weeks_best_times = pre_time_ar.select()
-      # find preferred position closest to current time
+  # def schedule_spread
+  #   remaining = Marshal.load(Marshal.dump(@tasks))
+  #   couldnt_schedule = []
+  #   pre_time_ar = Marshal.load(Marshal.dump(@preferred_times))
+  #   while !remaining.empty? do
+  #     best_task = remaining.shift
+  #     scheduled = false
+  #     weeks_best_times = pre_time_ar.select()
+  #     # find preferred position closest to current time
 
-      while !scheduled &&  do
-        check_day = @preferred_times[d%7]
-        #custom sort on Preftimes
-        best_times = check_day.sort.reverse
+  #     while !scheduled &&  do
+  #       check_day = @preferred_times[d%7]
+  #       #custom sort on Preftimes
+  #       best_times = check_day.sort.reverse
 
-      end
+  #     end
 
-    end
-  end
+  #   end
+  # end
 
   private
 
