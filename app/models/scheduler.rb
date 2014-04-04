@@ -53,30 +53,31 @@ class Scheduler
       #do some error for each not scheduled
     end
 
-    def schedule_spread
-      remaining = Marshal.load(Marshal.dump(@tasks))
-      couldnt_schedule = []
-      pre_time_ar = Marshal.load(Marshal.dump(@preferred_times))
-      while !remaining.empty? do
-        best_task = remaining.shift
-        scheduled = false
-        weeks_best_times = pre_time_ar.select()
-        # find preferred position closest to current time
+    @week.each do |day|
+      tasks = day.filled.select { |task| task.is_task? }
+      tasks.each do |block|
+        block.item.update_attributes(start_date: block.t[:begin], end_date: block.t[:end])
+      end
+    end
+  end
 
-        while !scheduled &&  do
+  def schedule_spread
+    remaining = Marshal.load(Marshal.dump(@tasks))
+    couldnt_schedule = []
+    pre_time_ar = Marshal.load(Marshal.dump(@preferred_times))
+    while !remaining.empty? do
+      best_task = remaining.shift
+      scheduled = false
+      weeks_best_times = pre_time_ar.select()
+      # find preferred position closest to current time
+
+      while !scheduled &&  do
         check_day = @preferred_times[d%7]
         #custom sort on Preftimes
         best_times = check_day.sort.reverse
 
       end
 
-    end
-
-    @week.each do |day|
-      tasks = day.filled.select { |task| task.is_task? }
-      tasks.each do |block|
-        block.item.update_attributes(start_date: block.t[:begin], end_date: block.t[:end])
-      end
     end
   end
 
