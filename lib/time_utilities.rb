@@ -16,7 +16,7 @@ end
 
 def multi_arr_empty?(arr)
 	not_empty = false
-	arr.each |inarr| do
+	arr.each do |inarr|
 		not_empty ||= !inarr.empty?
 	end
 	return !not_empty
