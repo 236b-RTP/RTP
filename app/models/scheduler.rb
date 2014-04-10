@@ -62,15 +62,16 @@ class Scheduler
       end
     end
   end
-
+=begin
   def schedule_spread
     remaining = Marshal.load(Marshal.dump(@tasks))
-    couldnt_schedule = []
     pre_time_ar = Marshal.load(Marshal.dump(@preferred_times))
     while !multi_arr_empty?(pre_time_ar) && !remaining.empty? do
       #need to remove best times from pref time ar - may not do what is intended
       best_times = weeks_best_times(pre_time_ar)
+      #may or may not work
       pre_time_ar-best_times
+
       best_times.each do |slot|
           #for times match best tasks or for tasks match best times????
          
@@ -91,9 +92,9 @@ class Scheduler
 
     end
     #need to work out script issue
-    #return @week, remaining
+    return @week, remaining
   end
-
+=end
   private
 
   def load_events(events)
@@ -105,7 +106,7 @@ class Scheduler
       end
     end
   end
-
+=begin
   #need to add null checks max may be null
   def weeks_best_times(preftimes)
     best_times = []
@@ -124,5 +125,5 @@ class Scheduler
     end
     return best_times
   end
-
+=end
 end
