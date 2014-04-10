@@ -11,6 +11,7 @@ Rtp::Application.routes.draw do
 
   resources :tasks do
     collection do
+      post 'reschedule'
       post 'search'
     end
 

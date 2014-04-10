@@ -57,6 +57,14 @@ class TasksController < ApplicationController
     end
   end
 
+  def reschedule
+    Task.reschedule!(current_user)
+
+    respond_to do |format|
+      format.json { render json: { error: false } }
+    end
+  end
+
   private
 
   def task_params

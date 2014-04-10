@@ -43,6 +43,9 @@ class TaskPlacer
 
   #I THINK I NEED AN ORIGIN TIME SINCE DUE AS A LENGHT OF TIME AWAY WILL CHANGE AND RERENDERING WILL CHANGE THE CURVE
   #DUE IS NOT THE DUE DATE BUT THE TIME FROM WHEN CREATED TO WHEN DUE
+  # p = priority, elapsed = time from creation to now, due = time from creation to due
+  # p_factor = how the curve stretches on the y-axis (priority factor)
+  # d_factor = how the curve stretches on the x-axis (date factor)
 
   def task_scale(p, elapsed, due)
     if p.between?(1, 5) && elapsed >= 0.0 && due >= elapsed && due > 0.0
