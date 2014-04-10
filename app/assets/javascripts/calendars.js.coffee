@@ -13,6 +13,7 @@ MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 
 jQuery ($) ->
   return unless $(document.body).hasClass("calendars-index") # only run on calendars page
 
+  ###################################### Calendar Functions ########################################
 
   # loads main calendar
   calendar = $("#calendar").fullCalendar({        # http://arshaw.com/fullcalendar/
@@ -20,6 +21,15 @@ jQuery ($) ->
     timezone: "local"                             # use local timezones from local systems
     eventClick: (event) ->
       new AppView({ model: event.model }, event)  # open edit dialog when events are clicked
+  })
+
+
+  # makes a "to do" task droppable into the calendar div, adding the task to "doing" and rescheduling all current tasks
+  $(".calendar").droppable({
+    accept: ".task-instance"
+    drop: (event, ui) ->
+      if confirm("Are you sure you want to add this task to your calendar?") # confirm before rescheduling
+        ui.draggable.data("model").schedule(ui.draggable) # reschedule all current tasks
   })
 
 
@@ -43,6 +53,9 @@ jQuery ($) ->
   resizeFn()
 
 
+  ######################################## Backbone Views ##########################################
+
+
   # new item dialog Backbone view
   class AppView extends View
     tagName: "div"                                # creates a new div
@@ -58,7 +71,7 @@ jQuery ($) ->
       @originalAttributes = @model.toJSON()       # saves the original item attributes to restore if event cancelled
       @model.on "change:item_type", =>            # renders the form view when an item type is selected
         @formView.render()
-      @formView = new FormView({ model: @model }) # 
+      @formView = new FormView({ model: @model }) # creates a new form view with the given model
       @$el.find("div.modal-body").append(@formView.render().el) # appends the content of the form to the modal's body
       dialog = @$el.appendTo(document.body).find("#newItemDialog")
       dialog.modal({
@@ -128,91 +141,6 @@ jQuery ($) ->
 
     resetItem: ->
       @model.set(@originalAttributes)
-
-
-  # creates the content of the new item form
-  class EventTask extends DeepModel
-    defaults: {
-      item: { tag_color: "orange" }
-    }
-    initialize: ->
-      @updateDates()
-    getOriginalDate: (attribute) ->
-      @originalDates[attribute]
-    updateDates: ->
-      @originalDates = {}
-      types = ["due", "start", "end"]
-      for type in types
-        if @get("item.#{type}_date")?
-          @originalDates["item.#{type}_date"] = @get("item.#{type}_date")
-          date = moment(@get("item.#{type}_date"))
-          @set("item.#{type}_date", date.format("MM/DD/YYYY"))
-          @set("item.#{type}_time", date.format("HH:mm"))
-    dialogTitle: ->
-      if @isNew() then 'New Item' else 'Edit Item'
-    trimmedTitle: ->
-      title = @get("item.title")
-      return title unless title.length > 13
-      title.substr(0, 13) + '...'
-    formattedDueDate: ->
-      date = new Date(@get("item.due_date"))
-      month = date.getMonth()
-      day = date.getDate()
-      "#{MONTHS[month]} #{day}"
-    fullCalendarParams: ->
-      {
-        title: @get("item.title")
-        start: jQuery.fullCalendar.moment(@getOriginalDate("item.start_date"))
-        end: jQuery.fullCalendar.moment(@getOriginalDate("item.end_date"))
-        model: @
-        id: @get("item.id")
-        className: @className()
-      }
-    dueDateColor: ->
-      if moment(@getOriginalDate("item.due_date")).isBefore(moment().add("days", 1))
-        "#a70304"
-      else if moment(@getOriginalDate("item.due_date")).isBefore(moment().add("days", 2))
-        "#da8005"
-      else
-        "#02ae4c"
-    schedule: (view) ->
-      view.hide()
-      $.ajax {
-        cache: false
-        dataType: 'json'
-        error: ->
-          alert('Unable to schedule task. Please try again.')
-        success: ->
-          loadAllTasks()
-        type: 'POST'
-        url: "/tasks/#{@get("item.id")}/schedule"
-      }
-    className: ->
-      "fc-taskevent-#{@get("item_type").toLowerCase()}"
-
-  class EventTaskCollection extends Collection
-    model: EventTask
-    comparator: (taskA, taskB) ->
-      taskAType = taskA.get("item_type")
-      taskBType = taskB.get("item_type")
-      if taskAType == "Event" && taskBType == "Task"
-        return -1
-      else if taskAType == "Task" && taskBType == "Event"
-        return 1
-      else if taskAType == "Event" && taskBType == "Event"
-        return 0
-      else
-        taskADue = taskA.getOriginalDate("item.due_date")
-        taskBDue = taskB.getOriginalDate("item.due_date")
-        if moment(taskADue).isBefore(taskBDue)
-          return -1
-        else if moment(taskADue).isAfter(taskBDue)
-          return 1
-        else
-          return 0
-
-
-  EventTasks = new EventTaskCollection()
 
 
   class TaskView extends View
@@ -294,8 +222,7 @@ jQuery ($) ->
           false
 
 
-
-
+  # new item form view
   class FormView extends View
     tagName: "div"
     template: _.template($("#new_item_content_template").html(), null, { variable: "model" })
@@ -346,6 +273,114 @@ jQuery ($) ->
       @
 
 
+  ##################################### Backbone DeepModels ########################################
+
+
+  # creates the content of the new item form
+  class EventTask extends DeepModel
+    defaults: {
+      item: { tag_color: "orange" }
+    }
+    initialize: ->
+      @updateDates()
+    getOriginalDate: (attribute) ->
+      @originalDates[attribute]
+    updateDates: ->
+      @originalDates = {}
+      types = ["due", "start", "end"]
+      for type in types
+        if @get("item.#{type}_date")?
+          @originalDates["item.#{type}_date"] = @get("item.#{type}_date")
+          date = moment(@get("item.#{type}_date"))
+          @set("item.#{type}_date", date.format("MM/DD/YYYY"))
+          @set("item.#{type}_time", date.format("HH:mm"))
+    dialogTitle: ->
+      if @isNew() then 'New Item' else 'Edit Item'
+    trimmedTitle: ->
+      title = @get("item.title")
+      return title unless title.length > 13
+      title.substr(0, 13) + '...'
+    formattedDueDate: ->
+      date = new Date(@get("item.due_date"))
+      month = date.getMonth()
+      day = date.getDate()
+      "#{MONTHS[month]} #{day}"
+    fullCalendarParams: ->
+      {
+      title: @get("item.title")
+      start: jQuery.fullCalendar.moment(@getOriginalDate("item.start_date"))
+      end: jQuery.fullCalendar.moment(@getOriginalDate("item.end_date"))
+      model: @
+      id: @get("item.id")
+      className: @className()
+      }
+    dueDateColor: ->
+      if moment(@getOriginalDate("item.due_date")).isBefore(moment().add("days", 1))
+        "#a70304"
+      else if moment(@getOriginalDate("item.due_date")).isBefore(moment().add("days", 2))
+        "#da8005"
+      else
+        "#02ae4c"
+    schedule: (view) ->
+      view.hide()
+      $.ajax {
+        cache: false
+        dataType: 'json'
+        error: ->
+          alert('Unable to schedule task. Please try again.')
+        success: ->
+          loadAllTasks()
+        type: 'POST'
+        url: "/tasks/#{@get("item.id")}/schedule"
+      }
+    className: ->
+      "fc-taskevent-#{@get("item_type").toLowerCase()}"
+
+
+  ##################################### Backbone Collections #######################################
+
+
+  class EventTaskCollection extends Collection
+    model: EventTask
+    comparator: (taskA, taskB) ->
+      taskAType = taskA.get("item_type")
+      taskBType = taskB.get("item_type")
+      if taskAType == "Event" && taskBType == "Task"
+        return -1
+      else if taskAType == "Task" && taskBType == "Event"
+        return 1
+      else if taskAType == "Event" && taskBType == "Event"
+        return 0
+      else
+        taskADue = taskA.getOriginalDate("item.due_date")
+        taskBDue = taskB.getOriginalDate("item.due_date")
+        if moment(taskADue).isBefore(taskBDue)
+          return -1
+        else if moment(taskADue).isAfter(taskBDue)
+          return 1
+        else
+          return 0
+
+  EventTasks = new EventTaskCollection()
+
+  # gets all the event tasks and loads them into the EventTask collection
+  loadAllTasks = ->
+    $.ajax({
+      cache: false
+      dataType: 'json'
+      error: ->
+        alert("Failed to fetch calendar items. Please reload the page.")
+      success: (data) ->
+        EventTasks.reset(data)
+      type: "GET"
+      url: "/task_events.json"
+    })
+  loadAllTasks()
+
+
+  ######################################### Click Events  ###########################################
+
+
   $("#new-item-button").on "click", ->
     new AppView({ model: new EventTask() })
 
@@ -364,26 +399,5 @@ jQuery ($) ->
       url: "/tasks/reschedule.json"
     }
 
-  $(".calendar").droppable({
-    accept: ".task-instance"
-    drop: (event, ui) ->
-      if confirm("Are you sure you want to add this task to your calendar?")
-        ui.draggable.data("model").schedule(ui.draggable)
-  })
-
 
   new TaskApp()
-
-  # gets all the event tasks and loads them into the EventTask collection
-  loadAllTasks = ->
-    $.ajax({
-      cache: false
-      dataType: 'json'
-      error: ->
-        alert("Failed to fetch calendar items. Please reload the page.")
-      success: (data) ->
-        EventTasks.reset(data)
-      type: "GET"
-      url: "/task_events.json"
-    })
-  loadAllTasks()
