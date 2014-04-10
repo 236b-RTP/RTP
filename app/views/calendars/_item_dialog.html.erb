@@ -147,10 +147,10 @@
       </div>
     </div>
 
-    <div class="form-group has-feedback">
+    <div class="form-group has-feedback ui-front">
       <%= label_tag(:tag_name, 'Tag:', class: 'control-label col-xs-2') %>
       <div class="col-xs-10">
-        <%= text_field_tag(:tag_name, nil, class: 'form-control') %>
+        <%= text_field_tag(:tag_name, nil, class: 'form-control tag_name') %>
         <span class="form-control-feedback colorpicker">
           <%= text_field_tag(:tag_color, nil, class: 'spectrum', value: 'orange') %>
         </span>

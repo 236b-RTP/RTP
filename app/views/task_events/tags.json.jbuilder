@@ -1,0 +1,1 @@
+json.array!(tags_hash_to_array(@tags))

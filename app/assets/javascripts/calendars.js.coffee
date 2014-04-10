@@ -338,6 +338,18 @@ jQuery ($) ->
       @$el.find(".glyphicon-calendar").on "click", ->
         $(@).siblings("input").datepicker("show")
         false
+      _renderItem = (ul, item) ->
+        $("<li>")
+          .append($("<div>").addClass("pull-right color-indicator").css("background-color", item.color))
+          .append($("<a>").text(item.label))
+          .appendTo(ul)
+      autocomplete = @$el.find("input.tag_name").autocomplete({
+        minLength: 1
+        source: "/task_events/tags.json"
+        select: (event, ui) =>
+          @$el.find(".spectrum").spectrum("set", ui.item.color)
+      })
+      autocomplete.data("uiAutocomplete")._renderItem = _renderItem if autocomplete.length == 1
       @
 
 

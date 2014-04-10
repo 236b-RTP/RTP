@@ -19,7 +19,11 @@ Rtp::Application.routes.draw do
     end
   end
 
-  resources :task_events, only: [ :index, :show ]
+  resources :task_events, only: [ :index, :show ] do
+    collection do
+      get 'tags'
+    end
+  end
 
   resources :calendars, only: [ :index ] do
     member do
