@@ -1,5 +1,6 @@
-require 'time_utilities'
+#require 'time_utilities'
 #require 'active_support/all'
+require_relative 'time_utilities.rb'
 
 class Scheduler
   def initialize(user, task = nil)
@@ -61,7 +62,7 @@ class Scheduler
       end
     end
   end
-=begin
+
   def schedule_spread
     remaining = Marshal.load(Marshal.dump(@tasks))
     couldnt_schedule = []
@@ -92,7 +93,7 @@ class Scheduler
     #need to work out script issue
     #return @week, remaining
   end
-=end
+
   private
 
   def load_events(events)
@@ -104,7 +105,7 @@ class Scheduler
       end
     end
   end
-=begin
+
   #need to add null checks max may be null
   def weeks_best_times(preftimes)
     best_times = []
@@ -123,5 +124,5 @@ class Scheduler
     end
     return best_times
   end
-=end
+
 end
