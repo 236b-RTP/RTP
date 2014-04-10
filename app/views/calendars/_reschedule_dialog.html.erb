@@ -1,0 +1,37 @@
+<script type="text/template" id="reschedule_dialog_template">
+  <div class="modal fade" id="rescheduleDialog" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form class="form-horizontal">
+          <div class="modal-header">
+            <h4 class="modal-title">Task Checklist</h4>
+          </div>
+
+          <div class="modal-body">
+            <p>
+              The following tasks cannot be rescheduled because the due date has passed. Please mark as complete,
+              change the due date, or delete each task before rescheduling can complete.
+            </p>
+          </div>
+
+          <div class="modal-footer">
+            <!-- buttons -->
+            <%= button_tag 'Cancel', type: 'button', data: { dismiss: 'modal' }, class: 'btn btn-default btn-cancel' %>
+            <%= submit_tag 'Reschedule', class: 'btn btn-primary' %>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="reschedule_template">
+  <div class="task-tag-color" style="background-color: {{= model.get("item.tag_color") }};"></div>
+  <div class="task-name">
+    {{= model.trimmedTitle() }}
+  </div>
+  <div class="task-due-date" style="background-color: {{= model.dueDateColor() }};">
+    {{= model.formattedDueDate() }}
+  </div>
+</script>

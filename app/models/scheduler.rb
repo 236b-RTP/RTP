@@ -1,6 +1,4 @@
-#require 'time_utilities'
-#require 'active_support/all'
-require_relative 'time_utilities.rb'
+require 'time_utilities'
 
 class Scheduler
   def initialize(user, task = nil)

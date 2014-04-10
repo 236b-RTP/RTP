@@ -1,6 +1,4 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
+# calendars.js.coffee
 
 root = @
 { jQuery, _, Backbone, moment } = root
@@ -11,55 +9,56 @@ root = @
 MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 
+# jQuery functions
 jQuery ($) ->
-  return unless $(document.body).hasClass("calendars-index")
+  return unless $(document.body).hasClass("calendars-index") # only run on calendars page
 
 
-  # loads calendar
-  calendar = $("#calendar").fullCalendar({
-    defaultView: "agendaWeek"
-    timezone: "local"
+  # loads main calendar
+  calendar = $("#calendar").fullCalendar({        # http://arshaw.com/fullcalendar/
+    defaultView: "agendaWeek"                     # week view
+    timezone: "local"                             # use local timezones from local systems
     eventClick: (event) ->
-      new AppView({ model: event.model }, event)
+      new AppView({ model: event.model }, event)  # open edit dialog when events are clicked
   })
 
 
   # loads mini-calendar
-  $("#mini-calendar").datepicker({
+  $("#mini-calendar").datepicker({                # http://jqueryui.com/datepicker/
     onSelect: (dateText) ->
-      mom = $.fullCalendar.moment(dateText)
-      calendar.fullCalendar('gotoDate', mom)
+      moment = $.fullCalendar.moment(dateText)    # creates a moment object using the date selected
+      calendar.fullCalendar('gotoDate', moment)   # changes the main calendar view to be the same week as the moment
   })
 
 
   # resizes task list and calendar height when window is resized
-  taskList = $(".tasks-list")
+  taskList = $(".tasks-list")                     # gets the tasks-list element
   resizeFn = ->
-    height = $(window).height()
-    taskListOffset = taskList.offset()
-    taskList.height(height - taskListOffset.top - 16)
-    calendarOffset = calendar.offset()
-    calendar.fullCalendar("option", "height", height - calendarOffset.top - 16)
-  $(window).on("resize", resizeFn)
+    height = $(window).height()                   # gets the height of the browser window
+    taskListOffset = taskList.offset()            # gets the coordinates of the tasks-list element
+    taskList.height(height - taskListOffset.top - 16) # sets the height of the tasks-list element
+    calendarOffset = calendar.offset()            # gets the coordinates of the main calendar
+    calendar.fullCalendar("option", "height", height - calendarOffset.top - 16) # sets the height of the calendar
+  $(window).on("resize", resizeFn)                # resize the tasks-list and calendar whenever the window is resized
   resizeFn()
 
 
-  ## render tasks and events to calendar
-
-  # creates a model that extends the Backbone view
+  # new item dialog Backbone view
   class AppView extends View
-    tagName: "div" # creates a div
-    template: _.template($("#new_item_dialog_template").html(), null, { variable: "model" }) # content of div
+    tagName: "div"                                # creates a new div
+    template: _.template($("#new_item_dialog_template").html(), null, { variable: "model" }) # content of new div
+
     events: {
-      "click .btn-delete": "removeItem"
-      "click .btn-cancel": "resetItem"
+      "click .btn-delete": "removeItem"           # delete button event
+      "click .btn-cancel": "resetItem"            # cancel button event
     }
+
     initialize: (options, @calendarEvent) ->
-      @render()
-      @originalAttributes = @model.toJSON()
-      @model.on "change:item_type", =>
+      @render()                                   # renders the dialog view
+      @originalAttributes = @model.toJSON()       # saves the original item attributes to restore if event cancelled
+      @model.on "change:item_type", =>            # renders the form view when an item type is selected
         @formView.render()
-      @formView = new FormView({ model: @model })
+      @formView = new FormView({ model: @model }) # 
       @$el.find("div.modal-body").append(@formView.render().el) # appends the content of the form to the modal's body
       dialog = @$el.appendTo(document.body).find("#newItemDialog")
       dialog.modal({
@@ -67,11 +66,9 @@ jQuery ($) ->
         keyboard: false,
         show: true
       })
-
-      dialog.on "hidden.bs.modal", => # remove all elements from memory
+      dialog.on "hidden.bs.modal", =>             # removes all elements from memory
         @formView.remove()
         @remove()
-
       form = @$el.find("form").on "submit", =>
         params = {}
         itemType = @model.get("item_type")
@@ -80,7 +77,6 @@ jQuery ($) ->
           return false
         itemType = itemType.toLowerCase()
         params[itemType] = form.serializeObject()
-
         ajaxParams = {
           cache: false
           data: params
@@ -100,13 +96,10 @@ jQuery ($) ->
           type: "POST"
           url: "/#{itemType}s.json"
         }
-
         unless @model.isNew()
           ajaxParams.url = "/#{itemType}s/#{@model.get("item.id")}.json"
           ajaxParams.data._method = "PUT"
-
         $.ajax(ajaxParams)
-
         false
 
     render: ->
@@ -355,6 +348,21 @@ jQuery ($) ->
 
   $("#new-item-button").on "click", ->
     new AppView({ model: new EventTask() })
+
+  $("#reschedule-button").on "click", ->
+    $(this).prop("disabled", true)
+    $.ajax {
+      cache: false
+      dataType: 'json'
+      error: =>
+        alert('Unable to schedule task. Please try again.')
+        $(this).prop("disabled", false)
+      success: =>
+        loadAllTasks()
+        $(this).prop("disabled", false)
+      type: 'POST'
+      url: "/tasks/reschedule.json"
+    }
 
   $(".calendar").droppable({
     accept: ".task-instance"
