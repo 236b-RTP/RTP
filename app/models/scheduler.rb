@@ -42,7 +42,8 @@ class Scheduler
 =end
         while !best_times.empty? && scheduled == false do
           pref_time = best_times.shift
-          if @week[d].date < best_task[0].due_date && pref_time.time >= @today
+          # make sure before scheduling before duedate and not before the current time
+          if @week[d].date < best_task[0].due_date && @today <= pref_time
             scheduled = @week[d].insert(pref_time.time, change_dt(pref_time.time, (best_task[0].duration / 60)), true, best_task[0])
           end
         end
@@ -67,7 +68,6 @@ class Scheduler
     end
   end
 =begin
-
   def schedule_spread
     remaining = Marshal.load(Marshal.dump(@tasks))
     pre_time_ar = Marshal.load(Marshal.dump(@preferred_times))
@@ -86,7 +86,9 @@ class Scheduler
             if slot.time < remaining[count].due_date
               task = remaining[count]
               day = @week.select{ |day| slot.time.to_date == day.date.to_date }[0]
-              scheduled = day.insert(pref_time.time, change_dt(pref_time.time, (task.duration / 60)), true, task)
+              if @week[d].date < best_task[0].due_date && @today <= pref_time
+                scheduled = day.insert(pref_time.time, change_dt(pref_time.time, (task.duration / 60)), true, task)
+              end
               if scheduled
                 remaining.delete_at(count)
               end

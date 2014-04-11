@@ -41,20 +41,18 @@ class TaskPlacer
   end
 
 
-  #I THINK I NEED AN ORIGIN TIME SINCE DUE AS A LENGHT OF TIME AWAY WILL CHANGE AND RERENDERING WILL CHANGE THE CURVE
-  #DUE IS NOT THE DUE DATE BUT THE TIME FROM WHEN CREATED TO WHEN DUE
+  
   # p = priority, elapsed = time from creation to now, due = time from creation to due
   # p_factor = how the curve stretches on the y-axis (priority factor)
   # d_factor = how the curve stretches on the x-axis (date factor)
-
   def task_scale(p, elapsed, due)
     if p.between?(1, 5) && elapsed >= 0.0 && due >= elapsed && due > 0.0
       p_factor = -0.3 - ((p / 100.0) * p)
-      #p_factor = -0.3
       d_factor = (10.0 - p) / due
       # base form out of ten not accounting priority 10-10e**(-0.5*(10/due)*today)
       # general form with priority p+(10-p)-(10-p)e**((-0.5-(p/100*p))*(10/due)*today)
       # alt (10-p / due) sqrt (due * current)
+      # asyptotic negative curve (e^-x) from 0 to 10 -priority on y axis inverted by subtracting from the max value
       scale = (10 - p) - ((10 - p) * (Math::E ** (p_factor * d_factor * elapsed))) + p + 1
 
       scale.to_i
