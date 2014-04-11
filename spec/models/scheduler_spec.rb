@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Scheduler do
-  it "can be constructed" do
+  it "can load events" do
   	@sched = Scheduler.new
   end
 end
