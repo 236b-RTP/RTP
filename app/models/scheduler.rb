@@ -36,7 +36,7 @@ class Scheduler
 
         while !best_times.empty? && scheduled == false do
           pref_time = best_times.shift
-          if @week[d].date < best_task[0].due_date
+          if @week[d].date < best_task[0].due_date && pref_time.time >= @today
             scheduled = @week[d].insert(pref_time.time, change_dt(pref_time.time, (best_task[0].duration / 60)), true, best_task[0])
           end
         end
