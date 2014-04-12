@@ -23,11 +23,14 @@ class Scheduler
   def schedule
     #making a deep copy
     remaining = Marshal.load(Marshal.dump(@tasks))
+    #all tasks that couldnt be scheduled because past due or didnt fit
     couldnt_schedule = []
+    #tasks that couldnt be scheduled before when due
+    past_due = []
     while !remaining.empty? do
       best_task = remaining.shift
       scheduled = false
-      # find preferred position closest to current time
+      #find preferred position closest to current time
       d = @today.wday
 
       while !scheduled && d < @today.wday + 7 do
@@ -42,10 +45,13 @@ class Scheduler
 =end
         while !best_times.empty? && scheduled == false do
           pref_time = best_times.shift
-          # make sure before scheduling before duedate and not before the current time
-          if @week[d].date < best_task[0].due_date && @today <= pref_time
+          #make sure before scheduling before duedate and not before the current time
+          if pref_time.time < best_task[0].due_date && @today <= pref_time.time
             scheduled = @week[d].insert(pref_time.time, change_dt(pref_time.time, (best_task[0].duration / 60)), true, best_task[0])
+          elsif pref_time >= best_task[0].due_date
+            past_due << best_task
           end
+
         end
 
         d += 1
@@ -55,22 +61,14 @@ class Scheduler
         couldnt_schedule << best_task
       end
     end
-
-    if !couldnt_schedule.empty?
-      #do some error for each not scheduled
-    end
-    #why is this here should be in outer script
-    @week.each do |day|
-      tasks = day.filled.select { |task| task.is_task? }
-      tasks.each do |block|
-        block.item.update_attributes(start_date: block.t[:begin], end_date: block.t[:end])
-      end
-    end
+    return @week, couldnt_schedule, past_due
   end
 =begin
 
   def schedule_spread
     remaining = Marshal.load(Marshal.dump(@tasks))
+    couldnt_schedule = []
+    past_due = []
     pre_time_ar = Marshal.load(Marshal.dump(@preferred_times))
     while !multi_arr_empty?(pre_time_ar) && !remaining.empty? do
       #need to remove best times from pref time ar - may not do what is intended
@@ -87,8 +85,10 @@ class Scheduler
             if slot.time < remaining[count].due_date
               task = remaining[count]
               day = @week.select{ |day| slot.time.to_date == day.date.to_date }[0]
-              if @week[d].date < best_task[0].due_date && @today <= pref_time
+              if pref_time.time < best_task[0].due_date && @today <= pref_time.time
                 scheduled = day.insert(pref_time.time, change_dt(pref_time.time, (task.duration / 60)), true, task)
+              elsif pref_time >= best_task[0].due_date
+                past_due << best_task
               end
               if scheduled
                 remaining.delete_at(count)
@@ -100,7 +100,7 @@ class Scheduler
 
     end
     #need to work out script issue
-    return @week, remaining
+    #return @week, remaining, past_due
   end
 =end
   private
