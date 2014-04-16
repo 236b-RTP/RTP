@@ -61,6 +61,10 @@ group :development, :test do
   gem 'travis'
 end
 
+# code coverage integrated with Travis CI
+gem 'simplecov', require: false
+gem 'coveralls', require: false
+
 group :production do
   gem 'rails_12factor' # needed for heroku assets
   gem 'thin' # web server for heroku

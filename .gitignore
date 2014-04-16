@@ -18,3 +18,6 @@
 .DS_Store
 *.orig
 Thumbs.db
+
+# Code Coverage
+/coverage
