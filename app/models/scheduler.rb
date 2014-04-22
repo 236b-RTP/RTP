@@ -103,7 +103,7 @@ class Scheduler
     #return @week, remaining, past_due
   end
 =end
-  private
+  #made load_events public to test it
 
   def load_events(events)
     @week.each do |wday|
