@@ -11,6 +11,7 @@ class Scheduler
     load_events(@user.events)
 
     tasks = @user.tasks.select { |task| task.start_date.present? }
+    tasks.reject!(&:completed?) # filter out completed tasks
     if task.present?
       tasks << task
     end
@@ -73,7 +74,7 @@ class Scheduler
 
       best_times.each do |slot|
           #for times match best tasks or for tasks match best times????
-         
+
           scheduled = false
           count = 0
           while count<remaining.size && scheduled == false
@@ -112,7 +113,7 @@ class Scheduler
     preftimes.each do |day|
       #get times with highest priority get earliest time?? may not want earliest time want something grr
       candidates = day.select{|p| p.pref == day.max.pref}
-      # if night owl take latest of best times 
+      # if night owl take latest of best times
       if !candidates.empty?
         if(user_preference.profile_type == 'late')
           best_time = candidates.sort{|a,b| b.time<=>a.time}.shift

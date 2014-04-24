@@ -52,9 +52,156 @@ jQuery ($) ->
   $(window).on("resize", resizeFn)                # resize the tasks-list and calendar whenever the window is resized
   resizeFn()
 
+  reschedule = ->
+    if EventTasks.hasOverdueTasks()
+      new OverdueTaskApp()
+    else
+      $(this).prop("disabled", true)
+      $.ajax {
+        cache: false
+        dataType: 'json'
+        error: =>
+          alert('Unable to schedule task. Please try again.')
+          $(this).prop("disabled", false)
+        success: =>
+          loadAllTasks()
+          $(this).prop("disabled", false)
+        type: 'POST'
+        url: "/tasks/reschedule.json"
+      }
+
+    false
 
   ######################################## Backbone Views ##########################################
 
+  class OverdueTaskApp extends View
+    tagName: "div"
+    template: _.template($('#reschedule_dialog_template').html(), null, { variable: 'model' })
+    initialize: ->
+      @render()
+      @views = []
+      @submitting = false
+
+      @listenTo(@, 'event:update', @updateSubmitButton)
+
+      @dialog = @$el.appendTo(document.body).find(".modal")
+      @dialog.modal({
+        backdrop: "static",
+        keyboard: false,
+        show: true
+      })
+
+      @dialog.on "hidden.bs.modal", => # removes all elements from memory
+        unless @submitting
+          _.each(@views, ((view) ->
+            view.restoreOriginalAttributes()
+          ))
+        @remove()
+
+      @$el.find('form').on('submit', _.bind(@save, @))
+
+      @overdueTable = @$el.find('table.overdue-tasks')
+      @overdueTableContainer = @overdueTable.find('tbody')
+
+      _.each(EventTasks.overdueTasks(), @addOverdueTask, @)
+    addOverdueTask: (eventTask) ->
+      view = new OverdueTaskView({ model: eventTask, application: @ })
+      @overdueTableContainer.append(view.render().el)
+      @views.push(view)
+    render: ->
+      @$el.html(@template(@model)) # renders the dialog view
+      @
+    isFinished: ->
+      _.filter(@views, ((view)->
+        !view.isCompleted()
+      )).length == 0
+    updateSubmitButton: ->
+      @submitBtn ||= @$el.find('input[type=submit]')
+      @submitBtn.prop('disabled', !@isFinished())
+    save: ->
+      return false unless @isFinished()
+      return false if @submitting
+
+      @submitting = true # only submit once, ever
+
+      calls = []
+      _.each(@views, ((view) ->
+        model = view.model
+
+        # make the ajax call and add it to an array so that we can use a jQuery promise
+        # to wait for all ajax calls to finish before rescheduling
+        calls.push($.ajax({
+          cache: false
+          data: {
+            _method: 'PUT'
+            task: {
+              completed: model.isCompleted() ? 'true' : 'false'
+              due_date: model.get('item.due_date')
+              due_time: model.get('item.due_time')
+            }
+          }
+          dataType: "json"
+          type: "POST"
+          url: "/tasks/#{model.get("item.id")}.json"
+        }))
+      ))
+
+      # wait for all calls to finish, then reschedule
+      $.when.apply($, calls).done =>
+        @dialog.modal('hide')
+        reschedule()
+
+      false
+
+
+  class OverdueTaskView extends View
+    tagName: 'tr'
+    template: _.template($('#reschedule_template').html(), null, { variable: 'model' })
+    bindings: {
+      "input[name=due_date]" : "item.due_date"
+      "input[name=due_time]" : "item.due_time"
+    }
+    initialize: (options) ->
+      @app = options.application
+      @action = ''
+      @completed = false
+
+      @originalAttributes = @model.toJSON()
+
+      @listenTo(@model, 'change', @setCompleted)
+    isCompleted: ->
+      @completed
+    setAction: (event) ->
+      target = $(event.target)
+      @action = target.val()
+      completed = @action == 'completed'
+
+      @model.set('item.completed', completed)
+      @$el.find('.form-control').prop('disabled', completed)
+      @setCompleted() unless completed
+    setCompleted: ->
+      if @action == 'completed'
+        @completed = true
+      else
+        @completed = moment("#{@model.get('item.due_date')} #{@model.get('item.due_time')}", "MM/DD/YYYY HH:mm").isAfter()
+
+      @app.trigger('event:update')
+    restoreOriginalAttributes: ->
+      console.log('restoring')
+      @model.set(@originalAttributes)
+    render: ->
+      @$el.html(@template(@model))
+      @stickit()
+
+      @$el.find('input.select-date').datepicker()
+      @$el.find(".glyphicon-calendar").on "click", ->
+        targetInput = $(@).siblings("input")
+        targetInput.datepicker("show") unless targetInput.prop('disabled')
+        false
+
+      @$el.find('input[type=radio]').on('click', _.bind(@setAction, @))
+
+      @
 
   # new item dialog Backbone view
   class AppView extends View
@@ -193,7 +340,7 @@ jQuery ($) ->
       @$el.empty()
       @displayedTasks.each(@addOne, @)
     addOne: (eventTask) ->
-      if eventTask.get("item_type") == "Task"
+      if eventTask.isTask()
         view = new TaskView({ model: eventTask })
         index = @displayedTasks.indexOf(eventTask)
         previous = @displayedTasks.at(index - 1)
@@ -204,6 +351,8 @@ jQuery ($) ->
           previousView.$el.before(view.render().el)
     addEvent: (eventTask) ->
       return unless eventTask.get("item.start_date")?
+      return if eventTask.isCompleted()
+
       calendar.fullCalendar("addEventSource", {
         events: [eventTask.fullCalendarParams()]
       })
@@ -213,13 +362,13 @@ jQuery ($) ->
     filter: ->   # populates display tasks
       activeTab = @tabs.find("li.active")
       @displayedTasks.reset EventTasks.filter (model) ->
-        return false if model.get("item_type") == "Event"
+        return false if model.isEvent()
         if activeTab.hasClass("todo")
           !model.get("item.start_date")
         else if activeTab.hasClass("doing")
           model.get("item.start_date")? && moment().isBefore(model.getOriginalDate("item.due_date"))
         else
-          false
+          model.isCompleted()
 
 
   # new item form view
@@ -283,6 +432,12 @@ jQuery ($) ->
     }
     initialize: ->
       @updateDates()
+    isTask: ->
+      @get('item_type') == 'Task'
+    isEvent: ->
+      @get('item_type') == 'Event'
+    isCompleted: ->
+      @get('item.completed') == true || @get('item.completed') == 'true'
     getOriginalDate: (attribute) ->
       @originalDates[attribute]
     updateDates: ->
@@ -307,12 +462,12 @@ jQuery ($) ->
       "#{MONTHS[month]} #{day}"
     fullCalendarParams: ->
       {
-      title: @get("item.title")
-      start: jQuery.fullCalendar.moment(@getOriginalDate("item.start_date"))
-      end: jQuery.fullCalendar.moment(@getOriginalDate("item.end_date"))
-      model: @
-      id: @get("item.id")
-      className: @className()
+        title: @get("item.title")
+        start: jQuery.fullCalendar.moment(@getOriginalDate("item.start_date"))
+        end: jQuery.fullCalendar.moment(@getOriginalDate("item.end_date"))
+        model: @
+        id: @get("item.id")
+        className: @className()
       }
     dueDateColor: ->
       if moment(@getOriginalDate("item.due_date")).isBefore(moment().add("days", 1))
@@ -360,6 +515,12 @@ jQuery ($) ->
           return 1
         else
           return 0
+    overdueTasks: ->
+      @filter((eventTask) ->
+        eventTask.isTask() && !eventTask.isCompleted() && moment(eventTask.get('item.due_date')).isBefore()
+      )
+    hasOverdueTasks: ->
+      @overdueTasks().length > 0
 
   EventTasks = new EventTaskCollection()
 
@@ -377,27 +538,13 @@ jQuery ($) ->
     })
   loadAllTasks()
 
-
   ######################################### Click Events  ###########################################
 
 
   $("#new-item-button").on "click", ->
     new AppView({ model: new EventTask() })
 
-  $("#reschedule-button").on "click", ->
-    $(this).prop("disabled", true)
-    $.ajax {
-      cache: false
-      dataType: 'json'
-      error: =>
-        alert('Unable to schedule task. Please try again.')
-        $(this).prop("disabled", false)
-      success: =>
-        loadAllTasks()
-        $(this).prop("disabled", false)
-      type: 'POST'
-      url: "/tasks/reschedule.json"
-    }
+  $("#reschedule-button").on("click", reschedule)
 
 
   new TaskApp()

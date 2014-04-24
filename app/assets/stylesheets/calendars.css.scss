@@ -135,3 +135,13 @@
 #reschedule-button {
   margin-top: 20px;
 }
+
+.overdue-tasks {
+  .task-tag-color {
+    float: left;
+    width: 13px;
+    height: 18px;
+    border: 1px solid black;
+    margin-right: 0.8em;
+  }
+}
