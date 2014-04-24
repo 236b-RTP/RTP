@@ -5,7 +5,7 @@
 [![Dependencies](https://gemnasium.com/236b-RTP/RTP.png)](https://gemnasium.com/236b-RTP/RTP)
 [![Code Climate](https://codeclimate.com/github/236b-RTP/RTP.png)](https://codeclimate.com/github/236b-RTP/RTP)
 
-Written by: Noranda Brown, Alex Pomata, Luka Milekic, Md Akhand
+Written by: Noranda Brown, Alex Pomata, Luka Milekic
 
 ### Rdoc
 Documentation can be found in the `doc/` folder or [here](http://236b-RTP.github.io/RTP).

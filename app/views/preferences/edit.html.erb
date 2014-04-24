@@ -8,32 +8,38 @@
       <%= render partial: 'shared/flash_messages' %>
       <%= form_for([@user, @preference]) do |f| %>
         <div class="radio">
+          <%= image_tag 'day.png', height: '50', width: '50', class: 'pull-right' %>
           <label>
             <%= f.radio_button(:profile_type, 'early') %>
             <strong>Early Riser</strong>
             <p>
-              Description of Early Riser preference type.
+              The earlier, the more productive I am.
             </p>
           </label>
         </div>
+        <hr>
         <div class="radio">
+          <%= image_tag 'night.png', height: '50', width: '50', class: 'pull-right' %>
           <label>
             <%= f.radio_button(:profile_type, 'late') %>
             <strong>Night Owl</strong>
             <p>
-              Description of Night Owl preference type.
+              I do my best work at night.
             </p>
           </label>
         </div>
+        <hr>
         <div class="radio">
+          <%= image_tag 'day-night.png', height: '50', width: '50', class: 'pull-right' %>
           <label>
             <%= f.radio_button(:profile_type, 'mix') %>
             <strong>In-Betweener</strong>
             <p>
-              Description of In-Betweener preference type.
+              I'm in-between. I can work at any time.
             </p>
           </label>
         </div>
+        <hr>
         <div class="row">
           <div class="col-sm-6">
             <div class="form-group">
