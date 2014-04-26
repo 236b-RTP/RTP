@@ -39,6 +39,6 @@ class PreferencesController < ApplicationController
   private
 
   def preferences_params
-    params.require(:preference).permit(:profile_type, :start_time, :end_time)
+    params.require(:preference).permit(:profile_type, :start_time, :end_time, :schedule_spread)
   end
 end

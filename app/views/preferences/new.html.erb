@@ -7,57 +7,9 @@
       </div>
       <%= render partial: 'shared/flash_messages' %>
       <%= form_for([@user, @preference]) do |f| %>
-          <div class="radio">
-            <%= image_tag 'day.png', height: '50', width: '50', class: 'pull-right' %>
-            <label>
-              <%= f.radio_button(:profile_type, 'early') %>
-              <strong>Early Riser</strong>
-              <p>
-                The earlier, the more productive I am.
-              </p>
-            </label>
-          </div>
-          <hr>
-          <div class="radio">
-            <%= image_tag 'night.png', height: '50', width: '50', class: 'pull-right' %>
-            <label>
-              <%= f.radio_button(:profile_type, 'late') %>
-              <strong>Night Owl</strong>
-              <p>
-                I do my best work at night.
-              </p>
-            </label>
-          </div>
-          <hr>
-          <div class="radio">
-            <%= image_tag 'day-night.png', height: '50', width: '50', class: 'pull-right' %>
-            <label>
-              <%= f.radio_button(:profile_type, 'mix') %>
-              <strong>In-Betweener</strong>
-              <p>
-                I'm in-between. I can work at any time.
-              </p>
-            </label>
-          </div>
-          <hr>
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <%= f.label(:start_time, 'Start Time') %>
-                <%= f.time_field(:start_time, class: "form-control") %>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                <%= f.label(:end_time, 'End Time') %>
-                <%= f.time_field(:end_time, class: "form-control") %>
-              </div>
-            </div>
+        <%= render partial: 'form', locals: { f: f } %>
 
-          </div>
-
-
-          <%= f.submit 'Save and Continue', class: 'btn btn-success' %>
+        <%= f.submit 'Save and Continue', class: 'btn btn-success' %>
       <% end %>
     </div>
   </div>

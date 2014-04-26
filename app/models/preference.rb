@@ -4,4 +4,5 @@ class Preference < ActiveRecord::Base
   validates :profile_type, presence: true
   validates :start_time, presence: true
   validates :end_time, presence: true
+  validates :schedule_spread, presence: true
 end

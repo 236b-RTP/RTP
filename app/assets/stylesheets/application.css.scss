@@ -56,6 +56,8 @@ textarea {
   padding: 0 20px;
 }
 
-strong {
-
+.alert-danger {
+  ol, ul {
+    margin-bottom: 0;
+  }
 }
