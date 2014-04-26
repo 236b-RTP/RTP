@@ -52,8 +52,9 @@ jQuery ($) ->
   $(window).on("resize", resizeFn)                # resize the tasks-list and calendar whenever the window is resized
   resizeFn()
 
+  # reschedules tasks
   reschedule = ->
-    if EventTasks.hasOverdueTasks()
+    if EventTasks.hasOverdueTasks()               # if there are overdue tasks, display overdue dialog
       new OverdueTaskApp()
     else
       $(this).prop("disabled", true)
@@ -355,6 +356,10 @@ jQuery ($) ->
 
       calendar.fullCalendar("addEventSource", {
         events: [eventTask.fullCalendarParams()]
+#        eventRender: (event, el) ->
+#          if event.isTask()
+#            colortag = "<span style:'background-color:#{event.tagcolor};'></span>"
+#            el.find(".fc-event-time").append(colortag)
       })
     addAllEvents: ->
       calendar.fullCalendar('removeEvents')
