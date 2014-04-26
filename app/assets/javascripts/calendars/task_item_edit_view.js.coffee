@@ -55,7 +55,7 @@ class TaskItemEditView extends View
             @model.updateDates()
             if @calendarEvent?
               _.extend(@calendarEvent, @model.fullCalendarParams())
-              calendar.fullCalendar("updateEvent", @calendarEvent)
+              @getCalendar().fullCalendar("updateEvent", @calendarEvent)
         type: "POST"
         url: "/#{itemType}s.json"
       }
@@ -64,6 +64,8 @@ class TaskItemEditView extends View
         ajaxParams.data._method = "PUT"
       $.ajax(ajaxParams)
       false
+  getCalendar: ->
+    @calendar ||= $("#calendar")
   render: ->
     @$el.html(getTemplate()(@model)) # renders the dialog view
     @
@@ -82,7 +84,7 @@ class TaskItemEditView extends View
           @$el.find("#newItemDialog").modal("hide")
           EventTasks.remove(@model)
           if @calendarEvent?
-            calendar.fullCalendar("removeEvents", [@calendarEvent.id])
+            @getCalendar().fullCalendar("removeEvents", [@calendarEvent.id])
         type: "POST"
         url: "/#{itemType}s/#{@model.get("item.id")}"
       })

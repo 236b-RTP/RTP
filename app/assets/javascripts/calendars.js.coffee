@@ -17,6 +17,12 @@ jQuery ($) ->
     timezone: "local"                             # use local timezones from local systems
     eventClick: (event) ->
       new TaskItemEditView({ model: event.model }, event)  # open edit dialog when events are clicked
+    eventRender: (event, el) ->
+      if event.model.isTask()
+        span = $(document.createElement('span'))
+        span.css('background-color', event.model.get("item.tag_color")).addClass('fc-event-tag-color')
+        el.find('.fc-event-inner').append(span)
+      return
   })
 
   # makes a "to do" task droppable into the calendar div, adding the task to "doing" and rescheduling all current tasks

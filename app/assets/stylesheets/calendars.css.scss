@@ -121,6 +121,16 @@
   color: #fff;
 }
 
+.fc-event-tag-color {
+  position: absolute;
+  display: block;
+  top: 0;
+  right: 0;
+  height: 13px;
+  width: 45px;
+  border-radius: 3px;
+}
+
 .ui-autocomplete {
   font-size: 0.9em;
 

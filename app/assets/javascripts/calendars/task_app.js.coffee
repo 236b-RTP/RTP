@@ -43,10 +43,6 @@ class TaskApp extends View
 
     @getCalendar().fullCalendar("addEventSource", {
       events: [eventTask.fullCalendarParams()]
-#        eventRender: (event, el) ->
-#          if event.isTask()
-#            colortag = "<span style:'background-color:#{event.tagcolor};'></span>"
-#            el.find(".fc-event-time").append(colortag)
     })
   addAllEvents: ->
     @getCalendar().fullCalendar('removeEvents')
