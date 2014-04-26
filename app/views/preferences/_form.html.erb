@@ -1,0 +1,72 @@
+<div class="radio">
+  <%= image_tag 'day.png', height: '50', width: '50', class: 'pull-right' %>
+  <label>
+    <%= f.radio_button(:profile_type, 'early') %>
+    <strong>Early Riser</strong>
+    <span class="help-block">
+      The earlier, the more productive I am.
+    </span>
+  </label>
+</div>
+<hr>
+<div class="radio">
+  <%= image_tag 'night.png', height: '50', width: '50', class: 'pull-right' %>
+  <label>
+    <%= f.radio_button(:profile_type, 'late') %>
+    <strong>Night Owl</strong>
+    <span class="help-block">
+      I do my best work at night.
+    </span>
+  </label>
+</div>
+<hr>
+<div class="radio">
+  <%= image_tag 'day-night.png', height: '50', width: '50', class: 'pull-right' %>
+  <label>
+    <%= f.radio_button(:profile_type, 'mix') %>
+    <strong>In-Betweener</strong>
+    <span class="help-block">
+      I'm in-between. I can work at any time.
+    </span>
+  </label>
+</div>
+<hr>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="radio">
+      <label>
+        <%= f.radio_button(:schedule_spread, 'spread') %>
+        <strong>Spread out my Schedule</strong>
+        <span class="help-block">
+          Your schedule will have tasks spread out throughout the day and week.
+        </span>
+      </label>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="radio">
+      <label>
+        <%= f.radio_button(:schedule_spread, 'condense') %>
+        <strong>Condense my Schedule</strong>
+        <span class="help-block">
+          Your schedule will have tasks one-after-another.
+        </span>
+      </label>
+    </div>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="form-group">
+      <%= f.label(:start_time, 'Start Time') %>
+      <%= f.time_field(:start_time, class: "form-control") %>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="form-group">
+      <%= f.label(:end_time, 'End Time') %>
+      <%= f.time_field(:end_time, class: "form-control") %>
+    </div>
+  </div>
+</div>
