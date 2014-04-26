@@ -30,7 +30,15 @@ jQuery ($) ->
     accept: ".task-instance"
     drop: (event, ui) ->
       if confirm("Are you sure you want to add this task to your calendar?") # confirm before rescheduling
-        ui.draggable.data("model").schedule(ui.draggable) # reschedule all current tasks
+        model = ui.draggable.data("model")
+        if EventTasks.hasOverdueTasks()
+          callbackFn = (model, draggable) ->
+            ->
+              model.schedule(draggable)
+
+          new OverdueTaskApp({ callback: callbackFn(model, ui.draggable) })
+        else
+          model.schedule(ui.draggable) # reschedule all current tasks
   })
 
   # loads mini-calendar
@@ -54,7 +62,7 @@ jQuery ($) ->
   # reschedules tasks
   reschedule = ->
     if EventTasks.hasOverdueTasks()               # if there are overdue tasks, display overdue dialog
-      new OverdueTaskApp()
+      new OverdueTaskApp({ callback: reschedule })
     else
       $(this).prop("disabled", true)
       $.ajax {
@@ -84,6 +92,8 @@ jQuery ($) ->
       type: "GET"
       url: "/task_events.json"
     })
+
+  root.loadAllTasks = loadAllTasks
 
   ######################################### Click Events  ###########################################
 

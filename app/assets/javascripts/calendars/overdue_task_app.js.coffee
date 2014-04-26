@@ -12,10 +12,11 @@ getTemplate = ->
 
 class OverdueTaskApp extends View
   tagName: "div"
-  initialize: ->
+  initialize: (options) ->
     @render()
     @views = []
     @submitting = false
+    @callback = options.callback
 
     @listenTo(@, 'event:update', @updateSubmitButton)
 
@@ -84,7 +85,7 @@ class OverdueTaskApp extends View
     # wait for all calls to finish, then reschedule
     $.when.apply($, calls).done =>
       @dialog.modal('hide')
-      reschedule()
+      @callback.call(@)
 
     false
 
