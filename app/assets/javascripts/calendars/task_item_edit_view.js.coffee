@@ -40,6 +40,7 @@ class TaskItemEditView extends View
         return false
       itemType = itemType.toLowerCase()
       params[itemType] = form.serializeObject()
+      params[itemType]['completed'] ||= "false"
       ajaxParams = {
         cache: false
         data: params

@@ -27,6 +27,7 @@ class TaskItemFormView extends View
     "input[name=difficulty]"    : "item.difficulty"
     "input[name=tag_name]"      : "item.tag_name"
     "input[name=tag_color]"     : "item.tag_color"
+    "input[name=completed]"     : "item.completed"
   }
   render: ->
     @$el.html(getTemplate()(@model)) # renders the dialog view

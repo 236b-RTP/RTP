@@ -160,5 +160,15 @@
       </div>
     </div>
 
+    {{ if (!model.isNew()) { }}
+      <div class="form-group">
+        <div class="col-xs-10 col-xs-offset-2">
+          <label>
+            <%= check_box_tag(:completed, 'true') %> Task Completed?
+          </label>
+        </div>
+      </div>
+    {{ } }}
+
   {{ } }}
 </script>
