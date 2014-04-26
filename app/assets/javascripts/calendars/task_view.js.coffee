@@ -16,17 +16,19 @@ class TaskView extends View
     "click": "edit"
   }
   initialize: ->
-    @$el.addClass("task-instance").draggable({
-      revert: "invalid"
-      helper: "clone"
-      appendTo: "body"
-      zIndex: 9999
-      start: (event, ui) ->
-        $(@).addClass("invisible")
-        ui.helper.width($(@).width()).css("border", "1.5px solid black")
-      stop: ->
-        $(@).removeClass("invisible")
-    })
+    @$el.addClass("task-instance")
+    unless @model.get("item.start_date")
+      @$el.draggable({
+        revert: "invalid"
+        helper: "clone"
+        appendTo: "body"
+        zIndex: 9999
+        start: (event, ui) ->
+          $(@).addClass("invisible")
+          ui.helper.width($(@).width()).css("border", "1.5px solid black")
+        stop: ->
+          $(@).removeClass("invisible")
+      })
     @$el.data("model", @model)
     @listenTo(@model, "remove", @remove)
     @listenTo(@model, "change", @render)
