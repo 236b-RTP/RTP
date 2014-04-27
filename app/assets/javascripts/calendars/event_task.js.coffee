@@ -73,6 +73,10 @@ class EventTask extends DeepModel
     }
   className: ->
     "fc-taskevent-#{@get("item_type").toLowerCase()}"
+  meetsSearchCriteria: (criteria) ->
+    criteria = if criteria? then criteria.toLowerCase() else ''
+    return true if criteria == ''
+    (@get('item.title') || '').toLowerCase().indexOf(criteria) >= 0 || (@get('item.description') || '').toLowerCase().indexOf(criteria) >= 0
 
 class EventTaskCollection extends Collection
   model: EventTask

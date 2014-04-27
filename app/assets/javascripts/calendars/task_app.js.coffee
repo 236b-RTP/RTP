@@ -23,6 +23,23 @@ class TaskApp extends View
     @listenTo(EventTasks, "add", @addEvent)
     @listenTo(EventTasks, "reset", @addAllEvents)
     @listenTo(EventTasks, "change", @filter)
+
+    @searchInput = @$el.parent().find('.tasks-search input[type=text]')
+    @searchInput.on('keydown', (event) =>
+      if event.which == 27 # escape key
+        @searchInput.val('')
+        @searchInput.blur()
+        @filter()
+        false
+      else
+        true
+    )
+    @searchInput.on('keyup change', =>
+      @filter()
+      true
+    )
+
+    @searchInput.closest('form').on('submit', _.bind(@filter, @))
   getCalendar: ->
     @calendar ||= $("#calendar")
   addAll: ->
@@ -50,14 +67,21 @@ class TaskApp extends View
     EventTasks.each(@addEvent, @)
   filter: ->   # populates display tasks
     activeTab = @tabs.find("li.active")
+    searchText = @searchInput.val()
     @displayedTasks.reset EventTasks.filter (model) ->
       return false if model.isEvent()
-      if activeTab.hasClass("todo")
+      modelMatches = if activeTab.hasClass("todo")
         !model.get("item.start_date")
       else if activeTab.hasClass("doing")
         !model.isCompleted() && model.get("item.start_date")? && moment().isBefore(model.getOriginalDate("item.due_date"))
       else
         model.isCompleted()
+
+      if searchText != ''
+        modelMatches &&= model.meetsSearchCriteria(searchText)
+
+      modelMatches
+    false
 
 
 # export TaskApp to the global namespace
