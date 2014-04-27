@@ -22,6 +22,7 @@ class TaskApp extends View
     @listenTo(EventTasks, "add reset", @filter)
     @listenTo(EventTasks, "add", @addEvent)
     @listenTo(EventTasks, "reset", @addAllEvents)
+    @listenTo(EventTasks, "change", @filter)
   getCalendar: ->
     @calendar ||= $("#calendar")
   addAll: ->
@@ -57,6 +58,7 @@ class TaskApp extends View
         !model.isCompleted() && model.get("item.start_date")? && moment().isBefore(model.getOriginalDate("item.due_date"))
       else
         model.isCompleted()
+
 
 # export TaskApp to the global namespace
 root.TaskApp = TaskApp

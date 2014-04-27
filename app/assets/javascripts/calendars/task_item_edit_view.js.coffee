@@ -57,6 +57,15 @@ class TaskItemEditView extends View
             if @calendarEvent?
               _.extend(@calendarEvent, @model.fullCalendarParams())
               @getCalendar().fullCalendar("updateEvent", @calendarEvent)
+            if @model.get("item.start_date")?
+              calendarEvent = _.find @getCalendar().fullCalendar('clientEvents'), (event) =>
+                event.model == @model
+              if @model.isCompleted() && calendarEvent?
+                @getCalendar().fullCalendar('removeEvents', [calendarEvent.id])
+              else if !@model.isCompleted() && !calendarEvent?
+                @getCalendar().fullCalendar("addEventSource", {
+                  events: [@model.fullCalendarParams()]
+                })
         type: "POST"
         url: "/#{itemType}s.json"
       }
