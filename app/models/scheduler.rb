@@ -22,7 +22,7 @@ class Scheduler
 
   def schedule
     #making a deep copy
-    remaining = Marshal.load(Marshal.dump(@tasks))
+    remaining = @tasks
     #all tasks that couldnt be scheduled because past due or didnt fit
     couldnt_schedule = []
     #tasks that couldnt be scheduled before when due
@@ -48,7 +48,7 @@ class Scheduler
           #make sure before scheduling before duedate and not before the current time
           if pref_time.time < best_task[0].due_date && @today <= pref_time.time
             scheduled = @week[d].insert(pref_time.time, change_dt(pref_time.time, (best_task[0].duration / 60)), true, best_task[0])
-          elsif pref_time >= best_task[0].due_date
+          elsif pref_time.time >= best_task[0].due_date
             past_due << best_task
           end
 
@@ -63,13 +63,14 @@ class Scheduler
     end
     return @week, couldnt_schedule, past_due
   end
-=begin
 
   def schedule_spread
-    remaining = Marshal.load(Marshal.dump(@tasks))
+    remaining = @tasks
     couldnt_schedule = []
     past_due = []
     pre_time_ar = Marshal.load(Marshal.dump(@preferred_times))
+    puts "got to line 66"
+    
     while !multi_arr_empty?(pre_time_ar) && !remaining.empty? do
       #need to remove best times from pref time ar - may not do what is intended
       best_times = weeks_best_times(pre_time_ar)
@@ -78,31 +79,34 @@ class Scheduler
 
       best_times.each do |slot|
           #for times match best tasks or for tasks match best times????
-
+          puts "got to line 74 \n remaining.size = #{remaining.size}"
           scheduled = false
           count = 0
           while count<remaining.size && scheduled == false
-            if slot.time < remaining[count].due_date
-              task = remaining[count]
+            if slot.time < remaining[count][0].due_date
+              task = remaining[count][0]
               day = @week.select{ |day| slot.time.to_date == day.date.to_date }[0]
-              if pref_time.time < best_task[0].due_date && @today <= pref_time.time
-                scheduled = day.insert(pref_time.time, change_dt(pref_time.time, (task.duration / 60)), true, task)
-              elsif pref_time >= best_task[0].due_date
-                past_due << best_task
+              puts "got to line 81"
+              if slot.time < task.due_date && @today <= slot.time
+                scheduled = day.insert(slot.time, change_dt(slot.time, (task.duration / 60)), true, task)
+                puts "got to line 84"
               end
-              if scheduled
-                remaining.delete_at(count)
-              end
+            end
+            if slot.time >= task.due_date
+              past_due << task
+              puts "got to line 87"
+            end
+            if scheduled
+              remaining.delete_at(count)
+              puts "got to line 91"
             end
             count += 1
           end
-      end
-
+       end
     end
     #need to work out script issue
-    #return @week, remaining, past_due
+    return @week, remaining, past_due
   end
-=end
   #made load_events public to test it
 
   def load_events(events)
@@ -114,7 +118,7 @@ class Scheduler
       end
     end
   end
-=begin
+
   #need to add null checks max may be null
   def weeks_best_times(preftimes)
     best_times = []
@@ -123,7 +127,7 @@ class Scheduler
       candidates = day.select{|p| p.pref == day.max.pref}
       # if night owl take latest of best times
       if !candidates.empty?
-        if(user_preference.profile_type == 'late')
+        if(@user_preference.profile_type == 'late')
           best_time = candidates.sort{|a,b| b.time<=>a.time}.shift
         else
           best_time = candidates.sort{|a,b| a.time<=>b.time}.shift
@@ -133,5 +137,5 @@ class Scheduler
     end
     return best_times
   end
-=end
+
 end
