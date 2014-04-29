@@ -34,7 +34,12 @@ class Scheduler
         check_day = @preferred_times[d%7]
         #custom sort on Preftimes
         best_times = check_day.sort.reverse
-
+=begin
+        if(@user_preference.profile_type == 'late'){
+          #does a stable sort so reverses the times and then sorts of preferences eg best time is latest time with highest priority
+          best_times = reverse_pref_gravity(checkday.sort{|x,y| y.time<=>x.time})
+        }
+=end
         while !best_times.empty? && scheduled == false do
           pref_time = best_times.shift
           if @week[d].date < best_task[0].due_date && pref_time.time >= @today

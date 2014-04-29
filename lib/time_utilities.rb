@@ -17,3 +17,19 @@ end
 def multi_arr_empty?(arr)
   arr.empty? || arr.map(&:empty?).all?
 end
+
+
+class Array
+  def stable_sort
+      n = 0
+      sort_by {|x| n+= 1; [x, n]}
+  end
+end
+
+def reverse_pref_gravity(array)
+	if(array.class == Array)
+		return array.stable_sort
+	else
+		raise ArgumentError
+	end
+end
