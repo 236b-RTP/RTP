@@ -38,10 +38,10 @@ class Scheduler
         #custom sort on Preftimes
         best_times = check_day.sort.reverse
 
-        if(@user_preference.profile_type == 'late'){
+        if(@user_preference.profile_type == 'late') then
           #does a stable sort so reverses the times and then sorts of preferences eg best time is latest time with highest priority
           best_times = reverse_pref_gravity(checkday.sort{|x,y| y.time<=>x.time})
-        }
+        end
 
         while !best_times.empty? && scheduled == false do
           pref_time = best_times.shift
@@ -82,16 +82,21 @@ class Scheduler
           puts "got to line 74 \n remaining.size = #{remaining.size}"
           scheduled = false
           count = 0
+          task = nil
           while count<remaining.size && scheduled == false
+            puts "slot.time = #{slot.time}, remaining[count][0] = #{remaining[count][0].due_date}"
+            puts "best_times = #{best_times}"
             if slot.time < remaining[count][0].due_date
               task = remaining[count][0]
               day = @week.select{ |day| slot.time.to_date == day.date.to_date }[0]
               puts "got to line 81"
-              if slot.time < task.due_date && @today <= slot.time
+              if @today <= slot.time
                 scheduled = day.insert(slot.time, change_dt(slot.time, (task.duration / 60)), true, task)
                 puts "got to line 84"
               end
             end
+            puts remaining.to_s
+            puts "count is #{count}"
             if slot.time >= task.due_date
               past_due << task
               puts "got to line 87"
