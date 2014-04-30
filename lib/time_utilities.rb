@@ -18,7 +18,6 @@ def multi_arr_empty?(arr)
   arr.empty? || arr.map(&:empty?).all?
 end
 
-
 class Array
   def stable_sort
       n = 0
