@@ -95,7 +95,7 @@ class Scheduler
             end
             puts remaining.to_s
             puts "count is #{count}"
-            if slot.time >= task.due_date
+            if !task.nil? slot.time >= task.due_date
               past_due << task
               puts "got to line 87"
             end
