@@ -68,15 +68,13 @@ class Scheduler
     remaining = @tasks
     couldnt_schedule = []
     past_due = []
-    pre_time_ar = Marshal.load(Marshal.dump(@preferred_times))
+    pref_time_ar = Marshal.load(Marshal.dump(@preferred_times))
     puts "got to line 66"
     
-    while !multi_arr_empty?(pre_time_ar) && !remaining.empty? do
+    while !multi_arr_empty?(pref_time_ar) && !remaining.empty? do
       #need to remove best times from pref time ar - may not do what is intended
-      best_times = weeks_best_times(pre_time_ar)
-      #may or may not work
-      pre_time_ar-best_times
-
+      best_times = weeks_best_times(pref_time_ar)
+      pref_time_ar-best_times
       best_times.each do |slot|
           #for times match best tasks or for tasks match best times????
           puts "got to line 74 \n remaining.size = #{remaining.size}"
@@ -127,7 +125,9 @@ class Scheduler
   #need to add null checks max may be null
   def weeks_best_times(preftimes)
     best_times = []
-    preftimes.each do |day|
+    d = @today.wday
+    while d < @today.wday + 7 do
+      day = @preferred_times[d%7]
       #get times with highest priority get earliest time?? may not want earliest time want something grr
       candidates = day.select{|p| p.pref == day.max.pref}
       # if night owl take latest of best times
