@@ -139,6 +139,7 @@ class Scheduler
         end
         best_times << best_time
       end
+      d+=1
     end
     return best_times
   end
