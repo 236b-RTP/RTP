@@ -3,8 +3,8 @@ require 'scheduler'
 
 describe Scheduler do
 	before(:each) do
-		@start = DateTime.new(2014, 3, 15, 10)
-		@end_time = DateTime.new(2014, 3, 15, 20)
+		@start = DateTime.new(2014, 4, 29, 10)
+		@end_time = DateTime.new(2014, 4, 29, 20)
 		@event1 = double("Event1", :start_date => DateTime.now, :end_date => DateTime.now + 2.hours)
 		@task1 = double("Task1", :start_date => DateTime.now, :created_at => DateTime.now - 2.days,
 		 :duration => 60, :due_date => DateTime.now + 2.days, :priority => 3)
