@@ -147,4 +147,9 @@ class Scheduler
     return best_times
   end
 
+  def delete_best_times(preftimes, best_times){
+    preftimes.each do |day|
+      day = day - best_times
+  end
+
 end
