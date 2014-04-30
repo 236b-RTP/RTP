@@ -69,39 +69,42 @@ class Scheduler
     couldnt_schedule = []
     past_due = []
     pref_time_ar = Marshal.load(Marshal.dump(@preferred_times))
-    puts "got to line 66"
+
     
     while !multi_arr_empty?(pref_time_ar) && !remaining.empty? do
       #need to remove best times from pref time ar - may not do what is intended
       best_times = weeks_best_times(pref_time_ar)
-      pref_time_ar-best_times
+      puts "BEFORE:"
+      pref_time_ar.each do |element|
+        element.each do |pref_element|
+          puts "pref = #{pref_element.pref}, time = #{pref_element.time}"
+        end
+      end
+      pref_time_ar = pref_time_ar-best_times
+      puts "AFTER:"
+      pref_time_ar.each do |element|
+        element.each do |pref_element|
+          puts "pref = #{pref_element.pref}, time = #{pref_element.time}"
+        end
+      end
       best_times.each do |slot|
           #for times match best tasks or for tasks match best times????
-          puts "got to line 74 \n remaining.size = #{remaining.size}"
           scheduled = false
           count = 0
           task = nil
           while count<remaining.size && scheduled == false
-            puts "slot.time = #{slot.time}, remaining[count][0] = #{remaining[count][0].due_date}"
-            puts "best_times = #{best_times}"
             if slot.time < remaining[count][0].due_date
               task = remaining[count][0]
               day = @week.select{ |day| slot.time.to_date == day.date.to_date }[0]
-              puts "got to line 81"
               if @today <= slot.time
                 scheduled = day.insert(slot.time, change_dt(slot.time, (task.duration / 60)), true, task)
-                puts "got to line 84"
               end
             end
-            puts remaining.to_s
-            puts "count is #{count}"
-            if !task.nil? slot.time >= task.due_date
+            if !task.nil? && slot.time >= task.due_date
               past_due << task
-              puts "got to line 87"
             end
             if scheduled
               remaining.delete_at(count)
-              puts "got to line 91"
             end
             count += 1
           end
