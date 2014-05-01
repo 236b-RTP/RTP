@@ -28,19 +28,19 @@ describe Scheduler do
 
   it "can schedule using normal scheduler" do
   	@sched = Scheduler.new(@user)
-  	@sched.schedule
   end
 
   it "can schedule using spread scheduler" do
   	@sched = Scheduler.new(@user)
   	week = @sched.schedule_spread[0]
-  	week.each do |day|
-  		day.filled.each do |block|
-  			print block.t[:begin]
-  			puts block
-  		end
-
-  	end
-
   end
+  it "returns unschedulable events" do
+    user = @user
+    (0..10).each do
+      user.tasks << @task1
+    end
+    sched = Scheduler.new(user)
+    sched.schedule.should_not be_empty
+  end
+
 end
