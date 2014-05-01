@@ -84,7 +84,7 @@ class Scheduler
               task = remaining[count][0]
               day = @week.select{ |day| slot.time.to_date == day.date.to_date }[0]
               #check to make sure not to schedule in past
-              if @today <= slot.time
+              if @today <= slot.time && slot.time < task.due_date
                 scheduled = day.insert(slot.time, change_dt(slot.time, (task.duration / 60)), true, task)
               end
             end
