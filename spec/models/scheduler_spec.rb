@@ -65,7 +65,7 @@ describe Scheduler do
   end
   it "can schedule tasks past sunday using normal schedule" do
     user = @user
-    (0..22).each do
+    (0..100).each do
       user.tasks << @due_in_a_week
     end
     sched = Scheduler.new(user)
@@ -74,7 +74,7 @@ describe Scheduler do
 
   it "can schedule tasks past sunday using spread schedule" do
     user = @user
-    (0..22).each do
+    (0..25).each do
       user.tasks << @due_in_a_week
     end
     sched = Scheduler.new(user)
