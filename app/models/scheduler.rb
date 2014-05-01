@@ -74,28 +74,9 @@ class Scheduler
     while !multi_arr_empty?(pref_time_ar) && !remaining.empty? do
       #need to remove best times from pref time ar - may not do what is intended
       best_times = weeks_best_times(pref_time_ar)
-      puts "BEFORE:"
 
-      pref_time_ar.each do |element|
-        element.each do |pref_element|
-          puts "pref = #{pref_element.pref}, time = #{pref_element.time}"
-        end
-      end
-      puts "best times"
-      best_times.each do |e|
-          puts "pref = #{e.pref}, time = #{e.time}"
-      end
-      #binding.pry
       pref_time_ar = pref_time_ar.map{|day| day - best_times}
-      binding.pry
-=begin
-      puts "AFTER:"
-      pref_time_ar.each do |element|
-        element.each do |pref_element|
-          puts "pref = #{pref_element.pref}, time = #{pref_element.time}"
-        end
-      end
-=end
+
       best_times.each do |slot|
           #for times match best tasks or for tasks match best times????
           scheduled = false
