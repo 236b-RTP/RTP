@@ -57,7 +57,7 @@ describe Scheduler do
 
   it "returns unschedulable tasks in spread scheduler" do
     user = @user
-    (0..5).each do
+    (0..30).each do
       user.tasks << @due_in_two_days
     end
     sched = Scheduler.new(user)
