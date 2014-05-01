@@ -11,7 +11,7 @@ class SchedulerResultsHandler
 		update_tasks(results[0])
 	end
 
-	def run_schedule(user, task = nil)
+	def run_schedule_spread(user, task = nil)
 		scheduler = Scheduler.new(user, task)
 		results = scheduler.schedule_spread
 		#results[0] = week, [1] = couldnt schedule, [2] = past_due
