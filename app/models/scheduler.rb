@@ -65,7 +65,7 @@ class Scheduler
   def schedule_spread
     remaining = @tasks
     pref_time_ar = Marshal.load(Marshal.dump(@preferred_times))
-    past_due = remaining.select{|task| task[0].due_date < today}
+    past_due = remaining.select{|task| task[0].due_date < @today}
     remaining = remaining - past_due
     while !multi_arr_empty?(pref_time_ar) && !remaining.empty? do
       
@@ -78,7 +78,7 @@ class Scheduler
           count = 0
           task = nil
           #since matching tasks to times can delete tasks from middle of list use count to keep track of position
-          while count<remaining.size && scheduled == 
+          while count<remaining.size && scheduled == false
             #make sure dont schedule past due date
             if slot.time < remaining[count][0].due_date
               task = remaining[count][0]
