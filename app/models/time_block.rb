@@ -4,6 +4,7 @@ class TimeBlock
   def initialize(start, stop, type, item)
     @t = { :begin => start, :end => stop }
     @type = type
+    #task or event
     @item = item
   end
 
