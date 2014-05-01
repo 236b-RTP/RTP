@@ -65,7 +65,7 @@ describe Scheduler do
   end
   it "can schedule tasks past sunday using normal schedule" do
     user = @user
-    (0..100).each do
+    (0..50).each do
       user.tasks << @due_in_a_week
     end
     sched = Scheduler.new(user)
@@ -79,5 +79,17 @@ describe Scheduler do
     end
     sched = Scheduler.new(user)
     sched.schedule_spread[0][1].filled.should_not be_empty
+  end
+
+  it "schedules events at the end of the day for night-owls in normal schedule" do
+    user = @user
+    user = double("User", :preference => double("preference", :end_time => @end_time, 
+      :start_time => @start, :profile_type => "late"), :events => [], :tasks => [])
+    (0..6).each do
+      user.tasks << @due_in_a_week
+    end
+    sched = Scheduler.new(user)
+    arr = sched.schedule
+    puts arr[0][1]
   end
 end
