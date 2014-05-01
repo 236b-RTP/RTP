@@ -51,9 +51,7 @@ class Scheduler
           elsif pref_time.time >= best_task[0].due_date
             past_due << best_task
           end
-
         end
-
         d += 1
       end
 
@@ -66,32 +64,29 @@ class Scheduler
 
   def schedule_spread
     remaining = @tasks
-    couldnt_schedule = []
-    past_due = []
     pref_time_ar = Marshal.load(Marshal.dump(@preferred_times))
-
-    
+    past_due = remaining.select{|task| task[0].due_date < today}
+    remaining = remaining - past_due
     while !multi_arr_empty?(pref_time_ar) && !remaining.empty? do
-      #need to remove best times from pref time ar - may not do what is intended
+      
       best_times = weeks_best_times(pref_time_ar)
-
+      #remove the best times from pref time so on next loop can check second best
       pref_time_ar = pref_time_ar.map{|day| day - best_times}
-
+      # try to fill all best time slots with tasks
       best_times.each do |slot|
-          #for times match best tasks or for tasks match best times????
           scheduled = false
           count = 0
           task = nil
-          while count<remaining.size && scheduled == false
+          #since matching tasks to times can delete tasks from middle of list use count to keep track of position
+          while count<remaining.size && scheduled == 
+            #make sure dont schedule past due date
             if slot.time < remaining[count][0].due_date
               task = remaining[count][0]
               day = @week.select{ |day| slot.time.to_date == day.date.to_date }[0]
+              #check to make sure not to schedule in past
               if @today <= slot.time
                 scheduled = day.insert(slot.time, change_dt(slot.time, (task.duration / 60)), true, task)
               end
-            end
-            if !task.nil? && slot.time >= task.due_date
-              past_due << task
             end
             if scheduled
               remaining.delete_at(count)
@@ -100,10 +95,11 @@ class Scheduler
           end
        end
     end
+    
     #need to work out script issue
     return @week, remaining, past_due
   end
-  #made load_events public to test it
+
 
   def load_events(events)
     @week.each do |wday|
