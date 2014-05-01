@@ -40,7 +40,7 @@ class Scheduler
 
         if(@user_preference.profile_type == 'late') then
           #does a stable sort so reverses the times and then sorts of preferences eg best time is latest time with highest priority
-          best_times = reverse_pref_gravity(checkday.sort{|x,y| y.time<=>x.time})
+          best_times = reverse_pref_gravity(check_day.sort{|x,y| y.time<=>x.time})
         end
         
         while !best_times.empty? && scheduled == false do
