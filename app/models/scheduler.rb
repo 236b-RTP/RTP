@@ -43,7 +43,7 @@ class Scheduler
           #does a stable sort so reverses the times and then sorts of preferences eg best time is latest time with highest priority
           best_times = reverse_pref_gravity(checkday.sort{|x,y| y.time<=>x.time})
         end
-        binding.pry
+        #binding.pry
         while !best_times.empty? && scheduled == false do
           #binding.pry
           pref_time = best_times.shift
