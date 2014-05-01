@@ -80,7 +80,7 @@ class Scheduler
           puts "pref = #{pref_element.pref}, time = #{pref_element.time}"
         end
       end
-      pref_time_ar = pref_times.map{|day| day - best_times}
+      pref_time_ar = pref_time_ar.map{|day| day - best_times}
       puts "AFTER:"
       pref_time_ar.each do |element|
         element.each do |pref_element|

@@ -13,7 +13,7 @@ class PreferredTime
   end
   # can subtract from arrays using this
   def eql?(other)
-    [@pref, @time].eql?[other.pref, other.time]
+    [@pref, @time].eql? [other.pref, other.time]
   end
 
   def hash
