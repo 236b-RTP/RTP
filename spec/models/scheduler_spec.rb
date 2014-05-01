@@ -61,16 +61,23 @@ describe Scheduler do
       user.tasks << @due_in_two_days
     end
     sched = Scheduler.new(user)
-    arr = sched.schedule_spread
-    week = arr[0]
-    week.each do |day|
-      day.filled.each do |block|
-        print block.t[:begin]
-        puts block
-      end
+    sched.schedule_spread.should_not be_empty
+  end
+  it "can schedule tasks past sunday using normal schedule" do
+    user = @user
+    (0..22).each do
+      user.tasks << @due_in_a_week
     end
-    puts arr[1]
-    arr[1].should_not be_empty
+    sched = Scheduler.new(user)
+    sched.schedule[0][1].filled.should_not be_empty
   end
 
+  it "can schedule tasks past sunday using spread schedule" do
+    user = @user
+    (0..22).each do
+      user.tasks << @due_in_a_week
+    end
+    sched = Scheduler.new(user)
+    sched.schedule_spread[0][1].filled.should_not be_empty
+  end
 end
