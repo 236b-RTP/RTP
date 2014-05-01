@@ -75,18 +75,27 @@ class Scheduler
       #need to remove best times from pref time ar - may not do what is intended
       best_times = weeks_best_times(pref_time_ar)
       puts "BEFORE:"
+
       pref_time_ar.each do |element|
         element.each do |pref_element|
           puts "pref = #{pref_element.pref}, time = #{pref_element.time}"
         end
       end
+      puts "best times"
+      best_times.each do |e|
+          puts "pref = #{e.pref}, time = #{e.time}"
+      end
+      #binding.pry
       pref_time_ar = pref_time_ar.map{|day| day - best_times}
+      binding.pry
+=begin
       puts "AFTER:"
       pref_time_ar.each do |element|
         element.each do |pref_element|
           puts "pref = #{pref_element.pref}, time = #{pref_element.time}"
         end
       end
+=end
       best_times.each do |slot|
           #for times match best tasks or for tasks match best times????
           scheduled = false
@@ -130,7 +139,7 @@ class Scheduler
     best_times = []
     d = @today.wday
     while d < @today.wday + 7 do
-      day = @preferred_times[d%7]
+      day = preftimes[d%7]
       #max returns the first object with the highest pref then get the pref to compair
       candidates = day.select{|p| p.pref == day.max.pref}
       # if night owl take latest of best times
