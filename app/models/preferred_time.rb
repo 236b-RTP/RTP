@@ -11,6 +11,14 @@ class PreferredTime
   def <=> (another)
     @pref <=> another.pref
   end
+  # can subtract from arrays using this
+  def eql?(other)
+    [@pref, @time].eql?[other.pref, other.time]
+  end
+
+  def hash
+     [@pref, @time].hash
+  end
 
   class << self
     def week_preferences(preference)

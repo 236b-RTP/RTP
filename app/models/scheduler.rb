@@ -80,7 +80,7 @@ class Scheduler
           puts "pref = #{pref_element.pref}, time = #{pref_element.time}"
         end
       end
-      pref_time_ar = pref_time_ar-best_times
+      pref_time_ar = preftimes.map{|day| day - best_times}
       puts "AFTER:"
       pref_time_ar.each do |element|
         element.each do |pref_element|
@@ -131,7 +131,7 @@ class Scheduler
     d = @today.wday
     while d < @today.wday + 7 do
       day = @preferred_times[d%7]
-      #get times with highest priority get earliest time?? may not want earliest time want something grr
+      #max returns the first object with the highest pref then get the pref to compair
       candidates = day.select{|p| p.pref == day.max.pref}
       # if night owl take latest of best times
       if !candidates.empty?
@@ -147,9 +147,5 @@ class Scheduler
     return best_times
   end
 
-  def delete_best_times(preftimes, best_times){
-    preftimes.each do |day|
-      day = day - best_times
-  end
 
 end
