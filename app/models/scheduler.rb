@@ -34,7 +34,6 @@ class Scheduler
       d = @today.wday
 
       while !scheduled && d < @today.wday + 7 do
-        #binding.pry
         check_day = @preferred_times[d%7]
         #custom sort on Preftimes
         best_times = check_day.sort.reverse
@@ -43,9 +42,8 @@ class Scheduler
           #does a stable sort so reverses the times and then sorts of preferences eg best time is latest time with highest priority
           best_times = reverse_pref_gravity(checkday.sort{|x,y| y.time<=>x.time})
         end
-        #binding.pry
+        
         while !best_times.empty? && scheduled == false do
-          #binding.pry
           pref_time = best_times.shift
           #make sure before scheduling before duedate and not before the current time
           if pref_time.time < best_task[0].due_date && @today <= pref_time.time
@@ -53,7 +51,6 @@ class Scheduler
           elsif pref_time.time >= best_task[0].due_date
             past_due << best_task
           end
-          #binding.pry
         end
         d += 1
       end
