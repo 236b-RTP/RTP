@@ -5,13 +5,13 @@ describe Scheduler do
 	before(:each) do
 		@start = DateTime.new(2014, 4, 29, 10)
 		@end_time = DateTime.new(2014, 4, 29, 20)
-		@event_right_now = double("event_right_now", :start_date => DateTime.now, :end_date => DateTime.now + 2.hours)
+		@event_right_now = double("event_right_now", :start_date => DateTime.now, :end_date => DateTime.now + 2.hours, :completed? => false)
 		@due_in_a_week = double("due_in_a_week", :start_date => DateTime.now, :created_at => DateTime.now - 2.days,
-		 :duration => 60, :due_date => DateTime.now + 7.days, :priority => 3)
+		 :duration => 60, :due_date => DateTime.now + 7.days, :priority => 3, :completed? => false)
 		@due_in_two_days = double("due_in_two_days", :start_date => DateTime.now, :created_at => DateTime.now - 2.days,
-		 :duration => 60, :due_date => DateTime.now + 2.days, :priority => 3)
+		 :duration => 60, :due_date => DateTime.now + 2.days, :priority => 3, :completed? => false)
 		@due_in_five_days = double("due_in_five_days", :start_date => DateTime.now, :created_at => DateTime.now - 2.days,
-		 :duration => 60, :due_date => DateTime.now + 5.days, :priority => 3)
+		 :duration => 60, :due_date => DateTime.now + 5.days, :priority => 3, :completed? => false)
 		@user = double("User", :preference => double("preference", :end_time => @end_time, 
 			:start_time => @start, :profile_type => "early"), :events => [], :tasks => [])
     @default_tasks = [@due_in_a_week, @due_in_five_days, @due_in_two_days]
@@ -90,6 +90,5 @@ describe Scheduler do
     end
     sched = Scheduler.new(user)
     arr = sched.schedule
-    puts arr[0][1]
   end
 end
