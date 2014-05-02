@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe TimeBlock do
-	before do
-		@start_time = DateTime.new(2014, 2, 3, 13, 0, 0)
-		@end_time = DateTime.new(2014, 2, 3, 15, 0, 0)
+  before do
+    @start_time = DateTime.new(2014, 2, 3, 13, 0, 0)
+    @end_time = DateTime.new(2014, 2, 3, 15, 0, 0)
   end
 
   it "can be initialized" do
-  	expect { TimeBlock.new(@start_time, @end_time, true, 4) }.to_not raise_error
+    expect { TimeBlock.new(@start_time, @end_time, true, 4) }.to_not raise_error
   end
 
   context '#is_task?' do

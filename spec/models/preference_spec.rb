@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Preference do
-	before do
-		@preference = Preference.new(profile_type: "foo", start_time: DateTime.now, end_time: DateTime.now)
-	end
+  before do
+    @preference = Preference.new(profile_type: "foo", start_time: DateTime.now, end_time: DateTime.now)
+  end
   subject { @preference }
 
   it { should respond_to(:profile_type) }

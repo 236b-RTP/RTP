@@ -20,15 +20,15 @@ end
 
 class Array
   def stable_sort
-      n = 0
-      sort_by {|x| n+= 1; [x, n]}
+    n = 0
+    sort_by {|x| n+= 1; [x, n]}
   end
 end
 
 def reverse_pref_gravity(array)
-	if(array.class == Array)
-		return array.stable_sort
-	else
-		raise ArgumentError
-	end
+  if array.class == Array
+    array.stable_sort
+  else
+    raise ArgumentError
+  end
 end

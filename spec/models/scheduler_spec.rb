@@ -11,9 +11,9 @@ describe Scheduler do
   let(:due_in_five_days) { create(:task, :start_date => DateTime.now, :due_date => DateTime.now + 5.days, :priority => 3,
                                   :task_event => create(:task_event, :user => user)) }
 
-	before(:each) do
-		@start = DateTime.new(2014, 4, 29, 10, 0, 0)
-		@end_time = DateTime.new(2014, 4, 29, 20, 0, 0)
+  before(:each) do
+    @start = DateTime.new(2014, 4, 29, 10, 0, 0)
+    @end_time = DateTime.new(2014, 4, 29, 20, 0, 0)
 
     @default_tasks = [due_in_a_week, due_in_five_days, due_in_two_days]
   end
@@ -22,7 +22,7 @@ describe Scheduler do
     user.tasks << due_in_five_days
     user.tasks << due_in_two_days
     user.events << event_right_now
-  	expect{ Scheduler.new(user) }.to_not raise_error
+    expect{ Scheduler.new(user) }.to_not raise_error
   end
 
   context '#schedule' do
@@ -46,7 +46,7 @@ describe Scheduler do
   end
 
   it "can load events" do
-  	scheduler = Scheduler.new(user)
+    scheduler = Scheduler.new(user)
     event2 = create(:event, :start_date => DateTime.now + 2.hours, :end_date => DateTime.now + 4.hours)
     scheduler.load_events([event_right_now, event2])
   end
@@ -64,7 +64,7 @@ describe Scheduler do
       user.tasks << create(:task, :start_date => DateTime.now, :due_date => DateTime.now + 5.days, :priority => 3,
                            :task_event => create(:task_event, :user => user))
     end
-  	Scheduler.new(user)
+    Scheduler.new(user)
   end
 
   it "returns unschedulable tasks in normal scheduler" do
