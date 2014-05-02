@@ -24,6 +24,7 @@ class SchedulerResultsHandler
 	    tasks = day.filled.select { |task| task.is_task? }
 	    tasks.each do |block|
 	    	block.item.update_attributes(start_date: block.t[:begin], end_date: block.t[:end])
-	    end
+      end
+    end
 	end
 end

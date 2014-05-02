@@ -62,12 +62,15 @@ Spork.prefork do
 
     # Capybara DSL
     config.include Capybara::DSL
+
+    # FactoryGirl
+    config.include FactoryGirl::Syntax::Methods
   end
 end
 
 Spork.each_run do
   # This code will be run each time you run your specs.
-
+  FactoryGirl.reload
 end
 
 # --- Instructions ---
