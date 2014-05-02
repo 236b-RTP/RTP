@@ -3,14 +3,14 @@ class Task < ActiveRecord::Base
   has_one :user, through: :task_event
 
   def schedule!
-    scheduler = Scheduler.new(user, self)
-    scheduler.schedule
+    scheduler = SchedulerResultsHandler.new(user, self)
+    scheduler.run_schedule
   end
 
   class << self
     def reschedule!(user)
-      scheduler = Scheduler.new(user)
-      scheduler.schedule
+      scheduler = SchedulerResultsHandler.new(user)
+      scheduler.run_schedule
     end
   end
 end

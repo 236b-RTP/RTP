@@ -1,22 +1,19 @@
 class SchedulerResultsHandler
 	#allow for growth in handeling results from scheduller including week updates and past due returns
-	def initialize()
+	def initialize(user, task = nil)
+    @user = user
+    @task = task
 	end
 
 	#run different scheduling schemas
-	def run_schedule(user, task = nil)
-		scheduler = Scheduler.new(user, task)
+	def run_schedule
+		scheduler = Scheduler.new(@user, @task)
 		results = scheduler.schedule
 		#results[0] = week, [1] = couldnt schedule, [2] = past_due
 		update_tasks(results[0])
 	end
 
-	def run_schedule_spread(user, task = nil)
-		scheduler = Scheduler.new(user, task)
-		results = scheduler.schedule_spread
-		#results[0] = week, [1] = couldnt schedule, [2] = past_due
-		update_tasks(results[0])	
-	end
+  private
 
 	#remove updating the databasae from scheduler
 	def update_tasks(week)
