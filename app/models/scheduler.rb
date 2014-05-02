@@ -21,6 +21,14 @@ class Scheduler
   end
 
   def schedule
+    if @user_preference.schedule_spread == 'spread'
+      schedule_spread
+    else
+      schedule_condensed
+    end
+  end
+
+  def schedule_condensed
     #making a deep copy
     remaining = @tasks
     #all tasks that couldnt be scheduled because past due or didnt fit

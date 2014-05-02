@@ -1,22 +1,26 @@
 require 'spec_helper'
 
 describe TimeBlock do
-	before(:all) do
-		@startTime = DateTime.new(2014, 2, 3, 13)
-		@endTime = DateTime.new(2014, 2, 3, 15)
-	end
+	before do
+		@start_time = DateTime.new(2014, 2, 3, 13, 0, 0)
+		@end_time = DateTime.new(2014, 2, 3, 15, 0, 0)
+  end
+
   it "can be initialized" do
-  	@TimeBlock = TimeBlock.new(@startTime, @endTime, true, 4)
+  	expect { TimeBlock.new(@start_time, @end_time, true, 4) }.to_not raise_error
   end
+
   it "raises an error when not given DateTimes" do
-  	expect {TimeBlock.new(1, @endTime, true, 4)}.to raise_error
+  	expect { TimeBlock.new(1, @end_time, true, 4) }.to raise_error
   end
+
   it "returns true when it is a task" do
-  	@Block = TimeBlock.new(@startTime,@endTime, true, 4)
-  	@Block.is_task?.should == true
+  	block = TimeBlock.new(@start_time, @end_time, true, 4)
+  	expect(block.is_task?).to be_true
   end
+
   it "returns false when it is not a task" do
-  	@Block = TimeBlock.new(@startTime, @endTime, false, 4)
-  	@Block.is_task?.should == false
+  	block = TimeBlock.new(@start_time, @end_time, false, 4)
+  	expect(block.is_task?).to be_false
   end
 end

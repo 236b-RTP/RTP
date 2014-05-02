@@ -52,6 +52,7 @@ gem 'capistrano-rails', '~> 1.1'
 # gem 'debugger', group: [:development, :test]
 group :development, :test do
   gem 'rspec-rails', '~> 2.14.1'
+  gem 'factory_girl_rails', '~> 4.0'
   gem 'guard'
   gem 'guard-rspec'
   gem 'capybara' # for feature testing

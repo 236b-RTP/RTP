@@ -1,8 +1,5 @@
-#require_relative 'day.rb'
-#require_relative 'task_placer.rb'
-#require_relative 'pref_time_builder.rb'
 require 'time_utilities'
-#require_relative 'scheduler_test_copy.rb'
+
 class DataHandler
 	def initialize(user, task = nil)
 		@main_calendar = Scheduler.new(user, task)
