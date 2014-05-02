@@ -24,7 +24,7 @@ class Day
     return busy
   end
 
-  #events can be at the same time need to change shit
+  #events can be at the same time need to change stuff
   def insert(start, fin, if_task, item)
     #preftimes made by preftime builder have the date when rise time was created
     if start.between?(@wake, @sleep) && fin.between?(@wake, @sleep)

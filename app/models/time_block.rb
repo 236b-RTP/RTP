@@ -1,17 +1,13 @@
 class TimeBlock
   attr_accessor :t, :item
 
-  def initialize(start, stop, type, item)
-  	if start.class == DateTime && stop.class == DateTime && !!type == type
-    	@t = { :begin => start, :end => stop }
-    	@type = type
-    	@item = item
-    else
-    	raise ArgumentError
-    end
+  def initialize(start, stop, is_task, item)
+  	@t = { :begin => start, :end => stop }
+    @is_task = is_task
+    @item = item
   end
 
   def is_task?
-    @type
+    @is_task
   end
 end

@@ -10,17 +10,15 @@ describe TimeBlock do
   	expect { TimeBlock.new(@start_time, @end_time, true, 4) }.to_not raise_error
   end
 
-  it "raises an error when not given DateTimes" do
-  	expect { TimeBlock.new(1, @end_time, true, 4) }.to raise_error
-  end
+  context '#is_task?' do
+    it "returns true when it is a task" do
+      block = TimeBlock.new(@start_time, @end_time, true, 4)
+      expect(block.is_task?).to be_true
+    end
 
-  it "returns true when it is a task" do
-  	block = TimeBlock.new(@start_time, @end_time, true, 4)
-  	expect(block.is_task?).to be_true
-  end
-
-  it "returns false when it is not a task" do
-  	block = TimeBlock.new(@start_time, @end_time, false, 4)
-  	expect(block.is_task?).to be_false
+    it "returns false when it is not a task" do
+      block = TimeBlock.new(@start_time, @end_time, false, 4)
+      expect(block.is_task?).to be_false
+    end
   end
 end

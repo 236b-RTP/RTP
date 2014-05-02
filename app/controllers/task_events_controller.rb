@@ -3,7 +3,7 @@ class TaskEventsController < ApplicationController
   respond_to :json
 
   def index
-    @task_events = current_user.task_events
+    @task_events = current_user.task_events.includes(:item)
   end
 
   def show
