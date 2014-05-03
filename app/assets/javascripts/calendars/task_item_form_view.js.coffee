@@ -32,7 +32,32 @@ class TaskItemFormView extends View
   render: ->
     @$el.html(getTemplate()(@model)) # renders the dialog view
     @stickit() # provides 2-way binding between the view and model
-    @$el.find("input.select-date").datepicker()
+    @$el.find("input.select-date").datepicker({
+      onClose: (dateText, inst) =>
+        input = $(inst.input)
+        name = input.attr('name')
+        if name == 'start_date'
+          end_date = @$el.find('input[name=end_date]').datepicker('option', 'minDate', dateText)
+          if end_date.val() == ''
+            end_date.val(input.val())
+            input.datepicker('option', 'maxDate', dateText)
+        else if name == 'end_date'
+          start_date = @$el.find('input[name=start_date]').datepicker('option', 'maxDate', dateText)
+          if start_date.val() == ''
+            start_date.val(input.val())
+            input.datepicker('option', 'minDate', dateText)
+    })
+    do =>
+      startDateInput = @$el.find('input[name=start_date]')
+      endDateInput = @$el.find('input[name=end_date]')
+
+      if startDateInput.length == 1 && endDateInput.length == 1
+        if startDateInput.val() != ''
+          endDateInput.datepicker('option', 'minDate', startDateInput.val())
+        if endDateInput.val() != ''
+          startDateInput.datepicker('option', 'maxDate', endDateInput.val())
+      return
+
     @$el.find(".spectrum").spectrum({
       showPalette: true,
       localStorageKey: "spectrum.palette"
