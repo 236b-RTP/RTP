@@ -42,11 +42,53 @@ jQuery ($) ->
   })
 
   # loads mini-calendar
-  $("#mini-calendar").datepicker({                # http://jqueryui.com/datepicker/
+  startDate = moment().day(0).startOf('day')
+  endDate = moment().day(6).startOf('day')
+  miniCalendar = $("#mini-calendar")
+  selectCurrentWeek = ->
+    setTimeout(->
+      miniCalendar.find('.ui-datepicker-current-day a').addClass('ui-state-active')
+    , 1)
+  miniCalendar.datepicker({                # http://jqueryui.com/datepicker/
     onSelect: (dateText) ->
-      moment = $.fullCalendar.moment(dateText)    # creates a moment object using the date selected
-      calendar.fullCalendar('gotoDate', moment)   # changes the main calendar view to be the same week as the moment
+      selectedMoment = $.fullCalendar.moment(dateText)    # creates a moment object using the date selected
+      calendar.fullCalendar('gotoDate', selectedMoment)   # changes the main calendar view to be the same week as the moment
+
+      date = $(this).datepicker('getDate');
+      startDate = moment(dateText).day(0).startOf('day')
+      endDate = moment(dateText).day(6).startOf('day')
+
+      miniCalendar.find('td a').removeClass('ui-state-hover')
+
+      miniCalendar.datepicker('setDate', dateText)
+      selectCurrentWeek()
+    beforeShowDay: (date) ->
+      cssClass = ''
+      if date >= startDate && date <= endDate
+        cssClass = 'ui-datepicker-current-day'
+      [true, cssClass]
+    onChangeMonthYear: ->
+      selectCurrentWeek()
   })
+  selectCurrentWeek()
+
+  calendar.data('fullCalendar').options.viewRender = (view, element) ->
+    startDate = view.start.startOf('day')
+    endDate = view.end.startOf('day')
+
+    if startDate.month() == endDate.month()
+      miniCalendar.datepicker('setDate', startDate.endOf('day').toDate())
+    else if startDate.isBefore(moment()) && endDate.clone().endOf('day').isAfter(moment())
+      miniCalendar.datepicker('setDate', new Date())
+    else
+      miniCalendar.datepicker('setDate', startDate.endOf('day').toDate())
+    miniCalendar.datepicker('refresh')
+    selectCurrentWeek()
+
+  miniCalendar.on('mouseover mouseout', 'tr', (event) ->
+    return if event.isTrigger?
+    $(this).find('td a').toggleClass('ui-state-hover', event.type == 'mouseover')
+  )
 
   # resizes task list and calendar height when window is resized
   taskList = $(".tasks-list")                     # gets the tasks-list element
