@@ -160,7 +160,19 @@
       </div>
     </div>
 
-    {{ if (!model.isNew()) { }}
+    <hr />
+
+    {{ if (model.isNew()) { }}
+
+    <div class="form-group">
+      <div class="col-xs-10 col-xs-offset-2">
+        <label clss="checkbox-inline">
+          <%= check_box_tag(:schedule_now, 'true') %> Schedule Immediately
+        </label>
+      </div>
+    </div>
+
+    {{ } else { }}
       <div class="form-group">
         <div class="col-xs-10 col-xs-offset-2">
           <label>

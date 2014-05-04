@@ -14,6 +14,7 @@ class TasksController < ApplicationController
 
     if @task.save
       @task_event = TaskEvent.create!(user: current_user, item: @task)
+      @task.schedule! if params[:task][:schedule_now] == 'true'
       @task_event
     else
       respond_to do |format|
