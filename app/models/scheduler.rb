@@ -45,14 +45,16 @@ class Scheduler
         check_day = @preferred_times[d%7]
         #custom sort on Preftimes
         best_times = check_day.sort.reverse
-
+=begin
+        binding.pry
         if(@user_preference.profile_type == 'late') then
           #does a stable sort so reverses the times and then sorts of preferences eg best time is latest time with highest priority
           #ar.sort{|x,y| y.type2<=>x.type2}.stable_sort
-          first_sort = check_day.sort{|x,y| y.time<=>x.time}
-          best_times = reverse_pref_gravity(first_sort)
+          first_sort = check_day.sort{|x,y| x.time<=>y.time}
+          best_times = reverse_pref_gravity(first_sort).reverse
+          binding.pry
         end
-        
+=end     
         while !best_times.empty? && scheduled == false do
           pref_time = best_times.shift
           #make sure before scheduling before duedate and not before the current time
