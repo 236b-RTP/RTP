@@ -68,7 +68,7 @@
   position: relative;
   margin: 0.8em;
   padding: 5px 5px 5px 20px;
-  border-radius: 10px;
+  border-radius: 5px;
   background-color: #eee;
   border: 1px solid #fff;
   height: 40px;
@@ -87,10 +87,10 @@
     position: absolute;
     right: 5px;
     top: 15%;
-    width: 55px;
+    width: 50px;
     padding: 5px;
-    font-size: 0.9em;
-    border-radius: 10px;
+    font-size: 0.8em;
+    border-radius: 5px;
     color: #fff;
     text-align: center;
   }
@@ -126,9 +126,9 @@
   display: block;
   top: 0;
   right: 0;
-  height: 13px;
-  width: 45px;
-  border-radius: 3px;
+  height: 9px;
+  width: 26px;
+//  border-radius: 3px;
 }
 
 .ui-autocomplete {
