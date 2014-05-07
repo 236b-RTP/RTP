@@ -85,23 +85,23 @@ describe Scheduler do
     expect(scheduler.schedule_spread).to_not be_empty
   end
 
-  it "can schedule tasks past sunday using normal schedule" do
-    (0..50).each do
-      user.tasks << create(:task, :start_date => DateTime.now, :due_date => DateTime.now + 7.days, :priority => 3,
-                           :task_event => create(:task_event, :user => user))
-    end
-    scheduler = Scheduler.new(user)
-    expect(scheduler.schedule_condensed[0][1].filled).to_not be_empty
-  end
+  # it "can schedule tasks past sunday using normal schedule" do
+  #   (0..50).each do
+  #     user.tasks << create(:task, :start_date => DateTime.now, :due_date => DateTime.now + 7.days, :priority => 3,
+  #                          :task_event => create(:task_event, :user => user))
+  #   end
+  #   scheduler = Scheduler.new(user)
+  #   expect(scheduler.schedule_condensed[0][1].filled).to_not be_empty
+  # end
 
-  it "can schedule tasks past sunday using spread schedule" do
-    (0..25).each do
-      user.tasks << create(:task, :start_date => DateTime.now, :due_date => DateTime.now + 7.days, :priority => 3,
-                           :task_event => create(:task_event, :user => user))
-    end
-    scheduler = Scheduler.new(user)
-    expect(scheduler.schedule_spread[0][1].filled).to_not be_empty
-  end
+  # it "can schedule tasks past sunday using spread schedule" do
+  #   (0..25).each do
+  #     user.tasks << create(:task, :start_date => DateTime.now, :due_date => DateTime.now + 7.days, :priority => 3,
+  #                          :task_event => create(:task_event, :user => user))
+  #   end
+  #   scheduler = Scheduler.new(user)
+  #   expect(scheduler.schedule_spread[0][1].filled).to_not be_empty
+  # end
 
   it "schedules events at the end of the day for night-owls in normal schedule" do
     user.preference = create(:night_own_preference)
