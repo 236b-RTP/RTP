@@ -70,3 +70,8 @@
     </div>
   </div>
 </div>
+<hr />
+<div class="form-group">
+  <%= f.label(:time_zone, 'Time Zone') %>
+  <%= time_zone_select(:preference, :time_zone, ActiveSupport::TimeZone.us_zones, { default: 'Eastern Time (US & Canada)' }, { class: 'form-control' }) %>
+</div>

@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+  include UserTimeZone
 
   respond_to :json
 
@@ -10,7 +11,9 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    @task.due_date = Chronic.parse("#{params[:task][:due_date]} #{params[:task][:due_time]}")
+    with_user_time_zone do
+      @task.due_date = Chronic.parse("#{params[:task][:due_date]} #{params[:task][:due_time]}")
+    end
 
     if @task.save
       @task_event = TaskEvent.create!(user: current_user, item: @task)
@@ -28,7 +31,9 @@ class TasksController < ApplicationController
 
   def update
     @task = Task.find(params[:id])
-    @task.due_date = Chronic.parse("#{params[:task][:due_date]} #{params[:task][:due_time]}")
+    with_user_time_zone do
+      @task.due_date = Chronic.parse("#{params[:task][:due_date]} #{params[:task][:due_time]}")
+    end
 
     unless @task.update_attributes(task_params)
       respond_to do |format|

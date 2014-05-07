@@ -1,4 +1,5 @@
 class EventsController < ApplicationController
+  include UserTimeZone
 
   respond_to :json
 
@@ -10,8 +11,10 @@ class EventsController < ApplicationController
 
   def create
     @event = Event.new(event_params)
-    @event.start_date = Chronic.parse("#{params[:event][:start_date]} #{params[:event][:start_time]}")
-    @event.end_date = Chronic.parse("#{params[:event][:end_date]} #{params[:event][:end_time]}")
+    with_user_time_zone do
+      @event.start_date = Chronic.parse("#{params[:event][:start_date]} #{params[:event][:start_time]}")
+      @event.end_date = Chronic.parse("#{params[:event][:end_date]} #{params[:event][:end_time]}")
+    end
 
     if @event.save
       @task_event = TaskEvent.create!(user: current_user, item: @event)
@@ -27,8 +30,10 @@ class EventsController < ApplicationController
 
   def update
     @event = Event.find(params[:id])
-    @event.start_date = Chronic.parse("#{params[:event][:start_date]} #{params[:event][:start_time]}")
-    @event.end_date = Chronic.parse("#{params[:event][:end_date]} #{params[:event][:end_time]}")
+    with_user_time_zone do
+      @event.start_date = Chronic.parse("#{params[:event][:start_date]} #{params[:event][:start_time]}")
+      @event.end_date = Chronic.parse("#{params[:event][:end_date]} #{params[:event][:end_time]}")
+    end
 
     unless @event.update_attributes(event_params)
       respond_to do |format|

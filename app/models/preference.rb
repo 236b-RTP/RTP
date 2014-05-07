@@ -5,4 +5,5 @@ class Preference < ActiveRecord::Base
   validates :start_time, presence: true
   validates :end_time, presence: true
   validates :schedule_spread, presence: true
+  validates :time_zone, presence: true
 end
